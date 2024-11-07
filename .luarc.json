@@ -16,7 +16,6 @@
         "undefined-field",
         "need-check-nil",
         "lowercase-global",
-        "inject-field",
-        "undefined-global"
+        "inject-field"
     ]
 }
