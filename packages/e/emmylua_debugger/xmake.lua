@@ -1,17 +1,16 @@
 package("emmylua_debugger", function()
     set_kind("binary")
-    set_homepage("https://github.com/EmmyLua/EmmyLuaDebugger")
     set_description("EmmyLua Debugger")
 
-    add_urls("https://github.com/EmmyLua/EmmyLuaDebugger/archive/refs/tags/$(version).tar.gz",
-        "https://github.com/EmmyLua/EmmyLuaDebugger.git")
+    -- add_requires("emmylua_debugger 1.8.4")
+    add_urls("https://github.com/TOMO-CAT/EmmyLuaDebugger.git")
 
-    add_versions("1.8.3", "a2803b4eec21400ca61691824e9e7689c1f14735470081a3ef0c5234aa4e590f")
-    add_versions("1.8.2", "2ce5adbfad4055072d39302dccf794ec45800e84a5f3ba4784b373078a9dff8c")
-    add_versions("1.8.1", "0dbbfefe798425323bd1f531463675460fce3418d73ef29b495e7369f8c76475")
-    add_versions("1.8.0", "21e5ba1c82e4386cd8ad4f8c76511d70319b899b414d29ecdaba35649325d2ee")
-    add_versions("1.7.1", "8757d372c146d9995b6e506d42f511422bcb1dc8bacbc3ea1a5868ebfb30015f")
-    add_versions("1.6.3", "4e10cf1c729fc58f72880895e63618cb91d186ff3b55f270cdaa089a2f8b20bc")
+    -- add_versions("1.8.3", "a2803b4eec21400ca61691824e9e7689c1f14735470081a3ef0c5234aa4e590f")
+    -- add_versions("1.8.2", "2ce5adbfad4055072d39302dccf794ec45800e84a5f3ba4784b373078a9dff8c")
+    -- add_versions("1.8.1", "0dbbfefe798425323bd1f531463675460fce3418d73ef29b495e7369f8c76475")
+    -- add_versions("1.8.0", "21e5ba1c82e4386cd8ad4f8c76511d70319b899b414d29ecdaba35649325d2ee")
+    -- add_versions("1.7.1", "8757d372c146d9995b6e506d42f511422bcb1dc8bacbc3ea1a5868ebfb30015f")
+    -- add_versions("1.6.3", "4e10cf1c729fc58f72880895e63618cb91d186ff3b55f270cdaa089a2f8b20bc")
 
     add_configs("luasrc", { description = "Use lua source.", default = true, type = "boolean" })
     add_configs("luaver", { description = "Set lua version.", default = "5.4", type = "string" })
