@@ -4,7 +4,7 @@ package("emmylua_debugger", function()
     set_description("EmmyLua Debugger")
 
     add_urls("https://github.com/EmmyLua/EmmyLuaDebugger/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/EmmyLua/EmmyLuaDebugger.git")
+        "https://github.com/EmmyLua/EmmyLuaDebugger.git")
 
     add_versions("1.8.3", "a2803b4eec21400ca61691824e9e7689c1f14735470081a3ef0c5234aa4e590f")
     add_versions("1.8.2", "2ce5adbfad4055072d39302dccf794ec45800e84a5f3ba4784b373078a9dff8c")
@@ -13,12 +13,12 @@ package("emmylua_debugger", function()
     add_versions("1.7.1", "8757d372c146d9995b6e506d42f511422bcb1dc8bacbc3ea1a5868ebfb30015f")
     add_versions("1.6.3", "4e10cf1c729fc58f72880895e63618cb91d186ff3b55f270cdaa089a2f8b20bc")
 
-    add_configs("luasrc", {description = "Use lua source.", default = true, type = "boolean"})
-    add_configs("luaver", {description = "Set lua version.", default = "5.4", type = "string"})
+    add_configs("luasrc", { description = "Use lua source.", default = true, type = "boolean" })
+    add_configs("luaver", { description = "Set lua version.", default = "5.4", type = "string" })
 
     add_deps("cmake")
 
-    on_load(function (package)
+    on_load(function(package)
         local suffix
         if package:is_plat("macosx") then
             suffix = ".dylib"
@@ -31,7 +31,7 @@ package("emmylua_debugger", function()
         package:mark_as_pathenv("EMMYLUA_DEBUGGER")
     end)
 
-    on_install("macosx", "linux", "windows", function (package)
+    on_install("macosx", "linux", "windows", function(package)
         import("core.base.semver")
         local configs = {}
         if package:config("luasrc") then
@@ -43,11 +43,11 @@ package("emmylua_debugger", function()
             table.insert(configs, "-DEMMY_LUA_VERSION=" .. version:major() .. version:minor())
         end
         table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:is_debug() and "Debug" or "Release"))
-        io.replace("CMakeLists.txt", "set(CMAKE_INSTALL_PREFIX install)", "", {plain = true})
+        io.replace("CMakeLists.txt", "set(CMAKE_INSTALL_PREFIX install)", "", { plain = true })
         import("package.tools.cmake").install(package, configs)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(os.isfile(os.getenv("EMMYLUA_DEBUGGER")))
     end)
 end)
