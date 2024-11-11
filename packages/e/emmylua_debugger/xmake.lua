@@ -31,6 +31,11 @@ package("emmylua_debugger", function()
     end)
 
     on_install("macosx", "linux", "windows", function(package)
+        os.setenv("CPP", "")
+        os.setenv("CXX", "")
+        os.setenv("CC", "")
+        os.setenv("LD", "")
+
         import("core.base.semver")
         local configs = {}
         if package:config("luasrc") then
