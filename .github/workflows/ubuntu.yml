@@ -3,7 +3,7 @@ name: Linux
 on:
   pull_request:
     branches:
-      - dev
+      - master
 
 jobs:
   build:
@@ -15,18 +15,21 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
-    concurrency:
-        group: ${{ github.ref }}-${{ github.base_ref }}-${{ github.head_ref }}-Linux-${{ matrix.kind }}-${{ matrix.mode }}
-        cancel-in-progress: true
+    # concurrency:
+    #     group: ${{ github.ref }}-${{ github.base_ref }}-${{ github.head_ref }}-Linux-${{ matrix.kind }}-${{ matrix.mode }}
+    #     cancel-in-progress: true
+  
     steps:
-      - uses: actions/checkout@v1
-      - uses: xmake-io/github-action-setup-xmake@v1
-        with:
-          xmake-version: branch@master
-          actions-cache-folder: '.xmake-cache'
-          actions-cache-key: 'ubuntu'
+      - name: Install XMake
+        run: |
+          mkdir /software && cd /software
+          git clone --recursive https://github.com/TOMO-CAT/xmake.git
+          cd xmake
+          git checkout master
+          bash scripts/install.sh
+          xmake --version
 
-      - name: Installation
+      - name: Prepare Dependencies
         run: |
           # TODO we will remove it later
           sudo apt-get update
@@ -34,4 +37,4 @@ jobs:
 
       - name: Tests
         run: |
-          xmake l ./scripts/test.lua -D -k ${{ matrix.kind }} -m ${{ matrix.mode }}
+          xmake lua ./scripts/test.lua --diagnosis --kind=${{ matrix.kind }} --mode=${{ matrix.mode }}

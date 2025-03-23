@@ -5,41 +5,40 @@ import("core.package.package", {alias = "core_package"})
 import("packages", {alias = "get_packages"})
 
 -- the options
-local options =
-{
-    {'v', "verbose",        "k",  nil, "Enable verbose information."                }
-,   {'D', "diagnosis",      "k",  nil, "Enable diagnosis information."              }
-,   {nil, "shallow",        "k",  nil, "Only install the root packages."            }
-,   {'k', "kind",           "kv", nil, "Enable static/shared library."              }
-,   {'p', "plat",           "kv", nil, "Set the given platform."                    }
-,   {'a', "arch",           "kv", nil, "Set the given architecture."                }
-,   {'m', "mode",           "kv", nil, "Set the given mode."                        }
-,   {'j', "jobs",           "kv", nil, "Set the build jobs."                        }
-,   {'f', "configs",        "kv", nil, "Set the configs."                           }
-,   {'d', "debugdir",       "kv", nil, "Set the debug source directory."            }
-,   {nil, "policies",       "kv", nil, "Set the policies."                          }
-,   {nil, "fetch",          "k",  nil, "Fetch package only."                        }
-,   {nil, "precompiled",    "k",  nil, "Attemp to install the precompiled package." }
-,   {nil, "remote",         "k",  nil, "Test package on the remote server."         }
-,   {nil, "linkjobs",       "kv", nil, "Set the link jobs."                         }
-,   {nil, "cflags",         "kv", nil, "Set the cflags."                            }
-,   {nil, "cxxflags",       "kv", nil, "Set the cxxflags."                          }
-,   {nil, "ldflags",        "kv", nil, "Set the ldflags."                           }
-,   {nil, "ndk",            "kv", nil, "Set the Android NDK directory."             }
-,   {nil, "ndk_sdkver",     "kv", nil, "Set the Android NDK platform sdk version."  }
-,   {nil, "sdk",            "kv", nil, "Set the SDK directory of cross toolchain."  }
-,   {nil, "vs",             "kv", nil, "Set the VS Compiler version."               }
-,   {nil, "vs_sdkver",      "kv", nil, "Set the Windows SDK version."               }
-,   {nil, "vs_toolset",     "kv", nil, "Set the Windows Toolset version."           }
-,   {nil, "vs_runtime",     "kv", nil, "Set the VS Runtime library (deprecated)."   }
-,   {nil, "runtimes",       "kv", nil, "Set the Runtime libraries."                 }
-,   {nil, "xcode_sdkver",   "kv", nil, "The SDK Version for Xcode"                  }
-,   {nil, "target_minver",  "kv", nil, "The Target Minimal Version"                 }
-,   {nil, "appledev",       "kv", nil, "The Apple Device Type"                      }
-,   {nil, "mingw",          "kv", nil, "Set the MingW directory."                   }
-,   {nil, "toolchain",      "kv", nil, "Set the toolchain name."                    }
-,   {nil, "toolchain_host", "kv", nil, "Set the host toolchain name."               }
-,   {nil, "packages",       "vs", nil, "The package list."                          }
+local options = {
+    {'v', "verbose", "k", nil, "Enable verbose information."},
+    {'D', "diagnosis", "k", nil, "Enable diagnosis information."},
+    {nil, "shallow", "k", nil, "Only install the root packages."},
+    {'k', "kind", "kv", nil, "Enable static/shared library."},
+    {'p', "plat", "kv", nil, "Set the given platform."},
+    {'a', "arch", "kv", nil, "Set the given architecture."},
+    {'m', "mode", "kv", nil, "Set the given mode."},
+    {'j', "jobs", "kv", nil, "Set the build jobs."},
+    {'f', "configs", "kv", nil, "Set the configs."},
+    {'d', "debugdir", "kv", nil, "Set the debug source directory."},
+    {nil, "policies", "kv", nil, "Set the policies."},
+    {nil, "fetch", "k", nil, "Fetch package only."},
+    {nil, "precompiled", "k", nil, "Attemp to install the precompiled package."},
+    {nil, "remote", "k", nil, "Test package on the remote server."},
+    {nil, "linkjobs", "kv", nil, "Set the link jobs."},
+    {nil, "cflags", "kv", nil, "Set the cflags."},
+    {nil, "cxxflags", "kv", nil, "Set the cxxflags."},
+    {nil, "ldflags", "kv", nil, "Set the ldflags."},
+    {nil, "ndk", "kv", nil, "Set the Android NDK directory."},
+    {nil, "ndk_sdkver", "kv", nil, "Set the Android NDK platform sdk version."},
+    {nil, "sdk", "kv", nil, "Set the SDK directory of cross toolchain."},
+    {nil, "vs", "kv", nil, "Set the VS Compiler version."},
+    {nil, "vs_sdkver", "kv", nil, "Set the Windows SDK version."},
+    {nil, "vs_toolset", "kv", nil, "Set the Windows Toolset version."},
+    {nil, "vs_runtime", "kv", nil, "Set the VS Runtime library (deprecated)."},
+    {nil, "runtimes", "kv", nil, "Set the Runtime libraries."},
+    {nil, "xcode_sdkver", "kv", nil, "The SDK Version for Xcode"},
+    {nil, "target_minver", "kv", nil, "The Target Minimal Version"},
+    {nil, "appledev", "kv", nil, "The Apple Device Type"},
+    {nil, "mingw", "kv", nil, "Set the MingW directory."},
+    {nil, "toolchain", "kv", nil, "Set the toolchain name."},
+    {nil, "toolchain_host", "kv", nil, "Set the host toolchain name."},
+    {nil, "packages", "vs", nil, "The package list."}
 }
 
 -- check package is supported?
@@ -168,7 +167,7 @@ function _require_packages(argv, packages)
     extra.configs.shared = argv.kind == "shared"
     local configs = argv.configs
     if configs then
-        extra.system  = false
+        extra.system = false
         extra.configs = extra.configs or {}
         local extra_configs, errors = ("{" .. configs .. "}"):deserialize()
         if extra_configs then
@@ -184,7 +183,8 @@ function _require_packages(argv, packages)
     local install_packages = {}
     if _check_package_is_supported() then
         for _, package in ipairs(packages) do
-            local ok = os.vexecv(os.programfile(), table.join(check_argv, package), {try = true})
+            local ok = os.vexecv(os.programfile(),
+                                 table.join(check_argv, package), {try = true})
             if ok == 0 then
                 table.insert(install_packages, package)
             end
@@ -195,12 +195,14 @@ function _require_packages(argv, packages)
     if #install_packages > 0 then
         os.vexecv(os.programfile(), table.join(require_argv, install_packages))
     else
-        print("no testable packages on %s or you're using lower version xmake!", argv.plat or os.subhost())
+        print("no testable packages on %s or you're using lower version xmake!",
+              argv.plat or os.subhost())
     end
 end
 
 -- the given package is supported?
 function _package_is_supported(argv, packagename)
+    -- 加载 packages 目录中的所有 package
     local packages = get_packages()
     if packages then
         local plat = argv.plat or os.subhost()
@@ -254,7 +256,8 @@ end
 function main(...)
 
     -- parse arguments
-    local argv = option.parse({...}, options, "Test all the given or changed packages.")
+    local argv = option.parse({...}, options,
+                              "Test all the given or changed packages.")
 
     -- get packages
     local packages = argv.packages or {}
@@ -262,12 +265,13 @@ function main(...)
         packages = get_modified_packages()
     end
     if #packages == 0 then
-        table.insert(packages, "tbox dev")
+        table.insert(packages, "protobuf-cpp 3.19.4")
     end
 
     -- remove unsupported packages
     for idx, package in irpairs(packages) do
-        assert(package == package:lower(), "package(%s) must be lower case!", package)
+        assert(package == package:lower(), "package(%s) must be lower case!",
+               package)
         if not _package_is_supported(argv, package) then
             table.remove(packages, idx)
         end
@@ -307,7 +311,4 @@ function main(...)
 
     -- require packages
     _require_packages(argv, packages)
-    --[[for _, package in ipairs(packages) do
-        _require_packages(argv, package)
-    end]]
 end
