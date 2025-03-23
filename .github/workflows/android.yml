@@ -3,7 +3,9 @@ name: Android
 on:
   pull_request:
     branches:
-      - dev
+      - master
+  push:
+    branches: [ master ]
 
 jobs:
   build:
@@ -22,11 +24,15 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v1
-      - uses: xmake-io/github-action-setup-xmake@v1
-        with:
-          xmake-version: branch@master
-          actions-cache-folder: ".xmake-cache"
-          actions-cache-key: "android"
+
+      - name: Install XMake
+        run: |
+          mkdir /software && cd /software
+          git clone --recursive https://github.com/TOMO-CAT/xmake.git
+          cd xmake
+          git checkout master
+          bash scripts/install.sh
+          xmake --version
 
       - name: Prepare
         run: |
@@ -40,4 +46,4 @@ jobs:
 
       - name: Tests
         run: |
-          xmake l ./scripts/test.lua -D -p android --ndk=`pwd`/android-ndk-${{ matrix.ndk }} --ndk_sdkver=${{ matrix.ndk_sdkver }} -a ${{ matrix.arch }}
+          xmake l ./scripts/test.lua -D -p android --ndk=`pwd`/android-ndk-${{ matrix.ndk }} --ndk_sdkver=${{ matrix.ndk_sdkver }} -a ${{ matrix.arch }} --packages="zlib 1.3.1"

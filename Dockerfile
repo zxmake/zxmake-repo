@@ -26,7 +26,8 @@ RUN apt-get install -y --fix-missing \
     curl \
     sudo \
     cmake \
-    unzip
+    unzip \
+    wget
 
 ARG USER_NAME=root
 RUN useradd -m ${USER_NAME}
