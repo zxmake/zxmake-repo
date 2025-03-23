@@ -3,7 +3,9 @@ name: Linux (Clang)
 on:
   pull_request:
     branches:
-      - dev
+      - master
+  push:
+    branches: [ master ]
 
 jobs:
   build:
@@ -14,20 +16,20 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
-    concurrency:
-        group: ${{ github.ref }}-${{ github.base_ref }}-${{ github.head_ref }}-Linux-Clang-${{ matrix.kind }}
-        cancel-in-progress: true
     steps:
       - uses: actions/checkout@v1
-      - uses: xmake-io/github-action-setup-xmake@v1
-        with:
-          xmake-version: branch@master
-          actions-cache-folder: '.xmake-cache'
-          actions-cache-key: 'ubuntu_clang'
 
-      - name: Installation
+      - name: Install XMake
         run: |
-          # TODO we will remove it later
+          mkdir /software && cd /software
+          git clone --recursive https://github.com/TOMO-CAT/xmake.git
+          cd xmake
+          git checkout master
+          bash scripts/install.sh
+          xmake --version
+
+      - name: Prepare Dependencies
+        run: |
           sudo apt-get update
           sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev p7zip
 
