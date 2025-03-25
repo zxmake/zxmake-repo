@@ -8,7 +8,12 @@ function shasum_of(package, url, version)
     local tmpfile = os.tmpfile()
     package:version_set(version)
     url = filter.handle(url, package)
-    local ok = try { function() http.download(url, tmpfile); return true end }
+    local ok = try {
+        function()
+            http.download(url, tmpfile);
+            return true
+        end
+    }
     if ok and os.isfile(tmpfile) and os.filesize(tmpfile) > 1024 then
         shasum = hash.sha256(tmpfile)
     end
@@ -63,7 +68,8 @@ function _check_version_from_github_tags(package, url)
         local version_latest
         local tags = git.tags(repourl)
         for _, tag in ipairs(tags) do
-            if _is_valid_version(tag) and (not version_latest or semver.compare(tag, version_latest) > 0) then
+            if _is_valid_version(tag) and
+                (not version_latest or semver.compare(tag, version_latest) > 0) then
                 version_latest = tag
             end
         end
@@ -77,7 +83,14 @@ function _check_version_from_github_releases(package, url)
     local repourl = url:match("https://github%.com/.-/.-/")
     if repourl then
         print("checking version from github releases %s ..", repourl)
-        local list = try {function() return os.iorunv("gh", {"release", "list", "--exclude-drafts", "--exclude-pre-releases", "-R", repourl}) end}
+        local list = try {
+            function()
+                return os.iorunv("gh", {
+                    "release", "list", "--exclude-drafts",
+                    "--exclude-pre-releases", "-R", repourl
+                })
+            end
+        }
         if not list then
             list = os.iorunv("gh", {"release", "list", "-R", repourl})
         end
@@ -87,7 +100,8 @@ function _check_version_from_github_releases(package, url)
                 local splitinfo = line:split("%s+")
                 local release = splitinfo[1]
                 local version = splitinfo[#splitinfo - 1]
-                if not version or not _is_valid_version(version) and _is_valid_version(release) then
+                if not version or not _is_valid_version(version) and
+                    _is_valid_version(release) then
                     version = release
                 end
                 if version and _is_valid_version(version) then
@@ -106,8 +120,10 @@ function _version_is_behind_conditions(package)
     local scriptfile = path.join(package:scriptdir(), "xmake.lua")
     local file = io.open(scriptfile)
     for line in file:lines() do
-        local pos = line:find("add_versions", 1, true) or line:find("add_versionfiles", 1, true)
+        local pos = line:find("add_versions", 1, true) or
+                        line:find("add_versionfiles", 1, true)
         if pos and pos > 5 then
+            raise("fck")
             return true
         end
     end
