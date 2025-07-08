@@ -5,7 +5,8 @@
             "missing-parameter",
             "param-type-not-match",
             "need-check-nil",
-            "undefined-field"
+            "undefined-field",
+            "unnecessary-if"
         ]
     },
     "workspace": {

@@ -84,9 +84,12 @@ package("protobuf-cpp", function()
         io.replace("CMakeLists.txt", "set(protobuf_DEBUG_POSTFIX \"d\"",
                    "set(protobuf_DEBUG_POSTFIX \"\"", {plain = true})
 
+        -- CMAKE_POSITION_INDEPENDENT_CODE 生成 fPIC 代码
+        -- @see https://github.com/protocolbuffers/protobuf/issues/1919
         local configs = {
             "-Dprotobuf_BUILD_TESTS=OFF", "-Dprotobuf_BUILD_PROTOC_BINARIES=ON",
-            "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+            "-DCMAKE_POLICY_VERSION_MINIMUM=3.5",
+            "-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
         }
         table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
                          (package:is_debug() and "Debug" or "Release"))

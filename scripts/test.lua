@@ -299,13 +299,16 @@ function main(...)
     -- get packages
     local packages = argv.packages or {}
     if #packages == 0 then
+        -- 没指定 package 时会根据 git diff 搜索到被修改了的 package
         packages = get_modified_packages()
     end
     if #packages == 0 then
+        -- 还是没找到 package 会降级到 tbox
         table.insert(packages, "tbox dev")
     end
 
     -- prepare test project
+    -- 路径: ${tmp}/xmake-repo/test
     local repodir = os.curdir()
     local workdir = path.join(os.tmpdir(), "xmake-repo")
     print(packages)

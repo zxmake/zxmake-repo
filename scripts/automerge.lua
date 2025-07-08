@@ -1,7 +1,7 @@
-
 function _get_autoupdate_pr_list()
     local result = {}
-    local list = os.iorun("gh pr list --label auto-update --state open -R xmake-io/xmake-repo")
+    local list = os.iorun(
+                     "gh pr list --label auto-update --state open -R xmake-io/xmake-repo")
     if list then
         for _, line in ipairs(list:split("\n")) do
             if line:find("Auto-update", 1, true) then
@@ -16,7 +16,9 @@ function _get_autoupdate_pr_list()
 end
 
 function _check_pr_passed(id)
-    local ok = os.vexecv("gh", {"pr", "checks", id, "-R", "xmake-io/xmake-repo"}, {try = true})
+    local ok = os.vexecv("gh",
+                         {"pr", "checks", id, "-R", "xmake-io/xmake-repo"},
+                         {try = true})
     if ok == 0 then
         return true
     end
