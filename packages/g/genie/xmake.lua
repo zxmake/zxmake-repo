@@ -1,4 +1,4 @@
-package("genie")
+package("genie", function()
 
     set_kind("binary")
     set_homepage("https://github.com/bkaradzic/GENie")
@@ -10,16 +10,23 @@ package("genie")
     add_versions("1165", "5461c5ab94d0365c40031fef8f459b9c21b4d37a")
     add_versions("1170", "22cc907a4351db46c55f73e6aa901f1b2f0c52ad")
 
-    add_configs("debug", {description = "Enable debug scripts.", default = false, type = "boolean", readonly = true})
+    add_configs("debug", {
+        description = "Enable debug scripts.",
+        default = false,
+        type = "boolean",
+        readonly = true
+    })
 
-    on_install("@windows", "@msys", "@macosx", "@linux", function (package)
+    on_install("@windows", "@msys", "@macosx", "@linux", function(package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         local outfile = os.tmpfile()
-        os.execv("genie" .. (package:is_plat("windows") and ".exe" or ""), {"--version"}, {stdout = outfile, try = true})
+        os.execv("genie" .. (package:is_plat("windows") and ".exe" or ""),
+                 {"--version"}, {stdout = outfile, try = true})
         local outdata = io.readfile(outfile)
         assert(outdata:find("GENie - Project generator tool", 1, true))
     end)
+end)

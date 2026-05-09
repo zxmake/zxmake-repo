@@ -18,12 +18,12 @@ add_rules("mode.debug", "mode.release")
 set_languages("c++17")
 
 target("assert")
-    set_kind("$(kind)")
-    add_files("src/*.cpp")
-    add_includedirs("include")
-    add_headerfiles("include/*.hpp")
-    add_packages("cpptrace")
+set_kind("$(kind)")
+add_files("src/*.cpp")
+add_includedirs("include")
+add_headerfiles("include/*.hpp")
+add_packages("cpptrace")
 
-    if is_plat("windows") and is_kind("shared") then
-        add_rules("utils.symbols.export_all", {export_classes = true})
-    end
+if is_plat("windows") and is_kind("shared") then
+    add_rules("utils.symbols.export_all", {export_classes = true})
+end

@@ -1,21 +1,26 @@
-package("opencl-headers")
+package("opencl-headers", function()
 
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/KhronosGroup/OpenCL-Headers/")
     set_description("Khronos OpenCL-Headers")
     set_license("Apache-2.0")
 
-    add_urls("https://github.com/KhronosGroup/OpenCL-Headers/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/KhronosGroup/OpenCL-Headers.git")
-    add_versions("v2024.05.08", "3c3dd236d35f4960028f4f58ce8d963fb63f3d50251d1e9854b76f1caab9a309")
-    add_versions("v2023.12.14", "407d5e109a70ec1b6cd3380ce357c21e3d3651a91caae6d0d8e1719c69a1791d")
-    add_versions("v2021.06.30", "6640d590c30d90f89351f5e3043ae6363feeb19ac5e64bc35f8cfa1a6cd5498e")
+    add_urls(
+        "https://github.com/KhronosGroup/OpenCL-Headers/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/KhronosGroup/OpenCL-Headers.git")
+    add_versions("v2024.05.08",
+                 "3c3dd236d35f4960028f4f58ce8d963fb63f3d50251d1e9854b76f1caab9a309")
+    add_versions("v2023.12.14",
+                 "407d5e109a70ec1b6cd3380ce357c21e3d3651a91caae6d0d8e1719c69a1791d")
+    add_versions("v2021.06.30",
+                 "6640d590c30d90f89351f5e3043ae6363feeb19ac5e64bc35f8cfa1a6cd5498e")
 
     add_deps("cmake")
-    on_install(function (package)
+    on_install(function(package)
         import("package.tools.cmake").install(package, {"-DBUILD_TESTING=OFF"})
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_ctypes("cl_int", {includes = "CL/cl.h"}))
     end)
+end)

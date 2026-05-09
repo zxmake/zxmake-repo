@@ -11,4 +11,3 @@ index fbaab52f4..32985a554 100644
 +#endif
  typedef int ecs_http_socket_t;
  #endif
- 

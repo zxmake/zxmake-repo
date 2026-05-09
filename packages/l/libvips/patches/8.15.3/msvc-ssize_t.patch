@@ -18,7 +18,7 @@ index bb3d1b2d7..8941762f7 100644
  		int chunk_size = VIPS_MIN(1024 * 1024 * 1024, count);
 -		ssize_t nwritten = write(region->im->fd, buf, chunk_size);
 +		gint64 nwritten = write(region->im->fd, buf, chunk_size);
- 
+
  		/* n == 0 isn't strictly an error, but we treat it as
  		 * one to make sure we don't get stuck in this loop.
 diff --git a/libvips/iofuncs/util.c b/libvips/iofuncs/util.c
@@ -31,7 +31,6 @@ index 46976ef42..acf78ade8 100644
  		int chunk_size = VIPS_MIN(1024 * 1024 * 1024, count);
 -		ssize_t nwritten = write(fd, buf, chunk_size);
 +		gint64 nwritten = write(fd, buf, chunk_size);
- 
+
  		/* n == 0 isn't strictly an error, but we treat it as
  		 * one to make sure we don't get stuck in this loop.
- 

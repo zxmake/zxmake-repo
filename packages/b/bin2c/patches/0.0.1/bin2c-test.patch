@@ -5,7 +5,7 @@ index 1004dd6..ae3c9b3 100644
 @@ -32,6 +32,11 @@ main(int argc, char *argv[])
      unsigned int uncompressed_size, bz2_size;
  #endif
- 
+
 +	if (argc == 2 && strcmp(argv[1], "test") == 0) {
 +		fprintf(stdout, "bin2c installation succeeded!\n");
 +		return 0;

@@ -1,4 +1,4 @@
-package("hash-library")
+package("hash-library", function()
     set_homepage("https://create.stephan-brumme.com/hash-library/")
     set_description("Portable C++ hashing library")
     set_license("zlib")
@@ -6,7 +6,7 @@ package("hash-library")
     add_urls("https://github.com/stbrumme/hash-library.git")
     add_versions("2021.09.29", "d389d18112bcf7e4786ec5e8723f3658a7f433d7")
 
-    on_install(function (package)
+    on_install(function(package)
         local configs = {}
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
@@ -27,8 +27,9 @@ package("hash-library")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <string>
             #include <iostream>
             void test() {
@@ -36,5 +37,7 @@ package("hash-library")
                 std::string myHash  = sha1("Hello World");
                 std::cout << myHash << std::endl;
             }
-        ]]}, {configs = {languages = "c++11"}, includes = {"sha1.h"}}))
+        ]]
+        }, {configs = {languages = "c++11"}, includes = {"sha1.h"}}))
     end)
+end)

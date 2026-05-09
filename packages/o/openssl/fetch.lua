@@ -4,9 +4,11 @@ import("lib.detect.find_library")
 -- http://www.slproweb.com/products/Win32OpenSSL.html
 function _find_package_on_windows(package, opt)
     local bits = package:is_arch("x86") and "32" or "64"
-    local paths = {"$(reg HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL %(" .. bits .. "-bit%)_is1;Inno Setup: App Path)",
-                    "$(env PROGRAMFILES)/OpenSSL-Win" .. bits,
-                    "C:/OpenSSL-Win" .. bits}
+    local paths = {
+        "$(reg HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL %(" ..
+            bits .. "-bit%)_is1;Inno Setup: App Path)",
+        "$(env PROGRAMFILES)/OpenSSL-Win" .. bits, "C:/OpenSSL-Win" .. bits
+    }
 
     if os.arch() == package:arch() then
         table.insert(paths, "$(env PROGRAMFILES)/OpenSSL")
@@ -24,7 +26,8 @@ function _find_package_on_windows(package, opt)
     if #result.links ~= 2 then
         return
     end
-    table.insert(result.includedirs, find_path(path.translate("openssl/ssl.h"), paths, {suffixes = "include"}))
+    table.insert(result.includedirs, find_path(path.translate("openssl/ssl.h"),
+                                               paths, {suffixes = "include"}))
     return result
 end
 

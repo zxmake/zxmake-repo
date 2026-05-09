@@ -7,6 +7,6 @@ index 3b8706b..dece795 100644
  #include <chrono>
  #include <mutex>
 +#include <string>
- 
+
  namespace drogon
  {

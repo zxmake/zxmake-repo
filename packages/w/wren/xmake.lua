@@ -1,14 +1,17 @@
-package("wren")
+package("wren", function()
     set_homepage("http://wren.io")
-    set_description("Wren is a small, fast, class-based concurrent scripting language.")
+    set_description(
+        "Wren is a small, fast, class-based concurrent scripting language.")
     set_license("MIT")
 
-    add_urls("https://github.com/wren-lang/wren/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/wren-lang/wren.git")
+    add_urls(
+        "https://github.com/wren-lang/wren/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/wren-lang/wren.git")
 
-    add_versions("0.4.0", "23c0ddeb6c67a4ed9285bded49f7c91714922c2e7bb88f42428386bf1cf7b339")
+    add_versions("0.4.0",
+                 "23c0ddeb6c67a4ed9285bded49f7c91714922c2e7bb88f42428386bf1cf7b339")
 
-    on_install(function (package)
+    on_install(function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             target("wren")
@@ -26,6 +29,7 @@ package("wren")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("wrenInterpret", {includes = "wren.h"}))
     end)
+end)

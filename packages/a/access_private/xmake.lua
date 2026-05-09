@@ -1,4 +1,4 @@
-package("access_private")
+package("access_private", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/martong/access_private")
     set_description("Access private members and statics of a C++ class")
@@ -7,12 +7,13 @@ package("access_private")
     add_urls("https://github.com/martong/access_private.git")
     add_versions("2024.02.01", "9e47d135067ecfe569158b2f42ead9c6db9aaedf")
 
-    on_install(function (package)
+    on_install(function(package)
         os.cp("include", package:installdir())
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <access_private.hpp>
 
             class A {
@@ -28,5 +29,7 @@ package("access_private")
                 auto &i = access_private::m_i(a);
                 auto res = call_private::m_f(a, 3);
             }
-        ]]}, {configs = {languages = "cxx11"}}))
+        ]]
+        }, {configs = {languages = "cxx11"}}))
     end)
+end)

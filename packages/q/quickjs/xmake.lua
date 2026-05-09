@@ -1,4 +1,4 @@
-package("quickjs")
+package("quickjs", function()
     set_homepage("https://bellard.org/quickjs/")
     set_description("QuickJS is a small and embeddable Javascript engine")
 
@@ -8,8 +8,14 @@ package("quickjs")
     add_versions("2024.01.13", "d6c7d169de6fb2c90cd2bd2226ba9dafdef883ce")
 
     if is_plat("windows") then
-        add_patches("2024.01.13", "patches/2024.01.13/msvc.patch", "e793d03b7c4db3741cfa3565f8fb1f6337afb31df33f4123c4050d65ffdd28a1")
-        add_configs("shared", {description = "Build shared library.", default = true, type = "boolean", readonly = true})
+        add_patches("2024.01.13", "patches/2024.01.13/msvc.patch",
+                    "e793d03b7c4db3741cfa3565f8fb1f6337afb31df33f4123c4050d65ffdd28a1")
+        add_configs("shared", {
+            description = "Build shared library.",
+            default = true,
+            type = "boolean",
+            readonly = true
+        })
     end
 
     if is_plat("linux", "macosx", "iphoneos", "cross") then
@@ -18,7 +24,7 @@ package("quickjs")
         add_syslinks("dl", "m")
     end
 
-    on_load("windows", function (package)
+    on_load("windows", function(package)
         if package:is_arch("x64") then
             package:add("deps", "mingw-w64")
         else
@@ -26,7 +32,8 @@ package("quickjs")
         end
     end)
 
-    on_install("linux", "macosx", "iphoneos", "android", "mingw", "cross", function (package)
+    on_install("linux", "macosx", "iphoneos", "android", "mingw", "cross",
+               function(package)
         io.writefile("xmake.lua", ([[
             add_rules("mode.debug", "mode.release")
             target("quickjs")
@@ -49,7 +56,7 @@ package("quickjs")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_install("windows", function (package)
+    on_install("windows", function(package)
         io.writefile("xmake.lua", ([[
             add_rules("mode.debug", "mode.release")
             target("quickjs")
@@ -85,22 +92,27 @@ package("quickjs")
         if package:config("shared") then
             import("utils.platform.gnu2mslib")
 
-            gnu2mslib("quickjs.lib", "quickjs.def", {plat = package:plat(), arch = package:arch()})
+            gnu2mslib("quickjs.lib", "quickjs.def",
+                      {plat = package:plat(), arch = package:arch()})
             os.vcp("quickjs.lib", package:installdir("lib"))
             os.rm(package:installdir("lib", "quickjs.dll.a"))
         else
             local mingw = import("detect.sdks.find_mingw")()
             local bindir = mingw.bindir
             if mingw and bindir then
-                os.vcp(path.join(bindir, "libgcc_s_seh-1.dll"), package:installdir("bin"))
-                os.vcp(path.join(bindir, "libwinpthread-1.dll"), package:installdir("bin"))
-                os.vcp(path.join(bindir, "libstdc++-6.dll"), package:installdir("bin"))
+                os.vcp(path.join(bindir, "libgcc_s_seh-1.dll"),
+                       package:installdir("bin"))
+                os.vcp(path.join(bindir, "libwinpthread-1.dll"),
+                       package:installdir("bin"))
+                os.vcp(path.join(bindir, "libstdc++-6.dll"),
+                       package:installdir("bin"))
             end
 
             -- TODO: export .def and generate .lib
         end
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("JS_NewRuntime", {includes = "quickjs.h"}))
     end)
+end)

@@ -7,15 +7,19 @@ import("packages", {alias = "packages_util"})
 function _load_package(packagename, packagedir, packagefile)
     local funcinfo = debug.getinfo(package.load_from_repository)
     if funcinfo and funcinfo.nparams == 3 then -- >= 2.7.8
-        return package.load_from_repository(packagename, packagedir, {packagefile = packagefile})
+        return package.load_from_repository(packagename, packagedir,
+                                            {packagefile = packagefile})
     else
         -- deprecated
-        return package.load_from_repository(packagename, nil, packagedir, packagefile)
+        return package.load_from_repository(packagename, nil, packagedir,
+                                            packagefile)
     end
 end
 
 function _need_artifact(instance)
-    return (not instance:is_headeronly()) and (packages_util.is_supported(instance, "windows", "x64") or packages_util.is_supported(instance, "windows", "x86"))
+    return (not instance:is_headeronly()) and
+               (packages_util.is_supported(instance, "windows", "x64") or
+                   packages_util.is_supported(instance, "windows", "x86"))
 end
 
 function _build_artifacts(name, versions)
@@ -26,18 +30,16 @@ function _build_artifacts(name, versions)
     local oldir = os.cd("build-artifacts")
     local trycount = 0
     while trycount < 2 do
-        local ok = try
-        {
-            function ()
+        local ok = try {
+            function()
                 io.save("build.txt", buildinfo)
                 os.exec("git add -A")
-                os.exec("git commit -a -m \"autobuild %s by xmake-repo/ci\"", name)
+                os.exec("git commit -a -m \"autobuild %s by xmake-repo/ci\"",
+                        name)
                 os.exec("git push origin build")
                 return true
-            end,
-            catch
-            {
-                function ()
+            end, catch {
+                function()
                     os.exec("git reset --hard HEAD^")
                     os.exec("git pull origin build")
                 end
@@ -59,17 +61,17 @@ function _get_latest_modified_packages()
     for _, file in ipairs(files:split('\n')) do
         file = file:trim()
         if file:find("packages", 1, true) and path.filename(file) == "xmake.lua" then
-           assert(file == file:lower(), "%s must be lower case!", file)
-           local packagedir = path.directory(file)
-           local packagename = path.filename(packagedir)
-           if #path.filename(path.directory(packagedir)) == 1 then
-               local instance = _load_package(packagename, packagedir, file)
-               if instance and _need_artifact(instance) then
-                  table.insert(instances, instance)
-                  print("  > %s", instance:name())
-               end
+            assert(file == file:lower(), "%s must be lower case!", file)
+            local packagedir = path.directory(file)
+            local packagename = path.filename(packagedir)
+            if #path.filename(path.directory(packagedir)) == 1 then
+                local instance = _load_package(packagename, packagedir, file)
+                if instance and _need_artifact(instance) then
+                    table.insert(instances, instance)
+                    print("  > %s", instance:name())
+                end
             end
-       end
+        end
     end
     print("%d found", #instances)
     return instances
@@ -85,7 +87,9 @@ function _get_all_packages()
             local instance = _load_package(packagename, packagedir, packagefile)
             local basename = instance:get("base")
             if instance and basename then
-                local basedir = path.join("packages", basename:sub(1, 1):lower(), basename:lower())
+                local basedir = path.join("packages",
+                                          basename:sub(1, 1):lower(),
+                                          basename:lower())
                 local basefile = path.join(basedir, "xmake.lua")
                 instance._BASE = _load_package(basename, basedir, basefile)
             end
@@ -124,17 +128,19 @@ function _get_packagerefs_in_latest_24h()
             local files = os.iorun("git diff --name-only " .. commit .. "^")
             for _, file in ipairs(files:split('\n')) do
                 file = file:trim()
-                if file:find("packages", 1, true) and path.filename(file) == "xmake.lua" then
-                   assert(file == file:lower(), "%s must be lower case!", file)
-                   local packagedir = path.directory(file)
-                   local packagename = path.filename(packagedir)
-                   if #path.filename(path.directory(packagedir)) == 1 then
-                       local instance = _load_package(packagename, packagedir, file)
-                       if instance and _need_artifact(instance) then
-                          table.insert(instances, instance)
-                       end
+                if file:find("packages", 1, true) and path.filename(file) ==
+                    "xmake.lua" then
+                    assert(file == file:lower(), "%s must be lower case!", file)
+                    local packagedir = path.directory(file)
+                    local packagename = path.filename(packagedir)
+                    if #path.filename(path.directory(packagedir)) == 1 then
+                        local instance =
+                            _load_package(packagename, packagedir, file)
+                        if instance and _need_artifact(instance) then
+                            table.insert(instances, instance)
+                        end
                     end
-               end
+                end
             end
         end
     end
@@ -157,13 +163,16 @@ function _get_packagerefs_in_latest_24h()
 end
 
 function main(updaterefs)
-    local instances = updaterefs and _get_packagerefs_in_latest_24h() or _get_latest_modified_packages()
+    local instances = updaterefs and _get_packagerefs_in_latest_24h() or
+                          _get_latest_modified_packages()
     for _, instance in ipairs(instances) do
-       local versions = instance:versions()
-       if versions and #versions > 0 then
-           table.sort(versions, function (a, b) return semver.compare(a, b) > 0 end)
-           local version_latest = versions[1]
-           _build_artifacts(instance:name(), table.wrap(version_latest))
-       end
+        local versions = instance:versions()
+        if versions and #versions > 0 then
+            table.sort(versions, function(a, b)
+                return semver.compare(a, b) > 0
+            end)
+            local version_latest = versions[1]
+            _build_artifacts(instance:name(), table.wrap(version_latest))
+        end
     end
 end

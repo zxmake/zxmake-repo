@@ -1,4 +1,4 @@
-package("csa")
+package("csa", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://epwalsh.github.io/software/csa")
     set_description("C++ header-only library for Coupled Simulated Annealing")
@@ -9,17 +9,20 @@ package("csa")
 
     add_deps("openmp")
 
-    on_install("linux", "macosx", "windows", "mingw@msys", function (package)
+    on_install("linux", "macosx", "windows", "mingw@msys", function(package)
         if package:has_tool("cxx", "gxx") then
             package:add("cxxflags", "-fpermissive")
         end
         os.cp("include", package:installdir())
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             void test() {
                 CSA::Solver<double, double> solver;
             }
-        ]]}, {configs = {languages = "c++11"}, includes = "csa.hpp"}))
+        ]]
+        }, {configs = {languages = "c++11"}, includes = "csa.hpp"}))
     end)
+end)

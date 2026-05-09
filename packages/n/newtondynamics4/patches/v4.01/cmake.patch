@@ -4,7 +4,7 @@ index c7f63370f..466bc9f72 100644
 +++ b/newton-4.00/CMakeLists.txt
 @@ -97,30 +97,6 @@ if(UNIX)
  endif ()
- 
+
  if (MSVC)
 -	if (PTR_SIZE EQUAL 8)
 -		set(CMAKE_INSTALL_PREFIX "win64sdk" CACHE PATH "..." FORCE)
@@ -38,10 +38,10 @@ index f399754d6..dbfb7d4ab 100644
 --- a/newton-4.00/applications/ndSandbox/CMakeLists.txt
 +++ b/newton-4.00/applications/ndSandbox/CMakeLists.txt
 @@ -96,8 +96,6 @@ if(MSVC OR MINGW)
- 
+
      target_link_libraries (${projectName} glu32 opengl32)
- 
--	target_link_options(${projectName} PUBLIC "/DEBUG") 
+
+-	target_link_options(${projectName} PUBLIC "/DEBUG")
 -
      if(CMAKE_VS_MSBUILD_COMMAND OR CMAKE_VS_DEVENV_COMMAND)
  		set_target_properties(${projectName} PROPERTIES COMPILE_FLAGS "/YundSandboxStdafx.h")
@@ -56,7 +56,7 @@ index a2d501408..76ea3b175 100644
  		endif()
 -
 -		if(MSVC OR MINGW)
--			target_link_options(${projectName} PUBLIC "/DEBUG") 
+-			target_link_options(${projectName} PUBLIC "/DEBUG")
 -		endif()
 -
  	else()
@@ -72,7 +72,7 @@ index 78903dd0a..2e1d5be89 100644
  	add_library(${projectName} SHARED ${CPP_SOURCE})
 -
 -	if(MSVC OR MINGW)
--		target_link_options(${projectName} PUBLIC "/DEBUG") 
+-		target_link_options(${projectName} PUBLIC "/DEBUG")
 -	endif()
  else()
  	add_library(${projectName} STATIC ${CPP_SOURCE})
@@ -87,7 +87,7 @@ index 2786e5838..7fc55b76b 100644
  	add_library(${projectName} SHARED ${CPP_SOURCE})
 -
 -	if(MSVC OR MINGW)
--		target_link_options(${projectName} PUBLIC "/DEBUG") 
+-		target_link_options(${projectName} PUBLIC "/DEBUG")
 -	endif()
 -
  else()
@@ -100,9 +100,9 @@ index eb6fc4bd5..97a366b77 100644
 @@ -51,10 +51,6 @@ if(UNIX)
  	add_library(${projectName} SHARED ${CPP_SOURCE})
  endif()
- 
+
 -if(MSVC OR MINGW)
--	target_link_options(${projectName} PUBLIC "/DEBUG") 
+-	target_link_options(${projectName} PUBLIC "/DEBUG")
 -endif()
 -
  install(TARGETS ${projectName}
@@ -119,7 +119,7 @@ index 86ca89aca..6e2875b11 100644
 -
 -
 -	if(MSVC OR MINGW)
--		target_link_options(${projectName} PUBLIC "/DEBUG") 
+-		target_link_options(${projectName} PUBLIC "/DEBUG")
 -	endif()
 -
  else()

@@ -1,11 +1,12 @@
-package("crypto-algorithms")
+package("crypto-algorithms", function()
     set_homepage("https://github.com/KorewaWatchful/crypto-algorithms")
-    set_description("Basic implementations of standard cryptography algorithms, like AES and SHA-1.")
+    set_description(
+        "Basic implementations of standard cryptography algorithms, like AES and SHA-1.")
 
     add_urls("https://github.com/KorewaWatchful/crypto-algorithms.git")
     add_versions("2020.4.20", "cb9ea3fada60f9b01e9133d7db4d3e08171d0565")
 
-    on_install(function (package)
+    on_install(function(package)
         local configs = {}
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
@@ -24,6 +25,7 @@ package("crypto-algorithms")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("base64_encode", {includes = "base64.h"}))
     end)
+end)

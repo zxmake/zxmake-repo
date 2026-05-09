@@ -1,19 +1,39 @@
-package("usockets")
+package("usockets", function()
     set_homepage("https://github.com/uNetworking")
-    set_description("µSockets is the non-blocking, thread-per-CPU foundation library used by µWebSockets. It provides optimized networking - using the same opaque API (programming interface) across all supported transports, event-loops and platforms.")
+    set_description(
+        "µSockets is the non-blocking, thread-per-CPU foundation library used by µWebSockets. It provides optimized networking - using the same opaque API (programming interface) across all supported transports, event-loops and platforms.")
     set_license("Apache-2.0")
 
-    add_urls("https://github.com/uNetworking/uSockets/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/uNetworking/uSockets.git")
+    add_urls(
+        "https://github.com/uNetworking/uSockets/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/uNetworking/uSockets.git")
 
-    add_versions("v0.8.8", "d14d2efe1df767dbebfb8d6f5b52aa952faf66b30c822fbe464debaa0c5c0b17")
+    add_versions("v0.8.8",
+                 "d14d2efe1df767dbebfb8d6f5b52aa952faf66b30c822fbe464debaa0c5c0b17")
 
-    add_configs("ssl", {description = "Select ssl library", default = nil, type = "string", values = {"openssl", "openssl3", "wolfssl", "boringssl"}})
-    add_configs("uv", {description = "Enable libuv", default = false, type = "boolean"})
-    add_configs("uring", {description = "Enable liburing", default = false, type = "boolean"})
-    add_configs("quic", {description = "Enable lsquic", default = false, type = "boolean"})
+    add_configs("ssl", {
+        description = "Select ssl library",
+        default = nil,
+        type = "string",
+        values = {"openssl", "openssl3", "wolfssl", "boringssl"}
+    })
+    add_configs("uv", {
+        description = "Enable libuv",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("uring", {
+        description = "Enable liburing",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("quic", {
+        description = "Enable lsquic",
+        default = false,
+        type = "boolean"
+    })
 
-    on_load(function (package)
+    on_load(function(package)
         local ssl = package:config("ssl")
         if ssl then
             package:add("deps", ssl)
@@ -47,7 +67,7 @@ package("usockets")
         end
     end)
 
-    on_install("windows", "macosx", "linux", function (package)
+    on_install("windows", "macosx", "linux", function(package)
         local configs = {}
         configs.ssl = package:config("ssl")
         configs.uv = package:config("uv")
@@ -58,6 +78,8 @@ package("usockets")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("us_create_socket_context", {includes = {"libusockets.h"}}))
+    on_test(function(package)
+        assert(package:has_cfuncs("us_create_socket_context",
+                                  {includes = {"libusockets.h"}}))
     end)
+end)

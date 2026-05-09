@@ -5,7 +5,8 @@ import("detect.sdks.find_cuda")
 function _find_package(package, opt)
     if package:is_plat("windows") then
         local rdir = (package:is_arch("x64") and "x64" or "Win32")
-        local libname = (package:is_arch("x64") and "nvToolsExt64_1" or "nvToolsExt32_1")
+        local libname = (package:is_arch("x64") and "nvToolsExt64_1" or
+                            "nvToolsExt32_1")
 
         -- init search paths
         local paths = {
@@ -14,21 +15,30 @@ function _find_package(package, opt)
         }
 
         -- find library
-        local result = {links = {}, linkdirs = {}, includedirs = {}, libfiles = {}}
-        local linkinfo = find_library(libname, paths, {suffixes = path.join("lib", rdir)})
+        local result = {
+            links = {},
+            linkdirs = {},
+            includedirs = {},
+            libfiles = {}
+        }
+        local linkinfo = find_library(libname, paths,
+                                      {suffixes = path.join("lib", rdir)})
         if linkinfo then
             local nvtx_dir = path.directory(path.directory(linkinfo.linkdir))
             table.insert(result.linkdirs, linkinfo.linkdir)
             table.insert(result.links, libname)
-            table.insert(result.libfiles, path.join(nvtx_dir, "bin", rdir, libname .. ".dll"))
-            table.insert(result.libfiles, path.join(nvtx_dir, "lib", rdir, libname .. ".lib"))
+            table.insert(result.libfiles,
+                         path.join(nvtx_dir, "bin", rdir, libname .. ".dll"))
+            table.insert(result.libfiles,
+                         path.join(nvtx_dir, "lib", rdir, libname .. ".lib"))
         else
             -- not found?
             return
         end
 
         -- find include
-        table.insert(result.includedirs, find_path("nvToolsExt.h", paths, {suffixes = "include"}))
+        table.insert(result.includedirs,
+                     find_path("nvToolsExt.h", paths, {suffixes = "include"}))
         return result
     else
         local cuda = find_cuda()

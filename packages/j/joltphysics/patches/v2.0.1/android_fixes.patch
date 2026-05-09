@@ -20,7 +20,7 @@ index 1565ff485..d429825a6 100644
      }
 +    namespace 'com.joltphysics.unittests'
  }
- 
+
  dependencies {
 diff --git a/Build/Android/UnitTests/src/main/AndroidManifest.xml b/Build/Android/UnitTests/src/main/AndroidManifest.xml
 index f8662a355..e31e98364 100644
@@ -31,7 +31,7 @@ index f8662a355..e31e98364 100644
 -<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 -    package="com.joltphysics.unittests">
 +<manifest xmlns:android="http://schemas.android.com/apk/res/android">
- 
+
      <application
          android:allowBackup="true"
 diff --git a/Build/Android/build.gradle b/Build/Android/build.gradle
@@ -44,7 +44,7 @@ index 7b2734da3..04bc67d84 100644
      dependencies {
 -        classpath 'com.android.tools.build:gradle:7.2.2'
 +        classpath 'com.android.tools.build:gradle:7.4.1'
- 
+
          // NOTE: Do not place your application dependencies here; they belong
          // in the individual module build.gradle files
 diff --git a/Build/Android/gradle/wrapper/gradle-wrapper.properties b/Build/Android/gradle/wrapper/gradle-wrapper.properties

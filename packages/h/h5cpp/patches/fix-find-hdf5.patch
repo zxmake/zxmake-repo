@@ -5,7 +5,7 @@ index c50784b3..dd97d117 100644
 @@ -171,11 +171,6 @@ install(FILES
      DESTINATION ${CMAKE_INSTALL_PACKAGEDIR}
      COMPONENT development)
- 
+
 -install(FILES
 -        cmake/FindHDF5.cmake
 -        DESTINATION ${CMAKE_INSTALL_PACKAGEDIR}/hdf5
@@ -21,7 +21,7 @@ index c05fe75f..7461f5ea 100644
 @@ -2,22 +2,24 @@ if(H5CPP_WITH_MPI)
    set(HDF5_PREFER_PARALLEL TRUE)
  endif()
- 
+
 -find_package(HDF5 REQUIRED COMPONENTS C HL)
 +find_package(HDF5 CONFIG REQUIRED COMPONENTS C HL)
 +if(H5CPP_BUILD_SHARED)
@@ -43,8 +43,8 @@ index c05fe75f..7461f5ea 100644
 -message(STATUS "Found HDF5 HDF5_IS_PARALLEL = ${HDF5_IS_PARALLEL}")
 +message(STATUS "Found HDF5 HDF5_ENABLE_PARALLEL = ${HDF5_ENABLE_PARALLEL}")
  message(STATUS "==============================================================")
- 
- 
+
+
  if(H5CPP_WITH_MPI)
 -  if(NOT HDF5_IS_PARALLEL)
 +  if(NOT HDF5_ENABLE_PARALLEL)
@@ -56,18 +56,18 @@ index 03a98885..0c8cd9de 100644
 --- a/src/h5cpp/CMakeLists.txt
 +++ b/src/h5cpp/CMakeLists.txt
 @@ -39,6 +39,9 @@ add_doxygen_source_deps(${h5cpp_headers})
- 
+
  if (H5CPP_BUILD_SHARED)
  	target_compile_definitions(h5cpp PRIVATE H5CPP_EXPORTS PUBLIC H5CPP_BUILD_SHARED)
 +  set(_suffix "shared")
 +else()
 +  set(_suffix "static")
  endif()
- 
+
  set(H5CPP_LINKS ${MPI_CXX_LIBRARIES})
 @@ -86,9 +89,9 @@ endif()
  target_link_libraries(h5cpp
-   PUBLIC 
+   PUBLIC
      ${H5CPP_LINKS}
 -    hdf5::hdf5
 +    "hdf5::hdf5-${_suffix}"

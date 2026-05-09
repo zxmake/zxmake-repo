@@ -1,4 +1,4 @@
-package("qmsetup")
+package("qmsetup", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/stdware/qmsetup")
     set_description("CMake Modules and Basic Libraries for C/C++ projects.")
@@ -13,17 +13,21 @@ package("qmsetup")
     end
     add_deps("syscmdline")
 
-    on_install(function (package)
+    on_install(function(package)
         local configs = {}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:is_debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
-        table.insert(configs, "-DQMSETUP_STATIC_RUNTIME=" .. (package:has_runtime("MT", "MTd") and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:is_debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
+        table.insert(configs, "-DQMSETUP_STATIC_RUNTIME=" ..
+                         (package:has_runtime("MT", "MTd") and "ON" or "OFF"))
 
         os.mkdir(path.join(package:buildir(), "src/corecmd/pdb"))
         import("package.tools.cmake").install(package, configs)
         package:addenv("PATH", "bin")
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cxxincludes("qmsetup/qmsetup_global.h"))
     end)
+end)

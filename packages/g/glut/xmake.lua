@@ -1,4 +1,4 @@
-package("glut")
+package("glut", function()
 
     set_homepage("https://www.opengl.org/resources/libraries/glut/")
     set_description("OpenGL utility toolkit")
@@ -7,10 +7,13 @@ package("glut")
         add_deps("freeglut")
     end
 
-    on_fetch(function (package, opt)
+    on_fetch(function(package, opt)
         if opt.system then
             if package:is_plat("macosx") then
-                return {frameworks = {"GLUT", "OpenGL"}, defines = "GL_SILENCE_DEPRECATION"}
+                return {
+                    frameworks = {"GLUT", "OpenGL"},
+                    defines = "GL_SILENCE_DEPRECATION"
+                }
             end
         else
             local freeglut = package:dep("freeglut")
@@ -19,3 +22,4 @@ package("glut")
             end
         end
     end)
+end)

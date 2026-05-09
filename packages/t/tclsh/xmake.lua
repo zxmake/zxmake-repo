@@ -1,4 +1,4 @@
-package("tclsh")
+package("tclsh", function()
     set_kind("binary")
     set_homepage("https://core.tcl-lang.org/tcl/")
     set_description("The Tcl Core. (Mirror of core.tcl-lang.org) ")
@@ -6,24 +6,28 @@ package("tclsh")
     add_urls("https://github.com/tcltk/tcl.git")
     add_versions("2024.06.07", "6accaa2544857f45554541a83fb4ef4cefa263d0")
 
-    on_install("linux", "macosx", function (package)
+    on_install("linux", "macosx", function(package)
         local configs = {}
         os.cd("unix")
         import("package.tools.autoconf").install(package, configs)
-        os.cp(path.join(package:installdir("bin"), "tclsh9.0"), path.join(package:installdir("bin"), "tclsh"))
+        os.cp(path.join(package:installdir("bin"), "tclsh9.0"),
+              path.join(package:installdir("bin"), "tclsh"))
     end)
 
-    on_install("windows", function (package)
+    on_install("windows", function(package)
         os.cd("win")
         -- TODO
-        io.replace("makefile.vc", "libtclzip:  core dlls $(TCLSCRIPTZIP)", "libtclzip:  core dlls", {plain = true})
-        import("package.tools.nmake").build(package, {"-f", "makefile.vc", "release"})
+        io.replace("makefile.vc", "libtclzip:  core dlls $(TCLSCRIPTZIP)",
+                   "libtclzip:  core dlls", {plain = true})
+        import("package.tools.nmake").build(package,
+                                            {"-f", "makefile.vc", "release"})
         os.cp("Release_*/*.exe", package:installdir("bin"))
         os.cp("Release_*/*.dll", package:installdir("bin"))
-        os.cp(path.join(package:installdir("bin"), "tclsh90.exe"), path.join(package:installdir("bin"), "tclsh.exe"))
+        os.cp(path.join(package:installdir("bin"), "tclsh90.exe"),
+              path.join(package:installdir("bin"), "tclsh.exe"))
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         local infile = os.tmpfile()
         local outfile = os.tmpfile()
         io.writefile(infile, "puts hello\n")
@@ -32,3 +36,4 @@ package("tclsh")
         os.rm(infile)
         os.rm(outfile)
     end)
+end)

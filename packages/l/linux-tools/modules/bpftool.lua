@@ -11,7 +11,8 @@ function install(package)
     for _, dep in ipairs(package:librarydeps()) do
         local fetchinfo = dep:fetch()
         if fetchinfo then
-            for _, includedir in ipairs(fetchinfo.includedirs or fetchinfo.sysincludedirs) do
+            for _, includedir in ipairs(fetchinfo.includedirs or
+                                            fetchinfo.sysincludedirs) do
                 table.insert(cflags, "-isystem " .. includedir)
             end
             for _, linkdir in ipairs(fetchinfo.linkdirs) do
@@ -28,10 +29,13 @@ function install(package)
     table.insert(configs, "LDFLAGS=" .. table.concat(ldflags, " "))
 
     os.cd("tools/bpf/bpftool")
-    io.replace("Makefile", "prefix ?= /usr/local", "prefix ?= " .. package:installdir(), {plain = true})
-    io.replace("Makefile", "bash_compdir ?= /usr/share", "bash_compdir ?= " .. package:installdir("share"), {plain = true})
+    io.replace("Makefile", "prefix ?= /usr/local",
+               "prefix ?= " .. package:installdir(), {plain = true})
+    io.replace("Makefile", "bash_compdir ?= /usr/share",
+               "bash_compdir ?= " .. package:installdir("share"), {plain = true})
     io.replace("Makefile", "-lelf -lz", "-lelf -lzstd -lz", {plain = true})
-    io.replace("Makefile", "$(Q)$(LLVM_STRIP) -g $@", "echo skip", {plain = true})
+    io.replace("Makefile", "$(Q)$(LLVM_STRIP) -g $@", "echo skip",
+               {plain = true})
     import("package.tools.make").build(package, configs)
     os.vrunv("make", table.join("install", configs))
 end

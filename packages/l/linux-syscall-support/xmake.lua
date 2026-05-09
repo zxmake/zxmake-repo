@@ -1,6 +1,7 @@
-package("linux-syscall-support")
+package("linux-syscall-support", function()
     set_homepage("https://chromium.googlesource.com/linux-syscall-support")
-    set_description("Linux Syscall Support provides a header file that can be included into your application whenever you need to make direct system calls.")
+    set_description(
+        "Linux Syscall Support provides a header file that can be included into your application whenever you need to make direct system calls.")
     set_license("BSD-3-Clause")
 
     add_urls("https://chromium.googlesource.com/linux-syscall-support.git")
@@ -8,10 +9,12 @@ package("linux-syscall-support")
 
     set_kind("library", {headeronly = true})
 
-    on_install("linux", function (package)
+    on_install("linux", function(package)
         os.cp("linux_syscall_support.h", package:installdir("include/lss"))
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("sys_open", {includes = "lss/linux_syscall_support.h"}))
+    on_test(function(package)
+        assert(package:has_cfuncs("sys_open",
+                                  {includes = "lss/linux_syscall_support.h"}))
     end)
+end)

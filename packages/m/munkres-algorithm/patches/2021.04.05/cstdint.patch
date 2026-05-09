@@ -7,6 +7,6 @@ index 694aff1..ac2ecca 100644
  #include <vector>
  #include <algorithm>
 +#include <cstdint>
- 
+
  namespace detail
  {

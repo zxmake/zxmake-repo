@@ -1,7 +1,8 @@
-package("cppcoro")
+package("cppcoro", function()
 
     set_homepage("https://github.com/lewissbaker/cppcoro")
-    set_description("A library of C++ coroutine abstractions for the coroutines TS")
+    set_description(
+        "A library of C++ coroutine abstractions for the coroutines TS")
 
     set_urls("https://github.com/lewissbaker/cppcoro.git")
     add_versions("2020.10.13", "a87e97fe5b6091ca9f6de4637736b8e0d8b109cf")
@@ -10,7 +11,7 @@ package("cppcoro")
         add_syslinks("synchronization", "ws2_32", "mswsock")
     end
 
-    on_install("windows", function (package)
+    on_install("windows", function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             target("cppcoro")
@@ -34,7 +35,8 @@ package("cppcoro")
         local configs = {}
         if package:config("shared") then
             configs.kind = "shared"
-        elseif not package:is_plat("windows", "mingw") and package:config("pic") ~= false then
+        elseif not package:is_plat("windows", "mingw") and package:config("pic") ~=
+            false then
             configs.cxflags = "-fPIC"
         end
         for _, filepath in ipairs(os.files("lib/*.cpp")) do
@@ -43,9 +45,11 @@ package("cppcoro")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        local cxxflags = package:is_plat("windows") and "/await" or "-fcoroutines-ts"
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        local cxxflags = package:is_plat("windows") and "/await" or
+                             "-fcoroutines-ts"
+        assert(package:check_cxxsnippets({
+            test = [[
         #include <cppcoro/task.hpp>
         #include <cppcoro/task.hpp>
         #include <cppcoro/sync_wait.hpp>
@@ -95,5 +99,13 @@ package("cppcoro")
             process_events(ioService)));
           return 0;
         }
-        ]]}, {configs = {cxxflags = cxxflags, languages = "c++17", defines = "_SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING"}}))
+        ]]
+        }, {
+            configs = {
+                cxxflags = cxxflags,
+                languages = "c++17",
+                defines = "_SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING"
+            }
+        }))
     end)
+end)

@@ -1,4 +1,4 @@
-package("strtk")
+package("strtk", function()
 
     set_kind("library", {headeronly = true})
     set_homepage("https://www.partow.net/programming/strtk/index.html")
@@ -8,12 +8,13 @@ package("strtk")
     add_urls("https://github.com/ArashPartow/strtk.git")
     add_versions("2020.01.01", "d2b446bf1f7854e8b08f5295ec6f6852cae066a2")
 
-    on_install(function (package)
+    on_install(function(package)
         os.cp("strtk.hpp", package:installdir("include"))
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #define strtk_no_tr1_or_boost
             #include <strtk.hpp>
             void test() {
@@ -22,5 +23,7 @@ package("strtk")
                 strtk::std_string::tokenizer<>::type tokenizer(s,predicate);
                 strtk::std_string::tokenizer<>::type::iterator itr = tokenizer.begin();
             }
-        ]]}, {configs = {languages = "c++14"}}))
+        ]]
+        }, {configs = {languages = "c++14"}}))
     end)
+end)

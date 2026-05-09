@@ -1,22 +1,28 @@
-package("xz")
+package("xz", function()
 
     set_homepage("https://tukaani.org/xz/")
-    set_description("General-purpose data compression with high compression ratio.")
+    set_description(
+        "General-purpose data compression with high compression ratio.")
 
-    set_urls("https://downloads.sourceforge.net/project/lzmautils/xz-$(version).tar.gz",
-             "https://tukaani.org/xz/xz-$(version).tar.gz")
-    add_versions("5.4.6", "aeba3e03bf8140ddedf62a0a367158340520f6b384f75ca6045ccc6c0d43fd5c")
-    add_versions("5.2.5", "f6f4910fd033078738bd82bfba4f49219d03b17eb0794eb91efbae419f4aba10")
-    add_versions("5.2.10", "eb7a3b2623c9d0135da70ca12808a214be9c019132baaa61c9e1d198d1d9ded3")
-    add_versions("5.4.1", "e4b0f81582efa155ccf27bb88275254a429d44968e488fc94b806f2a61cd3e22")
+    set_urls(
+        "https://downloads.sourceforge.net/project/lzmautils/xz-$(version).tar.gz",
+        "https://tukaani.org/xz/xz-$(version).tar.gz")
+    add_versions("5.4.6",
+                 "aeba3e03bf8140ddedf62a0a367158340520f6b384f75ca6045ccc6c0d43fd5c")
+    add_versions("5.2.5",
+                 "f6f4910fd033078738bd82bfba4f49219d03b17eb0794eb91efbae419f4aba10")
+    add_versions("5.2.10",
+                 "eb7a3b2623c9d0135da70ca12808a214be9c019132baaa61c9e1d198d1d9ded3")
+    add_versions("5.4.1",
+                 "e4b0f81582efa155ccf27bb88275254a429d44968e488fc94b806f2a61cd3e22")
 
-    on_load(function (package)
+    on_load(function(package)
         if package:is_plat("windows") and not package:config("shared") then
             package:add("defines", "LZMA_API_STATIC")
         end
     end)
 
-    on_install("windows", "mingw@windows,msys", function (package)
+    on_install("windows", "mingw@windows,msys", function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             target("lzma")
@@ -51,8 +57,10 @@ package("xz")
         import("package.tools.xmake").install(package)
     end)
 
-    on_install("macosx", "linux", "mingw@linux,macosx", function (package)
-        local configs = {"--disable-dependency-tracking", "--disable-silent-rules"}
+    on_install("macosx", "linux", "mingw@linux,macosx", function(package)
+        local configs = {
+            "--disable-dependency-tracking", "--disable-silent-rules"
+        }
         if package:debug() then
             table.insert(configs, "--enable-debug")
         end
@@ -69,6 +77,7 @@ package("xz")
         end
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("lzma_code", {includes = "lzma.h"}))
     end)
+end)

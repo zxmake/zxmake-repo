@@ -1,4 +1,4 @@
-package("phnt")
+package("phnt", function()
 
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/winsiderss/systeminformer")
@@ -10,10 +10,11 @@ package("phnt")
 
     add_syslinks("ntdll")
 
-    on_install("windows", function (package)
+    on_install("windows", function(package)
         os.cp("*.h", package:installdir("include"))
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cincludes("phnt_windows.h"))
     end)
+end)

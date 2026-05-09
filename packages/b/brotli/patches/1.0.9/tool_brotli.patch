@@ -4,7 +4,7 @@ index 7c678d3..8f55f2f 100644
 +++ b/c/tools/brotli.c
 @@ -876,6 +876,7 @@ static void PrintFileProcessingProgress(Context* context) {
  }
- 
+
  static BROTLI_BOOL DecompressFile(Context* context, BrotliDecoderState* s) {
 +  int has_more_input;
    BrotliDecoderResult result = BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT;

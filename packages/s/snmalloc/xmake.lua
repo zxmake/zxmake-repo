@@ -1,13 +1,16 @@
-package("snmalloc")
+package("snmalloc", function()
     set_homepage("https://github.com/microsoft/snmalloc")
     set_description("Message passing based allocator")
     set_license("MIT")
 
-    add_urls("https://github.com/microsoft/snmalloc/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/microsoft/snmalloc.git")
+    add_urls(
+        "https://github.com/microsoft/snmalloc/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/microsoft/snmalloc.git")
 
-    add_versions("0.6.2", "e0486ccf03eac5dd8acbb66ea8ad33bec289572a51614acdf7117397e4f1af8c")
-    add_versions("0.6.0", "de1bfb86407d5aac9fdad88319efdd5593ca2f6c61fc13371c4f34aee0b6664f")
+    add_versions("0.6.2",
+                 "e0486ccf03eac5dd8acbb66ea8ad33bec289572a51614acdf7117397e4f1af8c")
+    add_versions("0.6.0",
+                 "de1bfb86407d5aac9fdad88319efdd5593ca2f6c61fc13371c4f34aee0b6664f")
 
     add_deps("cmake")
 
@@ -15,19 +18,26 @@ package("snmalloc")
         add_syslinks("onecore")
     end
 
-    on_install("windows|x64", "windows|x86", "linux", "macosx", "bsd", function (package)
+    on_install("windows|x64", "windows|x86", "linux", "macosx", "bsd",
+               function(package)
         local configs = {"-DSNMALLOC_BUILD_TESTING=OFF"}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
         local cxflags
         if package:is_plat("windows") then
             cxflags = "/FS"
         end
-        import("package.tools.cmake").install(package, configs, {cxflags = cxflags})
+        import("package.tools.cmake").install(package, configs,
+                                              {cxflags = cxflags})
         os.cp("src/snmalloc", package:installdir("include"))
     end)
 
-    on_test(function (package)
-        assert(package:has_cxxfuncs("snmalloc::DefaultPal::message(\"\")",
-            {includes = "snmalloc/snmalloc.h", configs = {languages = "c++20", cxflags = "-mcx16"}}))
+    on_test(function(package)
+        assert(package:has_cxxfuncs("snmalloc::DefaultPal::message(\"\")", {
+            includes = "snmalloc/snmalloc.h",
+            configs = {languages = "c++20", cxflags = "-mcx16"}
+        }))
     end)
+end)

@@ -1,11 +1,21 @@
-package("qt6lib")
+package("qt6lib", function()
     set_kind("template")
     set_homepage("https://www.qt.io")
-    set_description("Qt is the faster, smarter way to create innovative devices, modern UIs & applications for multiple screens. Cross-platform software development at its best.")
+    set_description(
+        "Qt is the faster, smarter way to create innovative devices, modern UIs & applications for multiple screens. Cross-platform software development at its best.")
     set_license("LGPL-3")
 
-    add_configs("shared", {description = "Download shared binaries.", default = true, type = "boolean", readonly = true})
-    add_configs("vs_runtime", {description = "Set vs compiler runtime.", default = "MD", readonly = true})
+    add_configs("shared", {
+        description = "Download shared binaries.",
+        default = true,
+        type = "boolean",
+        readonly = true
+    })
+    add_configs("vs_runtime", {
+        description = "Set vs compiler runtime.",
+        default = "MD",
+        readonly = true
+    })
 
     add_versions("6.3.0", "dummy")
     add_versions("6.3.1", "dummy")
@@ -27,17 +37,21 @@ package("qt6lib")
     add_versions("6.7.2", "dummy")
     add_versions("6.8.0", "dummy")
 
-    on_load(function (package)
-        package:add("deps", "qt6base", {debug = package:is_debug(), version = package:version_str()})
+    on_load(function(package)
+        package:add("deps", "qt6base", {
+            debug = package:is_debug(),
+            version = package:version_str()
+        })
     end)
 
-    on_fetch(function (package)
+    on_fetch(function(package)
         local qt = package:dep("qt6base"):fetch()
         if not qt then
             return
         end
 
-        local libname = assert(package:data("libname"), "this package must not be used directly")
+        local libname = assert(package:data("libname"),
+                               "this package must not be used directly")
 
         local links = table.wrap(package:data("links"))
         local includedirs = {qt.includedir}
@@ -55,14 +69,16 @@ package("qt6lib")
                 linkname = linkname .. "_x86_64"
             elseif package:is_arch("arm64", "arm64-v8a") then
                 linkname = linkname .. "_arm64-v8a"
-            elseif package:is_arch("armv7", "armeabi-v7a", "armeabi", "armv7-a", "armv5te") then
+            elseif package:is_arch("armv7", "armeabi-v7a", "armeabi", "armv7-a",
+                                   "armv5te") then
                 linkname = linkname .. "_armeabi-v7a"
             elseif package:is_arch("x86") then
                 linkname = linkname .. "_x86"
             end
             table.insert(includedirs, path.join(qt.includedir, "Qt" .. libname))
         elseif package:is_plat("macosx") then
-            table.insert(includedirs, path.join(qt.libdir, "Qt" .. libname .. ".framework", "Headers"))
+            table.insert(includedirs, path.join(qt.libdir, "Qt" .. libname ..
+                                                    ".framework", "Headers"))
             frameworks = "Qt" .. libname
         else
             linkname = "Qt6" .. libname
@@ -88,7 +104,9 @@ package("qt6lib")
         }
     end)
 
-    on_install("windows|x64", "linux|x86_64", "macosx|x86_64", "mingw|x86_64", function (package)
+    on_install("windows|x64", "linux|x86_64", "macosx|x86_64", "mingw|x86_64",
+               function(package)
         local qt = package:dep("qt6base"):data("qt")
         assert(qt, "qt6base is required")
     end)
+end)

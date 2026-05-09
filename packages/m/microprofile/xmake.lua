@@ -1,23 +1,31 @@
-package("microprofile")
+package("microprofile", function()
     set_homepage("https://github.com/jonasmr/microprofile")
     set_description("microprofile is an embeddable profiler")
     set_license("Unlicense")
 
-    add_urls("https://github.com/jonasmr/microprofile/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/jonasmr/microprofile.git")
+    add_urls(
+        "https://github.com/jonasmr/microprofile/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/jonasmr/microprofile.git")
 
-    add_versions("v4.0", "59cd3ee7afd3ce5cfeb7599db62ccc0611818985a8e649353bec157122902a5c")
+    add_versions("v4.0",
+                 "59cd3ee7afd3ce5cfeb7599db62ccc0611818985a8e649353bec157122902a5c")
 
     if is_plat("windows") then
         add_syslinks("ws2_32", "advapi32", "shell32")
-        add_configs("shared", {description = "Build shared binaries.", default = false, type = "boolean", readonly = true})
+        add_configs("shared", {
+            description = "Build shared binaries.",
+            default = false,
+            type = "boolean",
+            readonly = true
+        })
     elseif is_plat("linux", "bsd") then
         add_syslinks("pthread")
     end
 
     add_deps("stb")
 
-    on_install("windows", "linux", "macosx", "bsd", "android", "iphoneos", function (package)
+    on_install("windows", "linux", "macosx", "bsd", "android", "iphoneos",
+               function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             set_languages("c++11")
@@ -39,6 +47,8 @@ package("microprofile")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("MicroProfileFlip", {includes = "microprofile.h"}))
+    on_test(function(package)
+        assert(package:has_cfuncs("MicroProfileFlip",
+                                  {includes = "microprofile.h"}))
     end)
+end)

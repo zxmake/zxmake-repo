@@ -4,7 +4,7 @@ index e9b921f..b55e7b4 100644
 +++ b/data/CMakeLists.txt
 @@ -1,6 +1,7 @@
  find_package(PythonInterp REQUIRED)
- 
+
  set(OPENCC_DICT_BIN opencc_dict)
 +set(OPENCC_DICT_EXECUTABLE "$<TARGET_FILE:${OPENCC_DICT_BIN}>")
  set(DICT_MERGE_BIN "${PYTHON_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/scripts/merge.py")
@@ -48,6 +48,6 @@ index 8ec1177..2bc2900 100644
 +else()
 +  target_link_libraries(libopencc marisa)
 +endif()
- 
+
  GENERATE_EXPORT_HEADER(
    libopencc

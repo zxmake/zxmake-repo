@@ -9,5 +9,5 @@ diff --git a/CMake/FollyCompilerMSVC.cmake b/CMake/FollyCompilerMSVC.cmake
 +      NOMINMAX
 +      GLOG_NO_ABBREVIATED_SEVERITIES
    )
- 
+
    # Ignore a warning about an object file not defining any symbols,

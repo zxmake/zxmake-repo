@@ -1,9 +1,12 @@
-package("qt5network")
+package("qt5network", function()
     set_base("qt5lib")
     set_kind("library")
 
-    on_load(function (package)
-        package:add("deps", "qt5core", {debug = package:is_debug(), version = package:version_str()})
+    on_load(function(package)
+        package:add("deps", "qt5core", {
+            debug = package:is_debug(),
+            version = package:version_str()
+        })
         package:data_set("libname", "Network")
 
         if package:is_plat("linux") then
@@ -15,18 +18,21 @@ package("qt5network")
                 package:add("deps", "openssl")
             end
         elseif package:is_plat("iphoneos") then
-            package:data_set("frameworks", {"GSS", "IOKit", "Security", "SystemConfiguration"})
+            package:data_set("frameworks", {
+                "GSS", "IOKit", "Security", "SystemConfiguration"
+            })
         end
 
         package:base():script("load")(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         local cxflags
         if not package:is_plat("windows") then
             cxflags = "-fPIC"
         end
-        assert(package:check_cxxsnippets({test = [[
+        assert(package:check_cxxsnippets({
+            test = [[
             int test(int argc, char** argv) {
                 QCoreApplication app(argc, argv);
 
@@ -36,5 +42,10 @@ package("qt5network")
 
                 return app.exec();
             }
-        ]]}, {configs = {languages = "c++14", cxflags = cxflags}, includes = {"QCoreApplication", "QByteArray", "QUdpSocket"}}))
+        ]]
+        }, {
+            configs = {languages = "c++14", cxflags = cxflags},
+            includes = {"QCoreApplication", "QByteArray", "QUdpSocket"}
+        }))
     end)
+end)

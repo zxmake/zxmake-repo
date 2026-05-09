@@ -1,7 +1,8 @@
-package("xproperty")
+package("xproperty", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/jupyter-xeus/xproperty")
-    set_description("Traitlets-like C++ properties and implementation of the observer pattern")
+    set_description(
+        "Traitlets-like C++ properties and implementation of the observer pattern")
     set_license("BSD-3-Clause")
 
     add_urls("https://github.com/jupyter-xeus/xproperty.git")
@@ -9,12 +10,13 @@ package("xproperty")
 
     add_deps("cmake", "xtl")
 
-    on_install("windows", "linux", "macosx", function (package)
+    on_install("windows", "linux", "macosx", function(package)
         import("package.tools.cmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <xproperty/xobserved.hpp>
             struct Foo : public xp::xobserved<Foo>
             {
@@ -25,5 +27,7 @@ package("xproperty")
                 Foo foo;
                 XOBSERVE(foo, bar, [](Foo& f){});
             }
-        ]]}, {configs = {languages = "c++14"}}))
+        ]]
+        }, {configs = {languages = "c++14"}}))
     end)
+end)

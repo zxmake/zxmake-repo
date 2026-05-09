@@ -5,7 +5,7 @@ index 76b5a62..174d981 100644
 @@ -40,15 +40,6 @@ else()
      target_compile_definitions(crossguid PRIVATE GUID_LIBUUID)
  endif()
- 
+
 -if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 -    set(WARNINGS "-Werror" "-Wall")
 -elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")

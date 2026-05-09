@@ -1,16 +1,22 @@
-package("tinycbor")
+package("tinycbor", function()
 
     set_homepage("https://github.com/intel/tinycbor")
     set_description("Concise Binary Object Representation (CBOR) Library")
     set_license("MIT")
 
-    add_urls("https://github.com/intel/tinycbor/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/intel/tinycbor.git")
-    add_versions("v0.6.0", "512e2c9fce74f60ef9ed3af59161e905f9e19f30a52e433fc55f39f4c70d27e4")
+    add_urls(
+        "https://github.com/intel/tinycbor/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/intel/tinycbor.git")
+    add_versions("v0.6.0",
+                 "512e2c9fce74f60ef9ed3af59161e905f9e19f30a52e433fc55f39f4c70d27e4")
 
-    add_configs("float", {description = "Enable floating point data type.", default = true, type = "boolean"})
+    add_configs("float", {
+        description = "Enable floating point data type.",
+        default = true,
+        type = "boolean"
+    })
 
-    on_install(function (package)
+    on_install(function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             option("enable_float", {default = true, showmenu = true})
@@ -49,9 +55,12 @@ package("tinycbor")
                     end
                 end)
         ]])
-        import("package.tools.xmake").install(package, {enable_float = package:config("float")})
+        import("package.tools.xmake").install(package, {
+            enable_float = package:config("float")
+        })
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("cbor_encoder_init", {includes = "cbor.h"}))
     end)
+end)

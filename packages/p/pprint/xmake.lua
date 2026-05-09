@@ -1,4 +1,4 @@
-package("pprint")
+package("pprint", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/p-ranav/pprint")
     set_description("Pretty Printer for Modern C++")
@@ -9,9 +9,10 @@ package("pprint")
     add_versions("2020.2.20", "0ee09c8d8a9eebc944d07ac69e3b86d41f2304df")
 
     add_deps("cmake")
-    on_install(function (package)
+    on_install(function(package)
         local configs = {}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
         if package:config("shared") then
             table.insert(configs, "-DBUILD_SHARED_LIBS=on")
         else
@@ -20,7 +21,7 @@ package("pprint")
         import("package.tools.cmake").install(package, configs)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:check_cxxsnippets({
             test = [[
             #include <pprint/pprint.hpp>
@@ -34,7 +35,7 @@ package("pprint")
                 printer.print("Hello, 世界");
                 printer.print(nullptr);
             }
-            ]]},
-            {configs = {languages = "c++17"}
-        }))
+            ]]
+        }, {configs = {languages = "c++17"}}))
     end)
+end)

@@ -1,15 +1,16 @@
-package("optix")
+package("optix", function()
 
     set_homepage("https://developer.nvidia.com/optix")
     set_description("NVIDIA OPTIX™ RAY TRACING ENGINE")
 
-    on_fetch(function (package, opt)
+    on_fetch(function(package, opt)
         if opt.system then
             import("lib.detect.find_path")
 
             local paths = {"$(env OptiX_ROOT)"}
             if package:is_plat("windows") then
-                for _, dir in ipairs(os.dirs("$(env PROGRAMDATA)/NVIDIA Corporation/OptiX SDK *.*.*")) do
+                for _, dir in ipairs(os.dirs(
+                                         "$(env PROGRAMDATA)/NVIDIA Corporation/OptiX SDK *.*.*")) do
                     table.insert(paths, dir)
                 end
             end
@@ -21,7 +22,10 @@ package("optix")
                 local version_str = content:match("OPTIX_VERSION (%d+)\n")
                 if version_str then
                     local version_num = tonumber(version_str)
-                    local version = format("%s.%s.%s", math.floor(version_num/10000), math.floor(version_num%10000/100), version_num%100)
+                    local version = format("%s.%s.%s",
+                                           math.floor(version_num / 10000),
+                                           math.floor(version_num % 10000 / 100),
+                                           version_num % 100)
                     result.version = version
                 end
 
@@ -29,3 +33,4 @@ package("optix")
             end
         end
     end)
+end)

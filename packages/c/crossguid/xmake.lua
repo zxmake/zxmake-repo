@@ -1,4 +1,4 @@
-package("crossguid")
+package("crossguid", function()
     set_homepage("https://github.com/graeme-hill/crossguid")
     set_description("Lightweight cross platform C++ GUID/UUID library")
     set_license("MIT")
@@ -8,7 +8,9 @@ package("crossguid")
 
     -- Apply patch and necessary lib
     if is_plat("macosx", "iphoneos") then
-        add_patches("2019.3.29", path.join(os.scriptdir(), "patches", "warnings.patch"), "9953cb5ef68bdffa7cc9cb138a2119dd3460f3055db14a13aecc4dd256104c09")
+        add_patches("2019.3.29",
+                    path.join(os.scriptdir(), "patches", "warnings.patch"),
+                    "9953cb5ef68bdffa7cc9cb138a2119dd3460f3055db14a13aecc4dd256104c09")
         add_frameworks("CoreFoundation")
     elseif is_plat("linux") then
         add_deps("libuuid")
@@ -18,21 +20,29 @@ package("crossguid")
 
     add_deps("cmake")
 
-    on_install("windows", "linux", "macosx", "iphoneos", "android", "mingw", function (package)
-        io.replace(path.translate("include/crossguid/guid.hpp"), "#include <functional>", "#include <cstdint>\n#include<functional>", { plain = true })
+    on_install("windows", "linux", "macosx", "iphoneos", "android", "mingw",
+               function(package)
+        io.replace(path.translate("include/crossguid/guid.hpp"),
+                   "#include <functional>",
+                   "#include <cstdint>\n#include<functional>", {plain = true})
         local configs = {"-DCROSSGUID_TESTS=OFF"}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        import("package.tools.cmake").install(package, configs, {buildir = "build"})
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        import("package.tools.cmake").install(package, configs,
+                                              {buildir = "build"})
 
         if package:is_plat("windows") then
             os.trycp("build/pdb/**.pdb", package:installdir("lib"))
         end
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             void test() {
                 auto g = xg::newGuid();
             }
-        ]]}, {configs = {languages = "c++17"}, includes = "crossguid/guid.hpp"}))
+        ]]
+        }, {configs = {languages = "c++17"}, includes = "crossguid/guid.hpp"}))
     end)
+end)

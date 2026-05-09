@@ -3,7 +3,7 @@ index 25c4f2fa..26753e5d 100644
 --- a/cmake/FindWinSock.cmake
 +++ b/cmake/FindWinSock.cmake
 @@ -39,6 +39,7 @@ endmacro(REMOVE_DUPLICATE_PATHS)
- 
+
  set(WINSOCK_INCLUDE_PATHS "${WINSOCK_ROOT}/include/")
  if(MINGW)
 +  file(TOUCH ${CMAKE_BINARY_DIR}/nul)

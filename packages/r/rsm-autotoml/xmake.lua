@@ -1,4 +1,4 @@
-package("rsm-autotoml")
+package("rsm-autotoml", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/Ryan-rsm-McKenzie/AutoTOML")
     set_description("toml++ wrapper for basic node types")
@@ -9,17 +9,23 @@ package("rsm-autotoml")
 
     add_deps("toml++")
 
-    on_install(function (package)
-        io.replace("include/AutoTOML.hpp", "string_t = toml::string", "string_t = std::string", {plain = true})
-        io.replace("include/AutoTOML.hpp", "~ISetting() = 0 {}", "~ISetting() = default;", {plain = true})
-        io.replace("include/AutoTOML.hpp", "node.as<", "node.template as<", {plain = true})
+    on_install(function(package)
+        io.replace("include/AutoTOML.hpp", "string_t = toml::string",
+                   "string_t = std::string", {plain = true})
+        io.replace("include/AutoTOML.hpp", "~ISetting() = 0 {}",
+                   "~ISetting() = default;", {plain = true})
+        io.replace("include/AutoTOML.hpp", "node.as<", "node.template as<",
+                   {plain = true})
         os.cp("include/AutoTOML.hpp", package:installdir("include"))
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             void test() {
                 static AutoTOML::bSetting test{ "section", "key", true };
             }
-        ]]}, {configs = {languages = "c++17"}, includes = "AutoTOML.hpp"}))
+        ]]
+        }, {configs = {languages = "c++17"}, includes = "AutoTOML.hpp"}))
     end)
+end)

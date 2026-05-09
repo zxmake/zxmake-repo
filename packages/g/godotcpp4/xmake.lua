@@ -1,4 +1,4 @@
-package("godotcpp4")
+package("godotcpp4", function()
     set_homepage("https://godotengine.org/")
     set_description("C++ bindings for the Godot 4 script API")
     set_license("MIT")
@@ -12,22 +12,17 @@ package("godotcpp4")
     add_deps("scons")
     add_includedirs("gen/include", "include")
 
-    on_check("android", function (package)
+    on_check("android", function(package)
         if package:version():ge("4.1") then
-            raise("package(godotcpp4 >=4.1): only support ndk version 23.2.8568313")
+            raise(
+                "package(godotcpp4 >=4.1): only support ndk version 23.2.8568313")
         end
     end)
 
     on_load(function(package)
-        assert(not package:is_arch(
-                "mips",
-                "mip64",
-                "mips64",
-                "mipsel",
-                "mips64el",
-                "s390x",
-                "sh4"),
-                "architecture " .. package:arch() .. " is not supported")
+        assert(not package:is_arch("mips", "mip64", "mips64", "mipsel",
+                                   "mips64el", "s390x", "sh4"),
+               "architecture " .. package:arch() .. " is not supported")
 
         if package:is_plat("windows") then
             package:add("defines", "TYPED_METHOD_BIND", "NOMINMAX")
@@ -37,9 +32,11 @@ package("godotcpp4")
         end
     end)
 
-    on_install("linux", "windows|x64", "windows|x86", "macosx", "iphoneos", "android", function(package)
+    on_install("linux", "windows|x64", "windows|x86", "macosx", "iphoneos",
+               "android", function(package)
         if package:is_plat("windows") and package:version():eq("4.0.0") then
-            io.replace("tools/targets.py", "/MD", "/" .. package:config("vs_runtime"), {plain = true})
+            io.replace("tools/targets.py", "/MD",
+                       "/" .. package:config("vs_runtime"), {plain = true})
         end
 
         local platform = package:plat()
@@ -56,30 +53,37 @@ package("godotcpp4")
             arch = "x86_32"
         elseif package:is_arch("arm64-v8a") then
             arch = "arm64"
-        elseif package:is_arch("arm", "armeabi", "armeabi-v7a", "armv7s", "armv7k") then
+        elseif package:is_arch("arm", "armeabi", "armeabi-v7a", "armv7s",
+                               "armv7k") then
             arch = "arm32"
         end
 
         local configs = {
-            "target=" .. (package:is_debug() and "template_debug" or "template_release"),
-            "platform=" .. platform,
-            "arch=" .. arch,
+            "target=" ..
+                (package:is_debug() and "template_debug" or "template_release"),
+            "platform=" .. platform, "arch=" .. arch,
             "debug_symbols=" .. (package:is_debug() and "yes" or "no")
         }
 
         if package:is_plat("windows") then
-            table.insert(configs, "use_static_cpp=" .. (package:has_runtime("MT") and "yes" or "no"))
+            table.insert(configs, "use_static_cpp=" ..
+                             (package:has_runtime("MT") and "yes" or "no"))
         end
 
         import("package.tools.scons").build(package, configs)
-        os.vcp("bin/*." .. (package:is_plat("windows") and "lib" or "a"), package:installdir("lib"))
+        os.vcp("bin/*." .. (package:is_plat("windows") and "lib" or "a"),
+               package:installdir("lib"))
         os.vcp("include/godot_cpp", package:installdir("include"))
-        os.vcp("gen/include/godot_cpp", path.join(package:installdir("gen"), "include", "godot_cpp"))
-        os.vcp("gdextension/gdextension_interface.h", package:installdir("include"))
+        os.vcp("gen/include/godot_cpp",
+               path.join(package:installdir("gen"), "include", "godot_cpp"))
+        os.vcp("gdextension/gdextension_interface.h",
+               package:installdir("include"))
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         local file = (package:version():eq("4.0") and "4.0.cpp" or "4.x.cpp")
         local code = io.readfile(path.join(os.scriptdir(), "test", file))
-        assert(package:check_cxxsnippets({test = code}, {configs = {languages = "cxx17"}}))
+        assert(package:check_cxxsnippets({test = code},
+                                         {configs = {languages = "cxx17"}}))
     end)
+end)

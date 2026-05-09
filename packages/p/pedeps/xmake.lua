@@ -1,17 +1,25 @@
-package("pedeps")
+package("pedeps", function()
     set_homepage("https://github.com/brechtsanders/pedeps")
-    set_description("Cross-platform C library to read data from PE/PE+ files (the format of Windows .exe and .dll files)")
+    set_description(
+        "Cross-platform C library to read data from PE/PE+ files (the format of Windows .exe and .dll files)")
     set_license("MIT")
 
-    add_urls("https://github.com/brechtsanders/pedeps/releases/download/$(version)/pedeps-$(version).tar.xz",
-             "https://github.com/brechtsanders/pedeps.git")
+    add_urls(
+        "https://github.com/brechtsanders/pedeps/releases/download/$(version)/pedeps-$(version).tar.xz",
+        "https://github.com/brechtsanders/pedeps.git")
 
-    add_versions("0.1.15", "41e6239ff27deed21ad435567f3f8f1c049d072c86a37c2005fd74aea906f1d3")
+    add_versions("0.1.15",
+                 "41e6239ff27deed21ad435567f3f8f1c049d072c86a37c2005fd74aea906f1d3")
 
-    add_configs("tools", {description = "Build tools", default = false, type = "boolean"})
+    add_configs("tools", {
+        description = "Build tools",
+        default = false,
+        type = "boolean"
+    })
 
-    on_install(function (package)
-        if not package:config("shared") and package:is_plat("windows", "mingw", "msys") then
+    on_install(function(package)
+        if not package:config("shared") and
+            package:is_plat("windows", "mingw", "msys") then
             package:add("defines", "STATIC")
         end
 
@@ -44,9 +52,11 @@ package("pedeps")
                     add_files(file)
             end
         ]])
-        import("package.tools.xmake").install(package, {tools = package:config("tools")})
+        import("package.tools.xmake").install(package,
+                                              {tools = package:config("tools")})
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("pefile_create", {includes = "pedeps.h"}))
     end)
+end)

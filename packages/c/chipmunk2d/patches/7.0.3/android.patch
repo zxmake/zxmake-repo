@@ -3,7 +3,7 @@ index 9544da8..82d027e 100644
 --- a/include/chipmunk/chipmunk_types.h
 +++ b/include/chipmunk/chipmunk_types.h
 @@ -54,7 +54,11 @@
- 
+
  #ifndef CP_USE_DOUBLES
  	// Use doubles by default for higher precision.
 -	#define CP_USE_DOUBLES 1
@@ -13,7 +13,7 @@ index 9544da8..82d027e 100644
 +		#define CP_USE_DOUBLES 0
 +	#endif
  #endif
- 
+
  /// @defgroup basicTypes Basic Types
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
 index 34882d1..56589fb 100644
@@ -35,7 +35,7 @@ index 8dca425..fa3074d 100644
 +++ b/src/cpHastySpace.c
 @@ -7,8 +7,16 @@
  //TODO: Move all the thread stuff to another file
- 
+
  //#include <sys/param.h >
 -#ifndef _WIN32
 +

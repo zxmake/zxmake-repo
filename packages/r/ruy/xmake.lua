@@ -1,30 +1,44 @@
-package("ruy")
+package("ruy", function()
     set_homepage("https://github.com/google/ruy")
     set_description("Matrix multiplication library")
     set_license("Apache-2.0")
-    
+
     set_urls("https://github.com/google/ruy.git")
     add_versions("2022.09.16", "3168a5c8f4c447fd8cea94078121ee2e2cd87df0")
 
     add_deps("cpuinfo")
 
-    add_configs("profiler", { description = "Enable ruy's built-in profiler (harms performance)", default = false, type = "boolean" })
+    add_configs("profiler", {
+        description = "Enable ruy's built-in profiler (harms performance)",
+        default = false,
+        type = "boolean"
+    })
     if is_plat("windows") then
-        add_configs("shared",     {description = "Build shared library.", default = false, type = "boolean", readonly = true})
-        add_configs("vs_runtime", {description = "Set vs compiler runtime.", default = "MT", readonly = true})
+        add_configs("shared", {
+            description = "Build shared library.",
+            default = false,
+            type = "boolean",
+            readonly = true
+        })
+        add_configs("vs_runtime", {
+            description = "Set vs compiler runtime.",
+            default = "MT",
+            readonly = true
+        })
     end
 
-    on_install("windows", "linux", "macosx", "android", function (package)
+    on_install("windows", "linux", "macosx", "android", function(package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         os.rm("BUILD")
         local configs = {}
         configs.profiler = package:config("profiler")
-         
+
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-         assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             void test(int args, char** argv) {
                 ruy::Context context;
                 const float lhs_data[] = {1, 2, 3, 4};
@@ -44,5 +58,7 @@ package("ruy")
                 ruy::MulParams<float, float> mul_params;
                 ruy::Mul(lhs, rhs, mul_params, &context, &dst);
             }
-        ]]}, {configs = {languages = "c++14"}, includes = "ruy/ruy.h"}))
+        ]]
+        }, {configs = {languages = "c++14"}, includes = "ruy/ruy.h"}))
     end)
+end)

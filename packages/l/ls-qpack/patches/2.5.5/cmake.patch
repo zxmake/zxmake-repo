@@ -5,7 +5,7 @@ index 413b4579..f9f1371d 100644
 @@ -42,14 +42,14 @@ else()
  	set(LSQPACK_DEPENDS "libxxhash")
  endif()
- 
+
 -if(WIN32)
 +if(MSVC OR MINGW OR EMSCRIPTEN)
      target_include_directories(ls-qpack PUBLIC
@@ -13,7 +13,7 @@ index 413b4579..f9f1371d 100644
          $<INSTALL_INTERFACE:include>
      )
  endif()
- 
+
 -if(WIN32)
 +if(MSVC)
      target_compile_options(ls-qpack PRIVATE
@@ -22,7 +22,7 @@ index 413b4579..f9f1371d 100644
 @@ -144,7 +144,7 @@ if(LSQPACK_BIN)
            DESTINATION ${CMAKE_INSTALL_BINDIR})
  endif()
- 
+
 -if(WIN32)
 +if(MSVC OR MINGW OR EMSCRIPTEN)
      install(DIRECTORY wincompat/sys DESTINATION include)

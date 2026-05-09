@@ -1,4 +1,4 @@
-package("piex")
+package("piex", function()
 
     set_homepage("https://github.com/google/piex")
     set_description("Preview Image Extractor (PIEX)")
@@ -10,8 +10,11 @@ package("piex")
     add_versions("20190530", "84e9cdf11cd8dac8a4977dd1a6a874ddf884d322")
 
     add_links("piex", "image_type_recognition", "tiff_directory", "binary_parse")
-    on_install("macosx", "linux", "windows", "mingw", "android", "iphoneos", function (package)
-        for _, folder in ipairs({"binary_parse", "image_type_recognition", "tiff_directory"}) do
+    on_install("macosx", "linux", "windows", "mingw", "android", "iphoneos",
+               function(package)
+        for _, folder in ipairs({
+            "binary_parse", "image_type_recognition", "tiff_directory"
+        }) do
             for _, file in ipairs(os.files(path.join("src", folder, "*.*"))) do
                 io.gsub(file, "#include \"src/", "#include \"../")
             end
@@ -19,8 +22,10 @@ package("piex")
         for _, file in ipairs(os.files(path.join("src", "*.*"))) do
             io.gsub(file, "#include \"src/", "#include \"")
         end
-        io.gsub("src/image_type_recognition/image_type_recognition_lite.cc", "#include <string>", "#include <string>\n#include <cstring>")
-        io.gsub("src/image_type_recognition/image_type_recognition_lite.cc", "kSignatureOffset %+ strlen", "kSignatureOffset + std::strlen")
+        io.gsub("src/image_type_recognition/image_type_recognition_lite.cc",
+                "#include <string>", "#include <string>\n#include <cstring>")
+        io.gsub("src/image_type_recognition/image_type_recognition_lite.cc",
+                "kSignatureOffset %+ strlen", "kSignatureOffset + std::strlen")
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             target("binary_parse")
@@ -50,6 +55,10 @@ package("piex")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:has_cxxfuncs("piex::BytesRequiredForIsRaw()", {configs = {languages = "c++11"}, includes = "piex.h"}))
+    on_test(function(package)
+        assert(package:has_cxxfuncs("piex::BytesRequiredForIsRaw()", {
+            configs = {languages = "c++11"},
+            includes = "piex.h"
+        }))
     end)
+end)

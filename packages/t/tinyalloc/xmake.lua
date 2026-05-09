@@ -1,12 +1,13 @@
-package("tinyalloc")
+package("tinyalloc", function()
     set_homepage("https://github.com/thi-ng/tinyalloc")
-    set_description("malloc / free replacement for unmanaged, linear memory situations (e.g. WASM, embedded devices...)")
+    set_description(
+        "malloc / free replacement for unmanaged, linear memory situations (e.g. WASM, embedded devices...)")
     set_license("Apache-2.0")
 
     add_urls("https://github.com/thi-ng/tinyalloc.git")
     add_versions("2021.10.08", "b60fcd7a351dea8a51f3ec95b19fc0d0d2e4dcd9")
 
-    on_install(function (package)
+    on_install(function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             target("tinyalloc")
@@ -20,6 +21,7 @@ package("tinyalloc")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("ta_init", {includes = "tinyalloc.h"}))
     end)
+end)

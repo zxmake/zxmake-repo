@@ -1,4 +1,4 @@
-package("libudis86")
+package("libudis86", function()
     set_homepage("http://udis86.sourceforge.net")
     set_description("Disassembler Library for x86 and x86-64")
     set_license("BSD-2-Clause")
@@ -8,10 +8,11 @@ package("libudis86")
 
     add_deps("python", {kind = "binary"})
 
-    on_install("!cross", function (package)
+    on_install("!cross", function(package)
         io.replace("scripts/ud_opcode.py", "/ 32", "// 32", {plain = true})
         io.replace("scripts/ud_opcode.py", "/ 2", "// 2", {plain = true})
-        os.vrunv("python", {"scripts/ud_itab.py", "docs/x86/optable.xml", "libudis86"})
+        os.vrunv("python",
+                 {"scripts/ud_itab.py", "docs/x86/optable.xml", "libudis86"})
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
 
@@ -31,6 +32,7 @@ package("libudis86")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("ud_init", {includes = "udis86.h"}))
     end)
+end)

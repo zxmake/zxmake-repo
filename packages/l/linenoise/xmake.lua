@@ -1,4 +1,4 @@
-package("linenoise")
+package("linenoise", function()
 
     set_homepage("https://github.com/antirez/linenoise")
     set_description("A small self-contained alternative to readline and libedit")
@@ -8,7 +8,8 @@ package("linenoise")
 
     add_versions("2020.3.12", "97d2850af13c339369093b78abe5265845d78220")
 
-    on_install("linux", "macosx", "bsd", "wasm", "android", "cross", "iphoneos", function (package)
+    on_install("linux", "macosx", "bsd", "wasm", "android", "cross", "iphoneos",
+               function(package)
         local configs = {}
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
@@ -23,6 +24,8 @@ package("linenoise")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("linenoise", {includes = {"stddef.h", "linenoise.h"}}))
+    on_test(function(package)
+        assert(package:has_cfuncs("linenoise",
+                                  {includes = {"stddef.h", "linenoise.h"}}))
     end)
+end)

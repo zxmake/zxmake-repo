@@ -1,0 +1,33 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+exclude: |
+  (?x)^(
+  )$
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks.git
+    rev: v4.5.0
+    hooks:
+      - id: check-added-large-files
+        exclude: |
+          (?x)^(
+          )$
+      - id: check-json
+      - id: check-toml
+      - id: check-yaml
+        exclude: |
+          (?x)^(
+          )$
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: https://github.com/CodeAnnotations/LuaFormatter.git
+    rev: f8f5b91b0629fecc117f213d112aa91869dc536d
+    hooks:
+      - id: luaformatter-linux
+  # - repo: https://github.com/igorshubovych/markdownlint-cli.git
+  #   rev: v0.45.0
+  #   hooks:
+  #     - id: markdownlint
+  # - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
+  #   rev: 3.2.1
+  #   hooks:
+  #     - id: editorconfig-checker

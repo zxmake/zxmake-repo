@@ -1,6 +1,7 @@
-package("injector")
+package("injector", function()
     set_homepage("https://github.com/kubo/injector")
-    set_description("Library for injecting a shared library into a Linux or Windows process")
+    set_description(
+        "Library for injecting a shared library into a Linux or Windows process")
     set_license("LGPL-2.1")
 
     add_urls("https://github.com/kubo/injector.git")
@@ -10,18 +11,21 @@ package("injector")
         add_syslinks("advapi32", "dbghelp", "psapi")
     end
 
-    on_install("windows", "linux", "macosx", "mingw", function (package)
+    on_install("windows", "linux", "macosx", "mingw", function(package)
         os.cp(path.join(package:scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <injector.h>
             void test() {
                 injector_t *injector;
                 injector_attach(&injector, 1234);
             }
-        ]]}))
+        ]]
+        }))
     end)
+end)

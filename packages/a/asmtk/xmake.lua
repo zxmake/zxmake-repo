@@ -1,4 +1,4 @@
-package("asmtk")
+package("asmtk", function()
     set_homepage("https://github.com/asmjit/asmtk")
     set_description("Assembler toolkit based on AsmJit")
     set_license("zlib")
@@ -8,7 +8,7 @@ package("asmtk")
 
     add_deps("asmjit")
 
-    on_install("!iphoneos", function (package)
+    on_install("!iphoneos", function(package)
         if not package:config("shared") then
             package:add("defines", "ASMTK_STATIC")
         end
@@ -40,8 +40,9 @@ package("asmtk")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <asmtk/asmtk.h>
             #include <asmjit/asmjit.h>
             using namespace asmjit;
@@ -53,5 +54,7 @@ package("asmtk")
                 x86::Assembler a(&code);
                 AsmParser p(&a);
             }
-        ]]}, {configs = {languages = "c++11"}}))
+        ]]
+        }, {configs = {languages = "c++11"}}))
     end)
+end)

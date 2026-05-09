@@ -26,8 +26,8 @@ index 828911d..244a732 100644
 -    ${blas_fix}
 -    ${LAPACK_LIBRARIES}
 -)
- 
- 
+
+
  # ----------------------------------------
  # compile tester library
 -add_library( tester ${libtest_all} )
@@ -37,20 +37,20 @@ index 828911d..244a732 100644
 -    ${blas_fix}
 -    ${LAPACK_LIBRARIES}
 -)
- 
- 
+
+
  # ----------------------------------------
 @@ -679,7 +652,6 @@ else()
    include_directories( sparse_hip/include )
    include_directories( sparse_hip/control )
  endif()
 -include_directories( testing )
- 
+
  if (MAGMA_ENABLE_CUDA)
    add_library( magma_sparse ${libsparse_all} )
 @@ -717,20 +689,6 @@ set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY testing_lib )
  set( CMAKE_LIBRARY_OUTPUT_DIRECTORY testing_lib )
- 
+
  # skip Fortran testers, which require an extra file from CUDA
 -foreach( filename ${testing_all} )
 -    if (filename MATCHES "\\.(c|cu|cpp)$")
@@ -66,13 +66,13 @@ index 828911d..244a732 100644
 -    list( APPEND testing ${EXE} )
 -endforeach()
 -add_custom_target( testing DEPENDS ${testing} )
- 
- 
+
+
  # ----------------------------------------
 @@ -743,17 +701,6 @@ else()
  endif()
- 
- 
+
+
 -set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${SPARSE_TEST_DIR}" )
 -cmake_policy( SET CMP0037 OLD)
 -foreach( TEST ${sparse_testing_all} )
@@ -84,6 +84,6 @@ index 828911d..244a732 100644
 -    list( APPEND sparse-testing ${EXE} )
 -endforeach()
 -add_custom_target( sparse-testing DEPENDS ${sparse-testing} )
- 
- 
+
+
  # ----------------------------------------

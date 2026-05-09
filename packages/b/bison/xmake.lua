@@ -1,14 +1,15 @@
-package("bison")
+package("bison", function()
     set_kind("binary")
     set_homepage("https://www.gnu.org/software/bison/")
     set_description("A general-purpose parser generator.")
     set_license("GPL-3.0")
 
     if on_source then
-        on_source(function (package)
+        on_source(function(package)
             if not package:is_plat("windows", "mingw", "msys") then
-                package:add("urls", "http://ftpmirror.gnu.org/gnu/bison/bison-$(version).tar.gz",
-                 "http://ftp.gnu.org/gnu/bison/bison-$(version).tar.gz")
+                package:add("urls",
+                            "http://ftpmirror.gnu.org/gnu/bison/bison-$(version).tar.gz",
+                            "http://ftp.gnu.org/gnu/bison/bison-$(version).tar.gz")
             end
         end)
     elseif not is_plat("windows", "mingw", "msys") then
@@ -16,15 +17,18 @@ package("bison")
                  "http://ftp.gnu.org/gnu/bison/bison-$(version).tar.gz")
     end
 
-    add_versions("3.7.4", "fbabc7359ccd8b4b36d47bfe37ebbce44805c052526d5558b95eda125d1677e2")
-    add_versions("3.7.6", "69dc0bb46ea8fc307d4ca1e0b61c8c355eb207d0b0c69f4f8462328e74d7b9ea")
-    add_versions("3.8.2", "06c9e13bdf7eb24d4ceb6b59205a4f67c2c7e7213119644430fe82fbd14a0abb")
+    add_versions("3.7.4",
+                 "fbabc7359ccd8b4b36d47bfe37ebbce44805c052526d5558b95eda125d1677e2")
+    add_versions("3.7.6",
+                 "69dc0bb46ea8fc307d4ca1e0b61c8c355eb207d0b0c69f4f8462328e74d7b9ea")
+    add_versions("3.8.2",
+                 "06c9e13bdf7eb24d4ceb6b59205a4f67c2c7e7213119644430fe82fbd14a0abb")
 
     if is_subhost("msys") then
         add_deps("pacman::bison")
     end
 
-    on_load("macosx", "linux", "bsd", "windows", function (package)
+    on_load("macosx", "linux", "bsd", "windows", function(package)
         if package:is_plat("windows") then
             package:add("deps", "winflexbison", {private = true})
         elseif package:is_plat("linux", "bsd") then
@@ -39,22 +43,25 @@ package("bison")
         end
     end)
 
-    on_install("@msys", function (package)
+    on_install("@msys", function(package)
     end)
 
-    on_install("windows", function (package)
-        os.cp(path.join(package:dep("winflexbison"):installdir(), "*"), package:installdir())
+    on_install("windows", function(package)
+        os.cp(path.join(package:dep("winflexbison"):installdir(), "*"),
+              package:installdir())
         os.rm(path.join(package:installdir(), "bin", "flex.exe"))
         os.rm(path.join(package:installdir(), "include", "FlexLexer.h"))
     end)
 
-    on_install("macosx", "linux", "bsd", "android", "iphoneos", "cross", function (package)
+    on_install("macosx", "linux", "bsd", "android", "iphoneos", "cross",
+               function(package)
         import("package.tools.autoconf").install(package)
         os.rm(package:installdir("share", "doc"))
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         if not package:is_cross() then
             os.vrun("bison -h")
         end
     end)
+end)

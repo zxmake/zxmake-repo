@@ -4,7 +4,7 @@ diff --git a/third_party/XNNPACK/src/xnnpack/intrinsics-polyfill.h b/third_party
 @@ -11,8 +11,8 @@
  #if defined(__SSE2__)
  #include <emmintrin.h>
- 
+
 -// GCC any, Clang pre-8, Android NDK Clang pre-8.0.7, Apple Clang pre-11, and ICC pre-16
 -#if (defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER)) || \
 +// GCC pre-11, Clang pre-8, Android NDK Clang pre-8.0.7, Apple Clang pre-11, and ICC pre-16

@@ -1,4 +1,4 @@
-package("physfs")
+package("physfs", function()
     set_homepage("https://icculus.org/physfs/")
     set_description("A portable, flexible file i/o abstraction")
     set_license("zlib")
@@ -20,7 +20,11 @@ package("physfs")
         ["vdf"] = "Gothic I/II VDF archive"
     }
     for k, v in pairs(archivers) do
-        add_configs(k, {description = "Enable " .. v .. " support", default = true, type = "boolean"})
+        add_configs(k, {
+            description = "Enable " .. v .. " support",
+            default = true,
+            type = "boolean"
+        })
     end
 
     if is_plat("windows") then
@@ -33,22 +37,28 @@ package("physfs")
 
     add_deps("cmake")
 
-    on_install(function (package)
+    on_install(function(package)
         local configs = {"-DPHYSFS_BUILD_TEST=OFF", "-DPHYSFS_BUILD_DOCS=OFF"}
-        table.insert(configs, "-DPHYSFS_BUILD_STATIC=" .. (package:config("shared") and "OFF" or "ON"))
-        table.insert(configs, "-DPHYSFS_BUILD_SHARED=" .. (package:config("shared") and "ON" or "OFF"))
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:is_debug() and "Debug" or "Release"))
+        table.insert(configs, "-DPHYSFS_BUILD_STATIC=" ..
+                         (package:config("shared") and "OFF" or "ON"))
+        table.insert(configs, "-DPHYSFS_BUILD_SHARED=" ..
+                         (package:config("shared") and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:is_debug() and "Debug" or "Release"))
         for k, v in pairs(archivers) do
-            table.insert(configs, "-DPHYSFS_ARCHIVE_" .. v:upper() .. "=" .. (package:config(k) and "ON" or "OFF"))
+            table.insert(configs, "-DPHYSFS_ARCHIVE_" .. v:upper() .. "=" ..
+                             (package:config(k) and "ON" or "OFF"))
         end
         import("package.tools.cmake").install(package, configs)
 
         if package:is_plat("windows") then
-            local dir = package:installdir(package:config("shared") and "bin" or "lib")
+            local dir = package:installdir(
+                            package:config("shared") and "bin" or "lib")
             os.trycp(path.join(package:buildir(), "physfs.pdb"), dir)
         end
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("PHYSFS_init", {includes = "physfs.h"}))
     end)
+end)

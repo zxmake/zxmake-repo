@@ -1,4 +1,4 @@
-package("libmodplug")
+package("libmodplug", function()
     set_homepage("http://modplug-xmms.sf.net")
     set_description("libmodplug GitHub repository")
     set_license("Public Domain")
@@ -12,9 +12,10 @@ package("libmodplug")
 
     add_deps("cmake")
 
-    on_install(function (package)
+    on_install(function(package)
         local configs = {}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
         if package:config("shared") then
             table.insert(configs, "-DBUILD_SHARED_LIBS=ON")
         else
@@ -24,6 +25,8 @@ package("libmodplug")
         import("package.tools.cmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:has_cxxfuncs("ModPlug_Load", {includes = "libmodplug/modplug.h"}))
+    on_test(function(package)
+        assert(package:has_cxxfuncs("ModPlug_Load",
+                                    {includes = "libmodplug/modplug.h"}))
     end)
+end)

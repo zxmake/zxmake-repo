@@ -1,4 +1,4 @@
-package("im3d")
+package("im3d", function()
     set_homepage("https://github.com/john-chapman/im3d")
     set_description("File Dialog for Dear ImGui")
     set_license("MIT")
@@ -7,7 +7,7 @@ package("im3d")
 
     add_versions("2023.06.09", "d03941725fd0bd08c78c46e3e5b0265526e9d060")
 
-    on_install(function (package)
+    on_install(function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             target("im3d")
@@ -22,12 +22,15 @@ package("im3d")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <im3d.h>
             void test() {
                 Im3d::PushDrawState();
                 Im3d::SetSize(2.0f);
             }
-        ]]}, {configs = {languages = "c++11"}}))
+        ]]
+        }, {configs = {languages = "c++11"}}))
     end)
+end)

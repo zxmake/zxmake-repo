@@ -1,4 +1,4 @@
-package("aseprite-tga")
+package("aseprite-tga", function()
 
     set_homepage("https://github.com/aseprite/tga")
     set_description("C++ library to read/write Truevision TGA/TARGA files")
@@ -7,7 +7,7 @@ package("aseprite-tga")
     set_urls("https://github.com/aseprite/tga.git")
     add_versions("2023.6.2", "d537510d98bc9706675746d132fa460639254a78")
 
-    on_install(function (package)
+    on_install(function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             target("aseprite-tga")
@@ -26,8 +26,9 @@ package("aseprite-tga")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <cstdio>
 
             void test() {
@@ -35,5 +36,7 @@ package("aseprite-tga")
                 tga::StdioFileInterface file(f);
                 tga::Decoder decoder(&file);
             }
-        ]]}, {configs = {languages = "c++11"}, includes = "tga.h"}))
+        ]]
+        }, {configs = {languages = "c++11"}, includes = "tga.h"}))
     end)
+end)

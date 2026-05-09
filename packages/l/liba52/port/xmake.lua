@@ -21,7 +21,8 @@ includes("@builtin/check")
 configvar_check_cfuncs("HAVE_BUILTIN_EXPECT", "__builtin_expect")
 -- configvar_check_cincludes("HAVE_DLFCN_H", "dlfcn.h")
 configvar_check_cfuncs("HAVE_FTIME", "ftime", {includes = "time.h"})
-configvar_check_cfuncs("HAVE_GETTIMEOFDAY", "gettimeofday", {includes = "time.h"})
+configvar_check_cfuncs("HAVE_GETTIMEOFDAY", "gettimeofday",
+                       {includes = "time.h"})
 configvar_check_cincludes("HAVE_INTTYPES_H", "inttypes.h")
 configvar_check_cincludes("HAVE_IO_H", "io.h")
 configvar_check_cfuncs("HAVE_MEMALIGN", "memalign", {includes = "stdlib.h"})
@@ -50,46 +51,42 @@ if is_plat("windows", "mingw", "msys", "cygwin") then
 end
 
 target("a52")
-    set_kind("$(kind)")
-    add_files("liba52/*.c", "libao/*.c")
-    add_headerfiles(
-        "include/a52.h",
-        "include/attributes.h",
-        "include/audio_out.h",
-        "include/mm_accel.h",
-        "liba52/a52_internal.h", {prefixdir = "a52dec"}
-    )
+set_kind("$(kind)")
+add_files("liba52/*.c", "libao/*.c")
+add_headerfiles("include/a52.h", "include/attributes.h", "include/audio_out.h",
+                "include/mm_accel.h", "liba52/a52_internal.h",
+                {prefixdir = "a52dec"})
 
-    if is_plat("windows", "mingw") then
-        add_syslinks("winmm")
-    elseif is_plat("linux", "bsd") then
-        add_syslinks("m")
-    end
+if is_plat("windows", "mingw") then
+    add_syslinks("winmm")
+elseif is_plat("linux", "bsd") then
+    add_syslinks("m")
+end
 
-    if is_plat("windows") and is_kind("shared") then
-        add_rules("utils.symbols.export_all")
-    end
+if is_plat("windows") and is_kind("shared") then
+    add_rules("utils.symbols.export_all")
+end
 
 rule("tools")
-    on_load(function (target)
-        if not get_config("tools") then
-            target:set("enabled", false)
-            return
-        end
+on_load(function(target)
+    if not get_config("tools") then
+        target:set("enabled", false)
+        return
+    end
 
-        target:add("kind", "binary")
-        target:add("files", "src/getopt.c")
-        target:add("includedirs", "src")
-        target:add("deps", "a52")
-        if target:is_plat("windows") then
-            target:add("packages", "strings_h")
-        end
-    end)
+    target:add("kind", "binary")
+    target:add("files", "src/getopt.c")
+    target:add("includedirs", "src")
+    target:add("deps", "a52")
+    if target:is_plat("windows") then
+        target:add("packages", "strings_h")
+    end
+end)
 
 target("a52dec")
-    add_rules("tools")
-    add_files("src/a52dec.c", "src/gettimeofday.c")
+add_rules("tools")
+add_files("src/a52dec.c", "src/gettimeofday.c")
 
 target("extract_a52")
-    add_rules("tools")
-    add_files("src/extract_a52.c")
+add_rules("tools")
+add_files("src/extract_a52.c")

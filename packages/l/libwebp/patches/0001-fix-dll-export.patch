@@ -18,7 +18,7 @@ index 2501012..2e090e6 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -16,2 +16,6 @@ project(WebP C)
- 
+
 +if(MSVC AND BUILD_SHARED_LIBS)
 +  add_definitions(-DWEBP_DLL)
 +endif()

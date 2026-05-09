@@ -7,6 +7,5 @@ index 004dd076..cb7eed81 100644
  ###############################################################################
  cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 +cmake_policy(SET CMP0057 NEW)
- 
+
  project(SOCI)
- 

@@ -5,12 +5,12 @@ index f5ca4435..7e5807da 100644
 @@ -40,7 +40,7 @@
  #define BROTLI_X_BIG_ENDIAN BIG_ENDIAN
  #endif
- 
+
 -#if BROTLI_MSVC_VERSION_CHECK(12, 0, 0)
 +#if BROTLI_MSVC_VERSION_CHECK(18, 0, 0)
  #include <intrin.h>
  #endif
- 
+
 @@ -529,7 +529,7 @@ BROTLI_MIN_MAX(size_t) BROTLI_MIN_MAX(uint32_t) BROTLI_MIN_MAX(uint8_t)
  #if BROTLI_GNUC_HAS_BUILTIN(__builtin_ctzll, 3, 4, 0) || \
      BROTLI_INTEL_VERSION_CHECK(16, 0, 0)

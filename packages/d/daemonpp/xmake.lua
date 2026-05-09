@@ -1,4 +1,4 @@
-package("daemonpp")
+package("daemonpp", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/baderouaich/daemonpp")
     set_description("Simple C++ header only template for creating Linux daemons")
@@ -7,12 +7,13 @@ package("daemonpp")
     add_urls("https://github.com/baderouaich/daemonpp.git")
     add_versions("2023.05.01", "0989a8296e1f8b4075db7deb0c3474a5d3780954")
 
-    on_install("linux", function (package)
+    on_install("linux", function(package)
         os.cp("include/*", package:installdir("include/daemonpp"))
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <chrono>
             #include <daemonpp/daemon.hpp>
 
@@ -39,5 +40,7 @@ package("daemonpp")
                 dmn.run(argc, argv);
                 return 0;
             }
-        ]]}, {configs = {languages = "cxx11"}}))
+        ]]
+        }, {configs = {languages = "cxx11"}}))
     end)
+end)

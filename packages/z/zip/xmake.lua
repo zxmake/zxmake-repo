@@ -1,4 +1,4 @@
-package("zip")
+package("zip", function()
     set_kind("binary")
     set_homepage("http://www.info-zip.org/Zip.html")
     set_description("Info-ZIP zip utility")
@@ -8,7 +8,7 @@ package("zip")
 
     add_deps("cmake")
 
-    on_install("@windows", "@macosx", "@linux", function (package)
+    on_install("@windows", "@macosx", "@linux", function(package)
         io.replace("zip.h", "#define __zip_h 1", [[#define __zip_h 1
             #if defined(WIN32) || defined(WINDLL)
             #  define WIN32_LEAN_AND_MEAN
@@ -40,7 +40,7 @@ package("zip")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         os.vrun("zip --help")
     end)
-
+end)

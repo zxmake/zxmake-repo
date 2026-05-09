@@ -19,4 +19,3 @@ index f58d48253..10733561e 100644
 +    message(STATUS "Missing ${CMAKE_SOURCE_DIR}/bindings/go/conftest.go, Go bindings disabled.")
    endif()
  endif()
- 

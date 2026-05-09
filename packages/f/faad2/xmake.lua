@@ -1,19 +1,24 @@
-package("faad2")
+package("faad2", function()
 
     set_homepage("https://sourceforge.net/projects/faac")
-    set_description("FAAD2 is a HE, LC, MAIN and LTP profile, MPEG2 and MPEG-4 AAC decoder.")
+    set_description(
+        "FAAD2 is a HE, LC, MAIN and LTP profile, MPEG2 and MPEG-4 AAC decoder.")
     set_license("GPL-2.0")
 
-    add_urls("https://github.com/knik0/faad2/archive/refs/tags/$(version).tar.gz", {version = function (version)
-        return version:gsub("%.", "_")
-    end})
-    add_versions("2.10.0", "0c6d9636c96f95c7d736f097d418829ced8ec6dbd899cc6cc82b728480a84bfb")
+    add_urls(
+        "https://github.com/knik0/faad2/archive/refs/tags/$(version).tar.gz", {
+            version = function(version)
+                return version:gsub("%.", "_")
+            end
+        })
+    add_versions("2.10.0",
+                 "0c6d9636c96f95c7d736f097d418829ced8ec6dbd899cc6cc82b728480a84bfb")
 
     if not is_plat("windows") then
         add_deps("autoconf", "automake", "libtool")
     end
 
-    on_install("windows", function (package)
+    on_install("windows", function(package)
         if package:is_plat("windows") then
             local vs = import("core.tool.toolchain").load("msvc"):config("vs")
             if tonumber(vs) < 2019 then
@@ -22,8 +27,10 @@ package("faad2")
         end
         os.cd("project/msvc")
         local configs = {"faad2.sln"}
-        table.insert(configs, "/p:Configuration=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "/p:Platform=" .. (package:is_arch("x64") and "x64" or "Win32"))
+        table.insert(configs, "/p:Configuration=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "/p:Platform=" ..
+                         (package:is_arch("x64") and "x64" or "Win32"))
         import("package.tools.msbuild").build(package, configs)
         os.cp("../../include/*.h", package:installdir("include"))
         os.cd(path.join("bin", package:debug() and "Debug" or "Release"))
@@ -37,16 +44,19 @@ package("faad2")
         package:addenv("PATH", "bin")
     end)
 
-    on_install("macosx", "linux", function (package)
+    on_install("macosx", "linux", function(package)
         local configs = {}
-        table.insert(configs, "--enable-shared=" .. (package:config("shared") and "yes" or "no"))
-        table.insert(configs, "--enable-static=" .. (package:config("shared") and "no" or "yes"))
+        table.insert(configs, "--enable-shared=" ..
+                         (package:config("shared") and "yes" or "no"))
+        table.insert(configs, "--enable-static=" ..
+                         (package:config("shared") and "no" or "yes"))
         if package:config("pic") ~= false then
             table.insert(configs, "--with-pic")
         end
         local libtool = package:dep("libtool")
         if libtool then
-            os.vrun("autoreconf --force --install -I" .. libtool:installdir("share", "aclocal"))
+            os.vrun("autoreconf --force --install -I" ..
+                        libtool:installdir("share", "aclocal"))
         else
             os.vrun("autoreconf --force --install")
         end
@@ -54,6 +64,7 @@ package("faad2")
         package:addenv("PATH", "bin")
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("NeAACDecInit", {includes = "neaacdec.h"}))
     end)
+end)

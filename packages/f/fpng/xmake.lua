@@ -1,15 +1,22 @@
-package("fpng")
+package("fpng", function()
     set_homepage("https://github.com/richgel999/fpng")
     set_description("Super fast C++ .PNG writer/reader")
 
-    add_urls("https://github.com/richgel999/fpng/archive/refs/tags/$(version).tar.gz",
-	     "https://github.com/richgel999/fpng.git")
-    add_versions("v1.0.6", "0f4b60f0b638d47addfbd150bb19bfe2f3343c4ed2d742c02c085456de0ee1dd")
-    add_versions("v1.0.1", "ef4e7ee23176908fdad4936f05f3ad097abaf61485171e108fb1e7ff230bd523")
+    add_urls(
+        "https://github.com/richgel999/fpng/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/richgel999/fpng.git")
+    add_versions("v1.0.6",
+                 "0f4b60f0b638d47addfbd150bb19bfe2f3343c4ed2d742c02c085456de0ee1dd")
+    add_versions("v1.0.1",
+                 "ef4e7ee23176908fdad4936f05f3ad097abaf61485171e108fb1e7ff230bd523")
 
-    add_configs("sse4", { description = "Enable SSE 4.1 support.", default = false, type = "boolean"})
+    add_configs("sse4", {
+        description = "Enable SSE 4.1 support.",
+        default = false,
+        type = "boolean"
+    })
 
-    on_install("windows", "linux", "macosx", function (package)
+    on_install("windows", "linux", "macosx", function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             option("sse4", {showmenu = true, default = false})
@@ -34,11 +41,14 @@ package("fpng")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             void test() {
                 std::vector<uint8_t> fpng_file_buf;
 	 	fpng::fpng_encode_image_to_memory(0, 0, 0, 0, fpng_file_buf, 0);
             }
-        ]]}, {configs = {languages = "c++11"}, includes = "fpng.h"}))
+        ]]
+        }, {configs = {languages = "c++11"}, includes = "fpng.h"}))
     end)
+end)

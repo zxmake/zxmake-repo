@@ -1,9 +1,9 @@
-package("postgresql")
+package("postgresql", function()
 
     set_homepage("https://www.postgresql.org/")
     set_description("PostgreSQL Database Management System")
 
-    on_fetch(function (package, opt)
+    on_fetch(function(package, opt)
         if opt.system then
             import("lib.detect.find_path")
             import("lib.detect.find_program")
@@ -12,9 +12,11 @@ package("postgresql")
             -- init search paths
             local paths = {}
             if package:is_plat("windows") then
-                local regs = winos.registry_keys("HKEY_LOCAL_MACHINE\\SOFTWARE\\PostgreSQL\\Installations\\postgresql-x64-*")
+                local regs = winos.registry_keys(
+                                 "HKEY_LOCAL_MACHINE\\SOFTWARE\\PostgreSQL\\Installations\\postgresql-x64-*")
                 for _, reg in ipairs(regs) do
-                    table.insert(paths, winos.registry_query(reg .. ";Base Directory"))
+                    table.insert(paths,
+                                 winos.registry_query(reg .. ";Base Directory"))
                 end
             elseif package:is_plat("macosx") then
                 for _, path in ipairs(os.dirs("/Library/PostgreSQL/*")) do
@@ -27,7 +29,8 @@ package("postgresql")
             end
 
             -- find programs
-            local binfile = find_program("postgres", {paths = os.getenv("PATH")})
+            local binfile =
+                find_program("postgres", {paths = os.getenv("PATH")})
             if binfile then
                 local packagedir = path.directory(path.directory(binfile))
                 table.insert(paths, packagedir)
@@ -35,15 +38,22 @@ package("postgresql")
             end
 
             -- find library
-            local result = {links = {}, linkdirs = {}, includedirs = {}, libfiles = {}}
+            local result = {
+                links = {},
+                linkdirs = {},
+                includedirs = {},
+                libfiles = {}
+            }
             local libname = (package:is_plat("windows") and "libpq" or "pq")
             local linkinfo = find_library(libname, paths, {suffixes = "lib"})
             if linkinfo then
                 table.insert(result.linkdirs, linkinfo.linkdir)
                 table.insert(result.links, libname)
                 if package:is_plat("windows") then
-                    table.insert(result.libfiles, path.join(linkinfo.linkdir, "libpq.lib"))
-                    table.insert(result.libfiles, path.join(linkinfo.linkdir, "libpq.dll"))
+                    table.insert(result.libfiles,
+                                 path.join(linkinfo.linkdir, "libpq.lib"))
+                    table.insert(result.libfiles,
+                                 path.join(linkinfo.linkdir, "libpq.dll"))
                 end
             end
 
@@ -61,3 +71,4 @@ package("postgresql")
             end
         end
     end)
+end)

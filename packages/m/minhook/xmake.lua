@@ -1,4 +1,4 @@
-package("minhook")
+package("minhook", function()
 
     set_homepage("https://github.com/TsudaKageyu/minhook")
     set_description("The Minimalistic x86/x64 API Hooking Library for Windows.")
@@ -7,9 +7,10 @@ package("minhook")
     set_urls("https://github.com/TsudaKageyu/minhook/archive/$(version).tar.gz",
              "https://github.com/TsudaKageyu/minhook.git")
 
-    add_versions("v1.3.3", "5bec16358ec9086d4593124bf558635e89135abea2c76e5761ecaf09f4546b19")
+    add_versions("v1.3.3",
+                 "5bec16358ec9086d4593124bf558635e89135abea2c76e5761ecaf09f4546b19")
 
-    on_install("windows", "mingw", function (package)
+    on_install("windows", "mingw", function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             target("minhook")
@@ -31,6 +32,7 @@ package("minhook")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("MH_Initialize", {includes = "MinHook.h"}))
     end)
+end)

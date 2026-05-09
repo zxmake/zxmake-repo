@@ -1,7 +1,8 @@
-package("libusbmuxd")
+package("libusbmuxd", function()
 
     set_homepage("https://github.com/libimobiledevice/libusbmuxd")
-    set_description("A client library to multiplex connections from and to iOS devices")
+    set_description(
+        "A client library to multiplex connections from and to iOS devices")
     set_license("LGPL-2.1")
 
     add_urls("https://github.com/libimobiledevice/libusbmuxd.git")
@@ -12,17 +13,22 @@ package("libusbmuxd")
         add_syslinks("ws2_32")
     end
 
-    on_install("macosx", "linux", "mingw@macosx", function (package)
+    on_install("macosx", "linux", "mingw@macosx", function(package)
         local configs = {}
-        table.insert(configs, "--enable-shared=" .. (package:config("shared") and "yes" or "no"))
-        table.insert(configs, "--enable-static=" .. (package:config("shared") and "no" or "yes"))
+        table.insert(configs, "--enable-shared=" ..
+                         (package:config("shared") and "yes" or "no"))
+        table.insert(configs, "--enable-static=" ..
+                         (package:config("shared") and "no" or "yes"))
         if package:is_plat("linux") and package:config("pic") ~= false then
             table.insert(configs, "--with-pic")
         end
-        io.replace("tools/Makefile.am", "bin_PROGRAMS = iproxy inetcat", "bin_PROGRAMS =")
+        io.replace("tools/Makefile.am", "bin_PROGRAMS = iproxy inetcat",
+                   "bin_PROGRAMS =")
         import("package.tools.autoconf").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("usbmuxd_events_subscribe", {includes = "usbmuxd.h"}))
+    on_test(function(package)
+        assert(package:has_cfuncs("usbmuxd_events_subscribe",
+                                  {includes = "usbmuxd.h"}))
     end)
+end)

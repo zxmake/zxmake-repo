@@ -6,6 +6,6 @@ diff -Naurw CMakeLists.txt CMakeLists.txt
  target_compile_definitions(backward PUBLIC ${BACKWARD_DEFINITIONS})
  target_include_directories(backward PUBLIC ${BACKWARD_INCLUDE_DIRS})
 +target_link_libraries(backward PUBLIC -limagehlp -lmsvcr110 -ldbghelp)
- 
+
  ###############################################################################
  # TESTS

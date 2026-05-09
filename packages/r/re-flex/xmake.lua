@@ -1,17 +1,22 @@
-package("re-flex")
+package("re-flex", function()
     set_homepage("https://www.genivia.com/doc/reflex/html")
-    set_description("A high-performance C++ regex library and lexical analyzer generator with Unicode support.")
+    set_description(
+        "A high-performance C++ regex library and lexical analyzer generator with Unicode support.")
     set_license("BSD-3-Clause")
 
-    add_urls("https://github.com/Genivia/RE-flex/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/Genivia/RE-flex.git")
+    add_urls(
+        "https://github.com/Genivia/RE-flex/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/Genivia/RE-flex.git")
 
-    add_versions("v4.5.0", "30a503087c4ea7c2f81ef8b7f1c54ea10c3f26ab3a372d2c874273ee5e643472")
-    add_versions("v4.4.0", "3b34d0c88f91db6b5387355a64a84bfa6464d90fb182aab05c367605db28d2e8")
-    add_versions("v4.3.0", "1658c1be9fa95bf948a657d75d2cef0df81b614bc6052284935774d4d8551d95")
+    add_versions("v4.5.0",
+                 "30a503087c4ea7c2f81ef8b7f1c54ea10c3f26ab3a372d2c874273ee5e643472")
+    add_versions("v4.4.0",
+                 "3b34d0c88f91db6b5387355a64a84bfa6464d90fb182aab05c367605db28d2e8")
+    add_versions("v4.3.0",
+                 "1658c1be9fa95bf948a657d75d2cef0df81b614bc6052284935774d4d8551d95")
 
-    on_install(function (package)
-        io.writefile("xmake.lua",[[
+    on_install(function(package)
+        io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             set_languages("cxx11")
             add_includedirs("include")
@@ -36,11 +41,14 @@ package("re-flex")
         package:addenv("PATH", "bin")
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <reflex/matcher.h>
             void test() {
                 reflex::Matcher matcher("\w+","114 514 1919 810");
             }
-        ]]}, {configs = {languages = "cxx11"}}))
+        ]]
+        }, {configs = {languages = "cxx11"}}))
     end)
+end)

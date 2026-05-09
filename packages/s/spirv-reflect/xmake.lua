@@ -1,6 +1,7 @@
-package("spirv-reflect")
+package("spirv-reflect", function()
     set_homepage("https://github.com/KhronosGroup/SPIRV-Reflect")
-    set_description("SPIRV-Reflect is a lightweight library that provides a C/C++ reflection API for SPIR-V shader bytecode in Vulkan applications.")
+    set_description(
+        "SPIRV-Reflect is a lightweight library that provides a C/C++ reflection API for SPIR-V shader bytecode in Vulkan applications.")
     set_license("Apache-2.0")
 
     add_urls("https://github.com/KhronosGroup/SPIRV-Reflect.git")
@@ -16,12 +17,20 @@ package("spirv-reflect")
     add_versions("1.3.283+0", "ee5b57fba6a986381f998567761bbc064428e645")
     add_versions("1.3.290+0", "b4dc70d8e6ac30c719a2d05b8ad05e1d277c92b4")
 
-    add_configs("shared", {description = "Build shared library.", default = false, type = "boolean", readonly = true})
+    add_configs("shared", {
+        description = "Build shared library.",
+        default = false,
+        type = "boolean",
+        readonly = true
+    })
 
     add_deps("spirv-headers")
 
-    on_install("windows", "linux", "macosx", "mingw", "android", function (package)
-        io.gsub("spirv_reflect.h", "#include \"%.%/include%/spirv%/unified1%/spirv.h\"", "#include \"spirv/unified1/spirv.h\"")
+    on_install("windows", "linux", "macosx", "mingw", "android",
+               function(package)
+        io.gsub("spirv_reflect.h",
+                "#include \"%.%/include%/spirv%/unified1%/spirv.h\"",
+                "#include \"spirv/unified1/spirv.h\"")
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             add_requires("spirv-headers")
@@ -40,6 +49,8 @@ package("spirv-reflect")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("spvReflectGetCodeSize", {includes = "spirv_reflect.h"}))
+    on_test(function(package)
+        assert(package:has_cfuncs("spvReflectGetCodeSize",
+                                  {includes = "spirv_reflect.h"}))
     end)
+end)

@@ -1,4 +1,4 @@
-package("sfparse")
+package("sfparse", function()
     set_homepage("https://github.com/ngtcp2/sfparse")
     set_description("Structured Field Values parser")
     set_license("MIT")
@@ -8,7 +8,7 @@ package("sfparse")
 
     add_includedirs("include", "include/sfparse")
 
-    on_install(function (package)
+    on_install(function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             target("sfparse")
@@ -22,6 +22,7 @@ package("sfparse")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("sf_parser_param", {includes = "sfparse.h"}))
     end)
+end)

@@ -4,17 +4,17 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 @@ -120,9 +120,9 @@ if (WIN32)
          PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/third_party/mman-win32>)
  endif (WIN32)
- 
+
 -add_subdirectory(trantor)
 +find_package(Trantor CONFIG REQUIRED)
- 
+
 -target_link_libraries(${PROJECT_NAME} PUBLIC trantor)
 +target_link_libraries(${PROJECT_NAME} PUBLIC Trantor::Trantor)
- 
+
  if(${CMAKE_SYSTEM_NAME} STREQUAL "Haiku")
      target_link_libraries(${PROJECT_NAME} PRIVATE network)
 @@ -316,11 +316,10 @@ endif (NOT WIN32)
- 
+
  if (BUILD_POSTGRESQL)
      # find postgres
 -    find_package(pg)
@@ -36,7 +36,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 -    endif (pg_FOUND)
 +    endif (PostgreSQL_FOUND)
  endif (BUILD_POSTGRESQL)
- 
+
  if (BUILD_MYSQL)
 diff --git a/drogon_ctl/CMakeLists.txt b/drogon_ctl/CMakeLists.txt
 --- a/drogon_ctl/CMakeLists.txt

@@ -1,4 +1,4 @@
-package("tomlc99")
+package("tomlc99", function()
     set_homepage("https://github.com/cktan/tomlc99")
     set_description("TOML C library")
     set_license("MIT")
@@ -6,7 +6,7 @@ package("tomlc99")
     add_urls("https://github.com/cktan/tomlc99.git")
     add_versions("2023.09.30", "5221b3d3d66c25a1dc6f0372b4f824f1202fe398")
 
-    on_install(function (package)
+    on_install(function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             target("tomlc99")
@@ -20,6 +20,7 @@ package("tomlc99")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("toml_parse", {includes = "toml.h"}))
     end)
+end)

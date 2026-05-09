@@ -3,23 +3,23 @@ index 338861f..252c566 100644
 --- a/cartographer/common/port.h
 +++ b/cartographer/common/port.h
 @@ -19,11 +19,12 @@
- 
+
  #include <cinttypes>
  #include <cmath>
 +#include <cstring>
  #include <string>
 +#include <stdexcept>
 +#include <functional>
- 
+
 -#include <boost/iostreams/device/back_inserter.hpp>
 -#include <boost/iostreams/filter/gzip.hpp>
 -#include <boost/iostreams/filtering_stream.hpp>
 +#include <zlib.h>
- 
+
  namespace cartographer {
- 
+
 @@ -48,22 +49,54 @@ inline int64 RoundToInt64(const double x) { return std::lround(x); }
- 
+
  inline void FastGzipString(const std::string& uncompressed,
                             std::string* compressed) {
 -  boost::iostreams::filtering_ostream out;
@@ -52,7 +52,7 @@ index 338861f..252c566 100644
 +
 +    deflateEnd(&zs);
  }
- 
+
  inline void FastGunzipString(const std::string& compressed,
                               std::string* decompressed) {
 -  boost::iostreams::filtering_ostream out;
@@ -83,5 +83,5 @@ index 338861f..252c566 100644
 +
 +    inflateEnd(&zs);
  }
- 
+
  }  // namespace common

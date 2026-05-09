@@ -1,17 +1,20 @@
-package("ls-hpack")
+package("ls-hpack", function()
     set_homepage("https://github.com/litespeedtech/ls-hpack")
     set_description("LiteSpeed HPACK (RFC7541) Library")
     set_license("MIT")
 
-    add_urls("https://github.com/litespeedtech/ls-hpack/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/litespeedtech/ls-hpack.git")
+    add_urls(
+        "https://github.com/litespeedtech/ls-hpack/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/litespeedtech/ls-hpack.git")
 
-    add_versions("v2.3.4", "db6775ce6aea2db7f90bdb4a798d2b21bdf88493da97cfd4eb40e9aa375d77c0")
-    add_versions("v2.3.3", "3d7d539bd659fefc7168fb514368065cb12a1a7a0946ded60e4e10f1637f1ea2")
+    add_versions("v2.3.4",
+                 "db6775ce6aea2db7f90bdb4a798d2b21bdf88493da97cfd4eb40e9aa375d77c0")
+    add_versions("v2.3.3",
+                 "3d7d539bd659fefc7168fb514368065cb12a1a7a0946ded60e4e10f1637f1ea2")
 
     add_deps("xxhash")
 
-    on_install(function (package)
+    on_install(function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
 
@@ -44,6 +47,7 @@ package("ls-hpack")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("lshpack_enc_init", {includes = "lshpack.h"}))
     end)
+end)

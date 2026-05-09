@@ -4,17 +4,17 @@ index f336f1fe2d2..8ed35c982d5 100644
 +++ b/Common/Core/SMP/Common/vtkSMPToolsImpl.h
 @@ -62,7 +62,7 @@ public:
    bool GetNestedParallelism() { return this->NestedActivated; }
- 
+
    //--------------------------------------------------------------------------------
 -  bool IsParallelScope() { return this->IsParallel; }
 +  bool IsParallelScope();
- 
+
    //--------------------------------------------------------------------------------
    bool GetSingleThread();
 @@ -118,6 +118,12 @@ private:
    std::atomic<bool> IsParallel{ false };
  };
- 
+
 +template <BackendType Backend>
 +bool vtkSMPToolsImpl<Backend>::IsParallelScope()
 +{
@@ -22,7 +22,7 @@ index f336f1fe2d2..8ed35c982d5 100644
 +}
 +
  using ExecuteFunctorPtrType = void (*)(void*, vtkIdType, vtkIdType, vtkIdType);
- 
+
  VTK_ABI_NAMESPACE_END
 diff --git a/Common/Core/SMP/Common/vtkSMPToolsImpl.h b/Common/Core/SMP/Common/vtkSMPToolsImpl.h
 index 8ed35c982d5..d2a4a377adc 100644
@@ -30,7 +30,7 @@ index 8ed35c982d5..d2a4a377adc 100644
 +++ b/Common/Core/SMP/Common/vtkSMPToolsImpl.h
 @@ -43,7 +43,7 @@ const BackendType DefaultBackend = BackendType::OpenMP;
  #endif
- 
+
  template <BackendType Backend>
 -class VTKCOMMONCORE_EXPORT vtkSMPToolsImpl
 +class vtkSMPToolsImpl
@@ -48,5 +48,5 @@ index 6971c7c1199..5f12bb7de76 100644
 -  return this->_M_chilren[child];
 +  return this->m_children[child];
  }
- 
+
  /**\brief Return a reference to a child node.

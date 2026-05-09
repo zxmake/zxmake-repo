@@ -1,4 +1,4 @@
-package("autotools")
+package("autotools", function()
     set_kind("binary")
 
     if is_subhost("msys") then
@@ -7,5 +7,6 @@ package("autotools")
         add_deps("autoconf", "automake", "libtool")
     end
 
-    on_install("@linux", "@macosx", "@bsd", "@msys", function (package)
+    on_install("@linux", "@macosx", "@bsd", "@msys", function(package)
     end)
+end)

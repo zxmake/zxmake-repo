@@ -4,13 +4,13 @@ index 5e812fb..0de18c8 100644
 +++ b/CMakeLists.txt
 @@ -75,7 +75,7 @@ set(ZYAN_ZYCORE_PATH
  # =============================================================================================== #
- 
+
  if (ZYAN_SYSTEM_ZYCORE)
 -    find_package(Zycore)
-+    
++
  else ()
      # Try to initialize the Zycore submodule using Git
-     if (NOT EXISTS "${ZYAN_ZYCORE_PATH}/CMakeLists.txt" AND 
+     if (NOT EXISTS "${ZYAN_ZYCORE_PATH}/CMakeLists.txt" AND
 @@ -127,8 +127,8 @@ set_target_properties("Zydis" PROPERTIES
      VERSION "${Zydis_VERSION}"
      SOVERSION "${Zydis_VERSION_MAJOR}.${Zydis_VERSION_MINOR}"
@@ -19,15 +19,15 @@ index 5e812fb..0de18c8 100644
 -zyan_maybe_enable_wpo("Zydis")
 +
 +
- 
+
  if (ZYDIS_FEATURE_FORMATTER AND NOT ZYDIS_FEATURE_DECODER)
      message(
 @@ -237,7 +237,7 @@ if (ZYDIS_BUILD_SHARED_LIB AND WIN32)
      target_sources("Zydis" PRIVATE "resources/VersionInfo.rc")
  endif ()
- 
+
 -zyan_set_source_group("Zydis")
 +
- 
+
  configure_package_config_file(cmake/zydis-config.cmake.in
      "${CMAKE_CURRENT_BINARY_DIR}/zydis-config.cmake"

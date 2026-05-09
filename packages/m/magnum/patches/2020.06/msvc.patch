@@ -5,24 +5,24 @@ index 5fa02c2..038e001 100644
 @@ -419,7 +419,7 @@ void Buffer::bindImplementationMulti(const Target target, const GLuint firstInde
          }
      }
- 
+
 -    glBindBuffersRange(GLenum(target), firstIndex, buffers.size(), ids, offsetsSizes, offsetsSizes + buffers.size());
 +    glBindBuffersRange(GLenum(target), firstIndex, buffers.size(), ids, offsetsSizes, offsetsSizes.data() + buffers.size());
  }
  #endif
- 
+
 diff --git a/src/Magnum/Implementation/ImageProperties.h b/src/Magnum/Implementation/ImageProperties.h
 index d6326cf..6eedae0 100644
 --- a/src/Magnum/Implementation/ImageProperties.h
 +++ b/src/Magnum/Implementation/ImageProperties.h
 @@ -70,7 +70,7 @@ template<UnsignedInt dimensions, class T, class Image, class Data> Containers::S
- 
+
      static_assert(sizeof(decltype(image.data().front())) == 1,
          "pointer arithmetic expects image data type to have 1 byte");
 -    return {data.suffix(properties.first[dimensions - 1]), data + properties.first.sum(), size, stride};
 +    return {data.suffix(properties.first[dimensions - 1]), data.data() + properties.first.sum(), size, stride};
  }
- 
+
  }}
 diff --git a/src/Magnum/MeshTools/Concatenate.cpp b/src/Magnum/MeshTools/Concatenate.cpp
 index 38a7bc1..c20eeb9 100644
@@ -45,7 +45,7 @@ index 38a7bc1..c20eeb9 100644
 +            std::iota(indices.data() + indexOffset, indices.data() + indexOffset + mesh.vertexCount(), UnsignedInt(vertexOffset));
              indexOffset += mesh.vertexCount();
          }
- 
+
 diff --git a/src/Magnum/MeshTools/Interleave.cpp b/src/Magnum/MeshTools/Interleave.cpp
 index b98c589..c16fd74 100644
 --- a/src/Magnum/MeshTools/Interleave.cpp
@@ -67,4 +67,3 @@ index b98c589..c16fd74 100644
 +                Containers::ArrayView<const void>{indexData.data() + data.indexOffset(), data.indices().size()[0]*data.indices().size()[1]}};
          }
      }
- 

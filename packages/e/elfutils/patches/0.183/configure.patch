@@ -5,7 +5,7 @@ index ec4ed1f..b173800 100755
 @@ -5160,55 +5160,6 @@ else
    NM="$ac_cv_prog_NM"
  fi
- 
+
 -
 -# We use -std=gnu99 but have explicit checks for some language constructs
 -# and GNU extensions since some compilers claim GNU99 support, but don't
@@ -61,7 +61,7 @@ index ec4ed1f..b173800 100755
 @@ -5363,43 +5314,6 @@ if test "$ac_cv_zdefs" = "yes"; then
  	dso_LDFLAGS="$dso_LDFLAGS $ZDEFS_LDFLAGS"
  fi
- 
+
 -# We really want build-ids. Warn and force generating them if gcc was
 -# configure without --enable-linker-build-id
 -{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the compiler generates build-ids" >&5
@@ -104,8 +104,8 @@ index ec4ed1f..b173800 100755
  $as_echo_n "checking whether gcc supports $ZRELRO_LDFLAGS... " >&6; }
 @@ -5436,47 +5350,6 @@ if test "$ac_cv_zrelro" = "yes"; then
  fi
- 
- 
+
+
 -
 -{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for __thread support" >&5
 -$as_echo_n "checking for __thread support... " >&6; }
@@ -151,9 +151,9 @@ index ec4ed1f..b173800 100755
  $as_echo_n "checking whether gcc provides stdatomic.h... " >&6; }
  if ${ac_cv_has_stdatomic+:} false; then :
 @@ -7345,74 +7218,6 @@ $as_echo "#define HAVE_FALLTHROUGH 1" >>confdefs.h
- 
+
  fi
- 
+
 -saved_LIBS="$LIBS"
 -{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing argp_parse" >&5
 -$as_echo_n "checking for library containing argp_parse... " >&6; }
@@ -227,8 +227,8 @@ index ec4ed1f..b173800 100755
  $as_echo_n "checking for library containing fts_close... " >&6; }
 @@ -7481,75 +7286,6 @@ See \`config.log' for more details" "$LINENO" 5; } ;;
  esac
- 
- 
+
+
 -saved_LIBS="$LIBS"
 -{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing _obstack_free" >&5
 -$as_echo_n "checking for library containing _obstack_free... " >&6; }
@@ -299,5 +299,3 @@ index ec4ed1f..b173800 100755
 -
 -
  ac_config_files="$ac_config_files doc/Makefile"
- 
- 

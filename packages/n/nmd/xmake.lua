@@ -1,7 +1,8 @@
-package("nmd")
+package("nmd", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/Nomade040/nmd")
-    set_description("An x86 assembler and disassembler along with a C89 header file (nmd_assembly.h), and a C89 2D graphics library (nmd_graphics.h).")
+    set_description(
+        "An x86 assembler and disassembler along with a C89 header file (nmd_assembly.h), and a C89 2D graphics library (nmd_graphics.h).")
     set_license("Unlicense")
 
     add_urls("https://github.com/Nomade040/nmd.git")
@@ -9,16 +10,19 @@ package("nmd")
 
     add_includedirs("include", "include/nmd")
 
-    on_install(function (package)
+    on_install(function(package)
         os.cp("nmd_assembly.h", package:installdir("include/nmd"))
         os.cp("nmd_graphics.h", package:installdir("include/nmd"))
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <nmd/nmd_assembly.h>
             void test() {
                 nmd_x86_instruction instruction;
             }
-        ]]}, {configs = {languages = "c89"}}))
+        ]]
+        }, {configs = {languages = "c89"}}))
     end)
+end)

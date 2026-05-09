@@ -4,8 +4,8 @@ index acc483f..244e733 100755
 +++ b/configure
 @@ -9363,76 +9363,6 @@ See \`config.log' for more details" "$LINENO" 5; } ;;
  esac
- 
- 
+
+
 -saved_LIBS="$LIBS"
 -{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for library containing _obstack_free" >&5
 -printf %s "checking for library containing _obstack_free... " >&6; }
@@ -76,6 +76,6 @@ index acc483f..244e733 100755
 -        *) obstack_LIBS= ;;
 -esac
 -
- 
- 
+
+
  ac_config_files="$ac_config_files doc/Makefile"

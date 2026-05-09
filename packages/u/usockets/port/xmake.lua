@@ -37,13 +37,13 @@ if has_config("quic") then
 end
 
 target("usockets")
-    set_kind("$(kind)")
-    set_languages("c++17")
+set_kind("$(kind)")
+set_languages("c++17")
 
-    add_files("src/**.cpp", "src/**.c")
-    add_includedirs("src")
-    add_headerfiles("src/libusockets.h")
+add_files("src/**.cpp", "src/**.c")
+add_includedirs("src")
+add_headerfiles("src/libusockets.h")
 
-    if is_plat("windows") and is_kind("shared") then
-        add_rules("utils.symbols.export_all", {export_classes = true})
-    end
+if is_plat("windows") and is_kind("shared") then
+    add_rules("utils.symbols.export_all", {export_classes = true})
+end

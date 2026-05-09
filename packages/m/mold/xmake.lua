@@ -1,4 +1,4 @@
-package("mold")
+package("mold", function()
     set_kind("binary")
     set_homepage("https://github.com/rui314/mold")
     set_description("mold: A Modern Linker")
@@ -11,7 +11,7 @@ package("mold")
         add_deps("openssl")
     end
 
-    on_install("linux", "macosx", function (package)
+    on_install("linux", "macosx", function(package)
         local configs = {}
         local cflags = {}
         local ldflags = {}
@@ -20,7 +20,9 @@ package("mold")
             if dep then
                 local depinfo = dep:fetch()
                 if depinfo then
-                    for _, includedir in ipairs(depinfo.includedirs or depinfo.sysincludedirs) do
+                    for _, includedir in ipairs(
+                                             depinfo.includedirs or
+                                                 depinfo.sysincludedirs) do
                         table.insert(cflags, "-I" .. includedir)
                     end
                     for _, linkdir in ipairs(depinfo.linkdirs) do
@@ -41,6 +43,7 @@ package("mold")
         os.cp("mold", package:installdir("bin"))
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         os.vrun("mold --version")
     end)
+end)

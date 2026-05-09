@@ -7,7 +7,7 @@ index a0f106db..3bdd8ce5 100644
  #include <shared_mutex>
  #include <dpp/exception.h>
 +#include <cstring>
- 
+
  namespace dpp
  {
 @@ -97,4 +98,4 @@ namespace dpp

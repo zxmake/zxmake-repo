@@ -6,11 +6,13 @@ import("core.base.semver")
 -- http://www.slproweb.com/products/Win32OpenSSL.html
 function _find_package_on_windows(package, opt)
     local bits = package:is_plat("x86") and "32" or "64"
-    local paths = {"$(reg HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL %(" .. bits .. "-bit%)_is1;Inno Setup: App Path)",
-                    "$(env PROGRAMFILES)/OpenSSL",
-                    "$(env PROGRAMFILES)/OpenSSL-Win" .. bits,
-                    "C:/OpenSSL",
-                    "C:/OpenSSL-Win" .. bits}
+    local paths = {
+        "$(reg HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL %(" ..
+            bits .. "-bit%)_is1;Inno Setup: App Path)",
+        "$(env PROGRAMFILES)/OpenSSL",
+        "$(env PROGRAMFILES)/OpenSSL-Win" .. bits, "C:/OpenSSL",
+        "C:/OpenSSL-Win" .. bits
+    }
 
     local result = {links = {}, linkdirs = {}}
     local suffix = package:config("shared") and "" or "_static"
@@ -38,14 +40,19 @@ function _find_package_on_windows(package, opt)
     if result.linkdirs then
         result.linkdirs = table.unique(result.linkdirs)
     end
-    local includedir = find_path(path.translate("openssl/ssl.h"), paths, {suffixes = "include"})
+    local includedir = find_path(path.translate("openssl/ssl.h"), paths,
+                                 {suffixes = "include"})
     if includedir then
         result.includedirs = result.includedirs or {}
         table.insert(result.includedirs, includedir)
     end
     local openssl = find_file("openssl.exe", paths, {suffixes = "bin"})
     if openssl then
-        local version = try {function () return os.iorunv(openssl, {"version"}) end}
+        local version = try {
+            function()
+                return os.iorunv(openssl, {"version"})
+            end
+        }
         if version then
             version = semver.match(version)
             if version then
@@ -67,4 +74,3 @@ function main(package, opt)
         return result or false
     end
 end
-

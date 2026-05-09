@@ -1,4 +1,4 @@
-package("psimd")
+package("psimd", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/Maratyszcza/psimd")
     set_description("Portable 128-bit SIMD intrinsics")
@@ -12,10 +12,13 @@ package("psimd")
     end)
 
     on_test(function(package)
-        assert(package:check_csnippets({test = [[
+        assert(package:check_csnippets({
+            test = [[
             void test() {
                 const psimd_f32 log2e = psimd_splat_f32(0x1.715476p+0f);
                 const psimd_f32 inf = psimd_splat_f32(__builtin_inff());
             }
-        ]]}, {configs = {languages = "c11"}, includes = "psimd.h"}))
+        ]]
+        }, {configs = {languages = "c11"}, includes = "psimd.h"}))
     end)
+end)

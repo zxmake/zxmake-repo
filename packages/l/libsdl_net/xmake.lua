@@ -1,11 +1,13 @@
-package("libsdl_net")
+package("libsdl_net", function()
     set_homepage("https://www.libsdl.org/projects/SDL_net/")
     set_description("Simple DirectMedia Layer networking library")
     set_license("zlib")
 
-    add_urls("https://www.libsdl.org/projects/SDL_net/release/SDL2_net-$(version).zip",
-             "https://github.com/libsdl-org/SDL_net/releases/download/release-$(version)/SDL2_net-$(version).zip")
-    add_versions("2.2.0", "1eec3a9d43df019d7916a6ecce32f2a3ad5248c82c9c237948afc712399be36d")
+    add_urls(
+        "https://www.libsdl.org/projects/SDL_net/release/SDL2_net-$(version).zip",
+        "https://github.com/libsdl-org/SDL_net/releases/download/release-$(version)/SDL2_net-$(version).zip")
+    add_versions("2.2.0",
+                 "1eec3a9d43df019d7916a6ecce32f2a3ad5248c82c9c237948afc712399be36d")
 
     if is_plat("mingw") and is_subhost("msys") then
         add_extsources("pacman::SDL2_net")
@@ -22,37 +24,52 @@ package("libsdl_net")
     end
 
     if is_plat("wasm") then
-        add_configs("shared", {description = "Build shared library.", default = false, type = "boolean", readonly = true})
+        add_configs("shared", {
+            description = "Build shared library.",
+            default = false,
+            type = "boolean",
+            readonly = true
+        })
     end
 
     add_includedirs("include", "include/SDL2")
 
-    on_load(function (package)
-        package:add("deps", "libsdl", { configs = { shared = package:config("shared") }})
+    on_load(function(package)
+        package:add("deps", "libsdl",
+                    {configs = {shared = package:config("shared")}})
     end)
 
-    on_install(function (package)
+    on_install(function(package)
         if package:is_plat("wasm") then
-            io.replace("CMakeLists.txt", "sdl_find_sdl2(${sdl2_target_name} ${SDL_REQUIRED_VERSION})", "", {plain = true})
-            io.replace("CMakeLists.txt", "target_link_libraries(SDL2_net PRIVATE $<BUILD_INTERFACE:${sdl2_target_name}>)", [[
+            io.replace("CMakeLists.txt",
+                       "sdl_find_sdl2(${sdl2_target_name} ${SDL_REQUIRED_VERSION})",
+                       "", {plain = true})
+            io.replace("CMakeLists.txt",
+                       "target_link_libraries(SDL2_net PRIVATE $<BUILD_INTERFACE:${sdl2_target_name}>)",
+                       [[
 target_include_directories(SDL2_net PRIVATE ${SDL2_INCLUDE_DIR})
 target_link_libraries(SDL2_net PRIVATE $<BUILD_INTERFACE:${SDL2_LIBRARY}>)
             ]], {plain = true})
-            io.replace("CMakeLists.txt", "target_link_libraries(SDL2_net PRIVATE ${sdl2_target_name})", [[
+            io.replace("CMakeLists.txt",
+                       "target_link_libraries(SDL2_net PRIVATE ${sdl2_target_name})",
+                       [[
 target_include_directories(SDL2_net PRIVATE ${SDL2_INCLUDE_DIR})
 target_link_libraries(SDL2_net PRIVATE ${SDL2_LIBRARY})
             ]], {plain = true})
         end
 
         local configs = {"-DSDL2NET_SAMPLES=OFF"}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
         local libsdl = package:dep("libsdl")
         if libsdl and not libsdl:is_system() then
             table.insert(configs, "-DSDL2_DIR=" .. libsdl:installdir())
             local fetchinfo = libsdl:fetch()
             if fetchinfo then
-                for _, dir in ipairs(fetchinfo.includedirs or fetchinfo.sysincludedirs) do
+                for _, dir in ipairs(fetchinfo.includedirs or
+                                         fetchinfo.sysincludedirs) do
                     if os.isfile(path.join(dir, "SDL_version.h")) then
                         table.insert(configs, "-DSDL2_INCLUDE_DIR=" .. dir)
                         break
@@ -60,21 +77,26 @@ target_link_libraries(SDL2_net PRIVATE ${SDL2_LIBRARY})
                 end
                 local libfiles = {}
                 for _, libfile in ipairs(fetchinfo.libfiles) do
-                    if libfile:match("SDL2%..+$") or libfile:match("SDL2-static%..+$") then
-                        if not (package:config("shared") and libfile:endswith(".dll")) then
+                    if libfile:match("SDL2%..+$") or
+                        libfile:match("SDL2-static%..+$") then
+                        if not (package:config("shared") and
+                            libfile:endswith(".dll")) then
                             table.insert(libfiles, libfile)
                         end
                     end
                 end
-                table.insert(configs, "-DSDL2_LIBRARY=" .. table.concat(libfiles, ";"))
+                table.insert(configs,
+                             "-DSDL2_LIBRARY=" .. table.concat(libfiles, ";"))
             end
         end
-        io.replace("CMakeLists.txt", "find_package(SDL2test)", "", {plain = true})
+        io.replace("CMakeLists.txt", "find_package(SDL2test)", "",
+                   {plain = true})
         import("package.tools.cmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <SDL2/SDL.h>
             #include <SDL2/SDL_net.h>
             int main(int argc, char** argv) {
@@ -82,5 +104,7 @@ target_link_libraries(SDL2_net PRIVATE ${SDL2_LIBRARY})
                 SDLNet_Quit();
                 return 0;
             }
-        ]]}, {configs = {defines = "SDL_MAIN_HANDLED"}}));
+        ]]
+        }, {configs = {defines = "SDL_MAIN_HANDLED"}}));
     end)
+end)

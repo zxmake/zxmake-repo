@@ -1,6 +1,7 @@
-package("libfixmatrix")
+package("libfixmatrix", function()
     set_homepage("https://github.com/PetteriAimonen/libfixmatrix")
-    set_description("C library for fixed point matrix, quaternion and vector calculations")
+    set_description(
+        "C library for fixed point matrix, quaternion and vector calculations")
     set_license("MIT")
 
     add_urls("https://github.com/PetteriAimonen/libfixmatrix.git")
@@ -9,7 +10,7 @@ package("libfixmatrix")
 
     add_deps("libfixmath")
 
-    on_install(function (package)
+    on_install(function(package)
         for _, file in ipairs(os.files("*.h")) do
             io.replace(file, "fix16.h", "libfixmath/fix16.h", {plain = true})
         end
@@ -30,6 +31,8 @@ package("libfixmatrix")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("mf16_fill", {includes = "libfixmatrix/fixmatrix.h"}))
+    on_test(function(package)
+        assert(package:has_cfuncs("mf16_fill",
+                                  {includes = "libfixmatrix/fixmatrix.h"}))
     end)
+end)

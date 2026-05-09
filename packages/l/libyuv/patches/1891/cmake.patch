@@ -4,15 +4,15 @@ index 3f521e3..4d742f3 100644
 +++ b/CMakeLists.txt
 @@ -73,7 +73,6 @@ if(MSVC)
  endif()
- 
+
  # Need to set PIC to allow creating shared libraries from object file libraries.
 -SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
- 
+
  # Build the set of objects that do not need to be compiled with flags to enable
  # particular architecture features.
 @@ -120,19 +119,15 @@ if(NOT MSVC)
  endif()
- 
+
  # this creates the static library (.a)
 -ADD_LIBRARY( ${ly_lib_static} STATIC ${ly_lib_parts})
 -
@@ -27,13 +27,13 @@ index 3f521e3..4d742f3 100644
 +  add_definitions("-DLIBYUV_BUILDING_SHARED_LIBRARY")
  endif()
 +# this creates the shared library (.so)
- 
+
 +option(BUILD_TOOLS "Build tools" OFF)
 +if (BUILD_TOOLS)
  # this creates the cpuid tool
 -ADD_EXECUTABLE      ( cpuid ${ly_base_dir}/util/cpuid.c )
 -TARGET_LINK_LIBRARIES  ( cpuid ${ly_lib_static} )
- 
+
  # this creates the conversion tool
  ADD_EXECUTABLE			( yuvconvert ${ly_base_dir}/util/yuvconvert.cc )
 @@ -141,12 +136,22 @@ TARGET_LINK_LIBRARIES	( yuvconvert ${ly_lib_static} )
@@ -47,7 +47,7 @@ index 3f521e3..4d742f3 100644
 +endif()
 +INSTALL(TARGETS yuvconvert yuvconstants DESTINATION bin)
 +endif()
- 
+
 -find_package ( JPEG )
 -if (JPEG_FOUND)
 -  include_directories( ${JPEG_INCLUDE_DIR} )
@@ -62,18 +62,17 @@ index 3f521e3..4d742f3 100644
 +    target_compile_definitions(yuvconvert PRIVATE HAVE_JPEG)
 +  endif()
  endif()
- 
+
  if(UNIT_TEST)
 @@ -192,11 +197,8 @@ endif()
- 
- 
+
+
  # install the conversion tool, .so, .a, and all the header files
 -INSTALL ( PROGRAMS ${CMAKE_BINARY_DIR}/yuvconvert			DESTINATION bin )
 -INSTALL ( TARGETS ${ly_lib_static}						DESTINATION lib )
 -INSTALL ( TARGETS ${ly_lib_shared} LIBRARY				DESTINATION lib RUNTIME DESTINATION bin )
 +INSTALL ( TARGETS ${ly_lib_static} RUNTIME DESTINATION bin ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
  INSTALL ( DIRECTORY ${PROJECT_SOURCE_DIR}/include/		DESTINATION include )
- 
+
  # create the .deb and .rpm packages using cpack
 -INCLUDE ( CM_linux_packages.cmake )
- 

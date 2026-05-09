@@ -1,31 +1,70 @@
-package("x265")
+package("x265", function()
     set_homepage("http://x265.org")
-    set_description("A free software library and application for encoding video streams into the H.265/MPEG-H HEVC compression format.")
+    set_description(
+        "A free software library and application for encoding video streams into the H.265/MPEG-H HEVC compression format.")
     set_license("GPL-2.0")
 
     add_urls("https://github.com/videolan/x265.git",
              "https://bitbucket.org/multicoreware/x265_git")
 
-    add_urls("https://github.com/videolan/x265/archive/refs/tags/$(version).tar.gz", {alias = "github"})
-    add_urls("https://bitbucket.org/multicoreware/x265_git/downloads/x265_$(version).tar.gz", {alias = "bitbucket"})
+    add_urls(
+        "https://github.com/videolan/x265/archive/refs/tags/$(version).tar.gz",
+        {alias = "github"})
+    add_urls(
+        "https://bitbucket.org/multicoreware/x265_git/downloads/x265_$(version).tar.gz",
+        {alias = "bitbucket"})
 
-    add_versions("bitbucket:4.0", "75b4d05629e365913de3100b38a459b04e2a217a8f30efaa91b572d8e6d71282")
+    add_versions("bitbucket:4.0",
+                 "75b4d05629e365913de3100b38a459b04e2a217a8f30efaa91b572d8e6d71282")
 
-    add_versions("github:3.4", "544d147bf146f8994a7bf8521ed878c93067ea1c7c6e93ab602389be3117eaaf")
-    add_versions("github:3.3", "ca25a38772fc6b49e5f1aa88733bc1dc92da7dc18f02a85cc3e99d76ba85b0a9")
-    add_versions("github:3.2.1", "b5ee7ea796a664d6e2763f9c0ae281fac5d25892fc2cb134698547103466a06a")
-    add_versions("github:3.2", "4dd707648ea90b96bf1f8ea6a36ed21c11fe3a9048923909c5b629755ca8d8f3")
+    add_versions("github:3.4",
+                 "544d147bf146f8994a7bf8521ed878c93067ea1c7c6e93ab602389be3117eaaf")
+    add_versions("github:3.3",
+                 "ca25a38772fc6b49e5f1aa88733bc1dc92da7dc18f02a85cc3e99d76ba85b0a9")
+    add_versions("github:3.2.1",
+                 "b5ee7ea796a664d6e2763f9c0ae281fac5d25892fc2cb134698547103466a06a")
+    add_versions("github:3.2",
+                 "4dd707648ea90b96bf1f8ea6a36ed21c11fe3a9048923909c5b629755ca8d8f3")
 
-    add_configs("hdr10_plus", {description = "Enable dynamic HDR10 compilation", default = false, type = "boolean"})
-    add_configs("svt_hevc", {description = "Enable SVT HEVC Encoder", default = false, type = "boolean"})
-    add_configs("high_bit_depth", {description = "Store pixel samples as 16bit values (Main10/Main12)", default = false, type = "boolean"})
-    add_configs("main12", {description = "Support Main12 instead of Main10", default = false, type = "boolean"})
+    add_configs("hdr10_plus", {
+        description = "Enable dynamic HDR10 compilation",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("svt_hevc", {
+        description = "Enable SVT HEVC Encoder",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("high_bit_depth", {
+        description = "Store pixel samples as 16bit values (Main10/Main12)",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("main12", {
+        description = "Support Main12 instead of Main10",
+        default = false,
+        type = "boolean"
+    })
     if is_plat("linux") then
-        add_configs("numa", {description = "Enable libnuma", default = false, type = "boolean"})
+        add_configs("numa", {
+            description = "Enable libnuma",
+            default = false,
+            type = "boolean"
+        })
     elseif is_plat("wasm") then
-        add_configs("shared", {description = "Build shared library.", default = false, type = "boolean", readonly = true})
+        add_configs("shared", {
+            description = "Build shared library.",
+            default = false,
+            type = "boolean",
+            readonly = true
+        })
     end
-    add_configs("tools", {description = "Build tools", default = false, type = "boolean"})
+    add_configs("tools", {
+        description = "Build tools",
+        default = false,
+        type = "boolean"
+    })
 
     if is_plat("macosx") then
         add_syslinks("c++")
@@ -38,36 +77,50 @@ package("x265")
     add_deps("cmake", "ninja", "nasm >=2.13")
 
     if on_check then
-        on_check("cross", function (package)
+        on_check("cross", function(package)
             if package:version():ge("4.0") then
                 raise("package(x265 >=4.0) unsupported cross pltform")
             end
         end)
     end
 
-    on_install("!cross", function (package)
+    on_install("!cross", function(package)
         os.cd("source")
         -- Let xmake cp pdb
-        io.replace("CMakeLists.txt", "if((WIN32 AND ENABLE_CLI) OR (WIN32 AND ENABLE_SHARED))", "if(0)", {plain = true})
+        io.replace("CMakeLists.txt",
+                   "if((WIN32 AND ENABLE_CLI) OR (WIN32 AND ENABLE_SHARED))",
+                   "if(0)", {plain = true})
 
         if package:is_plat("android") then
-            io.replace("CMakeLists.txt", "list(APPEND PLATFORM_LIBS pthread)", "", {plain = true})
+            io.replace("CMakeLists.txt", "list(APPEND PLATFORM_LIBS pthread)",
+                       "", {plain = true})
         elseif package:is_plat("wasm") then
-            io.replace("CMakeLists.txt", "X86 AND NOT X64", "FALSE", {plain = true})
+            io.replace("CMakeLists.txt", "X86 AND NOT X64", "FALSE",
+                       {plain = true})
         end
 
         local configs = {}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:is_debug() and "Debug" or "Release"))
-        table.insert(configs, "-DCHECKED_BUILD=" .. (package:is_debug() and "ON" or "OFF"))
-        table.insert(configs, "-DENABLE_SHARED=" .. (package:config("shared") and "ON" or "OFF"))
-        table.insert(configs, "-DENABLE_PIC=" .. (package:config("pic") and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:is_debug() and "Debug" or "Release"))
+        table.insert(configs, "-DCHECKED_BUILD=" ..
+                         (package:is_debug() and "ON" or "OFF"))
+        table.insert(configs, "-DENABLE_SHARED=" ..
+                         (package:config("shared") and "ON" or "OFF"))
+        table.insert(configs, "-DENABLE_PIC=" ..
+                         (package:config("pic") and "ON" or "OFF"))
 
-        table.insert(configs, "-DENABLE_HDR10_PLUS=" .. (package:config("hdr10_plus") and "ON" or "OFF"))
-        table.insert(configs, "-DENABLE_SVT_HEVC=" .. (package:config("svt_hevc") and "ON" or "OFF"))
-        table.insert(configs, "-DHIGH_BIT_DEPTH=" .. (package:config("high_bit_depth") and "ON" or "OFF"))
-        table.insert(configs, "-DMAIN12=" .. (package:config("main12") and "ON" or "OFF"))
-        table.insert(configs, "-DENABLE_CLI=" .. (package:config("tools") and "ON" or "OFF"))
-        table.insert(configs, "-DNATIVE_BUILD=" .. (package:is_cross() and "OFF" or "ON"))
+        table.insert(configs, "-DENABLE_HDR10_PLUS=" ..
+                         (package:config("hdr10_plus") and "ON" or "OFF"))
+        table.insert(configs, "-DENABLE_SVT_HEVC=" ..
+                         (package:config("svt_hevc") and "ON" or "OFF"))
+        table.insert(configs, "-DHIGH_BIT_DEPTH=" ..
+                         (package:config("high_bit_depth") and "ON" or "OFF"))
+        table.insert(configs, "-DMAIN12=" ..
+                         (package:config("main12") and "ON" or "OFF"))
+        table.insert(configs, "-DENABLE_CLI=" ..
+                         (package:config("tools") and "ON" or "OFF"))
+        table.insert(configs, "-DNATIVE_BUILD=" ..
+                         (package:is_cross() and "OFF" or "ON"))
 
         if package:config("numa") then
             table.insert(configs, "-DENABLE_LIBNUMA=ON")
@@ -76,11 +129,12 @@ package("x265")
             table.insert(configs, "-DENABLE_LIBNUMA=OFF")
         end
         if package:version() then
-            table.insert(configs, "-DX265_LATEST_TAG=" .. package:version():rawstr())
+            table.insert(configs,
+                         "-DX265_LATEST_TAG=" .. package:version():rawstr())
         end
 
-        if (package:is_plat("windows") and package:is_arch("arm.*"))
-            or package:is_plat("android", "iphoneos", "wasm") then
+        if (package:is_plat("windows") and package:is_arch("arm.*")) or
+            package:is_plat("android", "iphoneos", "wasm") then
             table.insert(configs, "-DENABLE_ASSEMBLY=OFF")
         end
 
@@ -113,10 +167,12 @@ package("x265")
             os.rm(package:installdir("lib/pkgconfig/x265.pc"))
 
             if package:is_debug() then
-                local dir = package:installdir(package:config("shared") and "bin" or "lib")
+                local dir = package:installdir(
+                                package:config("shared") and "bin" or "lib")
                 os.trycp(path.join(package:buildir(), "libx265.pdb"), dir)
                 if package:config("tools") then
-                    os.trycp(path.join(package:buildir(), "x265.pdb"), package:installdir("bin"))
+                    os.trycp(path.join(package:buildir(), "x265.pdb"),
+                             package:installdir("bin"))
                 end
             end
         else
@@ -126,6 +182,7 @@ package("x265")
         end
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("x265_api_get", {includes = "x265.h"}))
     end)
+end)

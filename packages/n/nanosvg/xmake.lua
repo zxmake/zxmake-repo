@@ -1,4 +1,4 @@
-package("nanosvg")
+package("nanosvg", function()
     set_homepage("https://github.com/memononen/nanosvg")
     set_description("Simple stupid SVG parser")
     set_license("zlib")
@@ -10,16 +10,19 @@ package("nanosvg")
 
     add_includedirs("include", "include/nanosvg")
 
-    on_install(function (package)
+    on_install(function(package)
         local configs = {}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
         if package:is_plat("windows") and package:config("shared") then
             table.insert(configs, "-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON")
         end
         import("package.tools.cmake").install(package, configs)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("nsvgParseFromFile", {includes = "nanosvg.h"}))
     end)
+end)

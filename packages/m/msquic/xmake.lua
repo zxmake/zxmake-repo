@@ -1,6 +1,7 @@
-package("msquic")
+package("msquic", function()
     set_homepage("https://github.com/microsoft/msquic")
-    set_description("Cross-platform, C implementation of the IETF QUIC protocol.")
+    set_description(
+        "Cross-platform, C implementation of the IETF QUIC protocol.")
     set_license("MIT")
 
     add_urls("https://github.com/microsoft/msquic.git")
@@ -15,7 +16,7 @@ package("msquic")
         add_syslinks("pthread", "dl", "m")
     end
 
-    on_load(function (package)
+    on_load(function(package)
         if package:config("shared") then
             package:add("links", "msquic")
         else
@@ -24,13 +25,17 @@ package("msquic")
         package:add("links", "core", "platform", "ssl", "crypto")
     end)
 
-    on_install("linux", "macosx", function (package)
-        local configs = {"-DQUIC_BUILD_TOOLS=OFF",
-                         "-DQUIC_BUILD_TEST=OFF",
-                         "-DQUIC_BUILD_PERF=OFF"}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
-        import("package.tools.cmake").install(package, configs, {buildir = "build"})
+    on_install("linux", "macosx", function(package)
+        local configs = {
+            "-DQUIC_BUILD_TOOLS=OFF", "-DQUIC_BUILD_TEST=OFF",
+            "-DQUIC_BUILD_PERF=OFF"
+        }
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
+        import("package.tools.cmake").install(package, configs,
+                                              {buildir = "build"})
         if package:debug() then
             os.cp("build/*/Debug/*", package:installdir("lib"))
         else
@@ -39,6 +44,7 @@ package("msquic")
         os.cp("build/*/*/openssl/lib/*", package:installdir("lib"))
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("MsQuicOpenVersion", {includes = "msquic.h"}))
     end)
+end)

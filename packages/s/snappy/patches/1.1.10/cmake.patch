@@ -13,4 +13,3 @@ index c3062e2..47443d1 100644
 +  val = vmaxvq_u8(v);
    return 0;
  }" SNAPPY_HAVE_NEON)
- 

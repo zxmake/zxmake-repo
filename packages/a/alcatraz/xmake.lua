@@ -1,4 +1,4 @@
-package("alcatraz")
+package("alcatraz", function()
     set_kind("binary")
     set_homepage("https://github.com/weak1337/Alcatraz")
     set_description("x64 binary obfuscator")
@@ -9,9 +9,9 @@ package("alcatraz")
 
     add_deps("asmjit", "zydis")
 
-    on_install("@windows", function (package)
+    on_install("@windows", function(package)
         io.replace("Alcatraz/obfuscator/obfuscator.cpp", "#include <iostream>",
-            "#include <iostream>\n#include <bit>", {plain = true})
+                   "#include <iostream>\n#include <bit>", {plain = true})
 
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
@@ -25,6 +25,7 @@ package("alcatraz")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         os.vrun("alcatraz")
     end)
+end)

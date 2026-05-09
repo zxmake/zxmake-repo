@@ -1,4 +1,4 @@
-package("cs_libguarded")
+package("cs_libguarded", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://www.copperspice.com/")
     set_description("Header-only library for multithreaded programming")
@@ -9,15 +9,20 @@ package("cs_libguarded")
 
     add_deps("cmake")
 
-    on_install(function (package)
-        import("package.tools.cmake").install(package, {"-DCMAKE_INSTALL_INCLUDEDIR=include"})
+    on_install(function(package)
+        import("package.tools.cmake").install(package, {
+            "-DCMAKE_INSTALL_INCLUDEDIR=include"
+        })
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <CsLibGuarded/cs_cow_guarded.h>
             void test() {
                 libguarded::cow_guarded<int, std::timed_mutex> data(0);
             }
-        ]]}, {configs = {languages = "c++17"}}))
+        ]]
+        }, {configs = {languages = "c++17"}}))
     end)
+end)

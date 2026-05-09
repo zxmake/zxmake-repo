@@ -1,12 +1,14 @@
-package("neco")
+package("neco", function()
     set_homepage("https://github.com/tidwall/neco")
     set_description("Concurrency library for C (coroutines)")
     set_license("MIT")
 
-    add_urls("https://github.com/tidwall/neco/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/tidwall/neco.git")
+    add_urls(
+        "https://github.com/tidwall/neco/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/tidwall/neco.git")
 
-    add_versions("v0.3.2", "ae3cefa6217428e992da0b30f254502b9974079dd9973eee9c482ea89df3fcef")
+    add_versions("v0.3.2",
+                 "ae3cefa6217428e992da0b30f254502b9974079dd9973eee9c482ea89df3fcef")
 
     if is_plat("linux", "bsd") then
         add_syslinks("pthread", "dl")
@@ -15,18 +17,24 @@ package("neco")
     end
 
     if on_check then
-        on_check("windows", function (package)
-            assert(package:has_cincludes("stdatomic.h", {configs = {languages = "c11"}}),
-             "package(neco) Require at least C11 and stdatomic.h")
+        on_check("windows", function(package)
+            assert(package:has_cincludes("stdatomic.h",
+                                         {configs = {languages = "c11"}}),
+                   "package(neco) Require at least C11 and stdatomic.h")
         end)
     end
 
-    on_install("linux", "mingw|x86_64", "windows", "bsd", "android", "iphoneos", function (package)
+    on_install("linux", "mingw|x86_64", "windows", "bsd", "android", "iphoneos",
+               function(package)
         io.replace("neco.c", "#if defined(__linux__) && !defined(_GNU_SOURCE)",
-            "#if defined(__linux__) && !defined(_GNU_SOURCE) && !defined(__ANDROID__)", {plain = true})
-        io.replace("neco.c", "&(int){1}", "(const char*)&(int){1}", {plain = true})
+                   "#if defined(__linux__) && !defined(_GNU_SOURCE) && !defined(__ANDROID__)",
+                   {plain = true})
+        io.replace("neco.c", "&(int){1}", "(const char*)&(int){1}",
+                   {plain = true})
         if package:is_plat("linux") then
-            io.replace("neco.c", "#include <stdlib.h>", "#include <stdlib.h>\n#include <time.h>\n#include <sys/mman.h>", {plain = true})
+            io.replace("neco.c", "#include <stdlib.h>",
+                       "#include <stdlib.h>\n#include <time.h>\n#include <sys/mman.h>",
+                       {plain = true})
         end
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
@@ -49,6 +57,7 @@ package("neco")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("neco_start", {includes = "neco.h"}))
     end)
+end)

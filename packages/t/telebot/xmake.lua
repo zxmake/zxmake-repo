@@ -1,4 +1,4 @@
-package("telebot")
+package("telebot", function()
     set_homepage("https://elmurod.net/telebot")
     set_description("Telegram Bot API in C")
     set_license("Apache-2.0")
@@ -15,18 +15,26 @@ package("telebot")
         add_deps("pthreads4w")
     end
 
-    on_install("windows|x64", "windows|x86", "mingw@macosx,linux", "linux", function (package)
+    on_install("windows|x64", "windows|x86", "mingw@macosx,linux", "linux",
+               function(package)
         if package:is_plat("windows") then
-            io.replace("src/telebot.c", "#include <unistd.h>", "", {plain = true})
-            io.replace("src/telebot-core.c", "#include <unistd.h>", "", {plain = true})
+            io.replace("src/telebot.c", "#include <unistd.h>", "",
+                       {plain = true})
+            io.replace("src/telebot-core.c", "#include <unistd.h>", "",
+                       {plain = true})
         end
 
-        io.replace("src/telebot.c", "#include <json.h>", "#include <json-c/json.h>", {plain = true})
-        io.replace("src/telebot-core.c", "#include <json.h>", "#include <json-c/json.h>", {plain = true})
-        io.replace("src/telebot-parser.c", "#include <json.h>", "#include <json-c/json.h>", {plain = true})
+        io.replace("src/telebot.c", "#include <json.h>",
+                   "#include <json-c/json.h>", {plain = true})
+        io.replace("src/telebot-core.c", "#include <json.h>",
+                   "#include <json-c/json.h>", {plain = true})
+        io.replace("src/telebot-parser.c", "#include <json.h>",
+                   "#include <json-c/json.h>", {plain = true})
 
-        io.replace("src/telebot.c", "#include <json_object.h>", "#include <json-c/json_object.h>", {plain = true})
-        io.replace("src/telebot-parser.c", "#include <json_object.h>", "#include <json-c/json_object.h>", {plain = true})
+        io.replace("src/telebot.c", "#include <json_object.h>",
+                   "#include <json-c/json_object.h>", {plain = true})
+        io.replace("src/telebot-parser.c", "#include <json_object.h>",
+                   "#include <json-c/json_object.h>", {plain = true})
 
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
@@ -49,6 +57,7 @@ package("telebot")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("telebot_create", {includes = "telebot.h"}))
     end)
+end)

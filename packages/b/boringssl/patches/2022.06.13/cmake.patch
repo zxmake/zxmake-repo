@@ -3,20 +3,20 @@ index aadcb9b..e8e1f50 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -567,8 +567,6 @@ endif()
- 
+
  # Add minimal googletest targets. The provided one has many side-effects, and
  # googletest has a very straightforward build.
 -add_library(boringssl_gtest third_party/googletest/src/gtest-all.cc)
 -target_include_directories(boringssl_gtest PRIVATE third_party/googletest)
- 
+
  include_directories(third_party/googletest/include)
- 
+
 @@ -594,15 +592,14 @@ add_custom_command(
    DEPENDS util/embed_test_data.go ${CRYPTO_TEST_DATA}
    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
- 
+
 -add_library(crypto_test_data OBJECT crypto_test_data.cc)
- 
+
  add_subdirectory(crypto)
  add_subdirectory(ssl)
 -add_subdirectory(ssl/test)
@@ -26,13 +26,13 @@ index aadcb9b..e8e1f50 100644
  add_subdirectory(util/fipstools/acvp/modulewrapper)
 -add_subdirectory(decrepit)
 +# add_subdirectory(decrepit)
- 
+
  if(FUZZ)
    if(LIBFUZZER_FROM_DEPS)
 @@ -653,16 +650,7 @@ else()
    add_custom_target(fips_specific_tests_if_any)
  endif()
- 
+
 -add_custom_target(
 -    run_tests
 -    COMMAND ${GO_EXECUTABLE} run util/all_tests.go -build-dir
@@ -44,19 +44,19 @@ index aadcb9b..e8e1f50 100644
 -    DEPENDS all_tests bssl_shim handshaker fips_specific_tests_if_any
 -    USES_TERMINAL)
 +
- 
+
  install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
- 
+
 diff --git a/crypto/CMakeLists.txt b/crypto/CMakeLists.txt
 index cf7199c..73cdd70 100644
 --- a/crypto/CMakeLists.txt
 +++ b/crypto/CMakeLists.txt
 @@ -91,7 +91,6 @@ function(perlasm dest src)
  endfunction()
- 
+
  add_subdirectory(fipsmodule)
 -add_subdirectory(test)
- 
+
  if(FIPS_DELOCATE OR FIPS_SHARED)
    SET_SOURCE_FILES_PROPERTIES(fipsmodule/bcm.o PROPERTIES EXTERNAL_OBJECT true)
 @@ -478,93 +477,3 @@ endif()
@@ -158,9 +158,9 @@ index 67a72ae..249f9e2 100644
 --- a/ssl/CMakeLists.txt
 +++ b/ssl/CMakeLists.txt
 @@ -52,20 +52,3 @@ add_dependencies(ssl global_target)
- 
+
  target_link_libraries(ssl crypto)
- 
+
 -add_executable(
 -  ssl_test
 -

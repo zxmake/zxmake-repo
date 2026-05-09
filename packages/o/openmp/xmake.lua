@@ -1,12 +1,22 @@
-package("openmp")
+package("openmp", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://openmp.org/")
     set_description("The OpenMP API specification for parallel programming")
 
-    add_configs("runtime",      {description = "Set OpenMP runtime for gcc/clang like compilers.", default = "default", type = "string", values = {"default", "custom"}})
-    add_configs("feature",      {description = "Set OpenMP feature for msvc.", default = "default", type = "string", values = {"default", "experimental", "llvm"}})
+    add_configs("runtime", {
+        description = "Set OpenMP runtime for gcc/clang like compilers.",
+        default = "default",
+        type = "string",
+        values = {"default", "custom"}
+    })
+    add_configs("feature", {
+        description = "Set OpenMP feature for msvc.",
+        default = "default",
+        type = "string",
+        values = {"default", "experimental", "llvm"}
+    })
 
-    on_load(function (package)
+    on_load(function(package)
         if package.has_tool then
             for _, toolkind in ipairs({"cc", "cxx", "fc"}) do
                 if package:config("runtime") == "default" then
@@ -18,7 +28,7 @@ package("openmp")
         end
     end)
 
-    on_fetch(function (package)
+    on_fetch(function(package)
         for _, dep in ipairs(package:orderdeps()) do
             if not dep:fetch() then
                 return
@@ -38,7 +48,8 @@ package("openmp")
                     if package:config("feature") == "default" then
                         result[flagname] = "/openmp"
                     else
-                        result[flagname] = "/openmp:" .. package:config("feature")
+                        result[flagname] = "/openmp:" ..
+                                               package:config("feature")
                     end
                     if package:has_tool(toolkind, "clang_cl") then
                         result.links = "libomp"
@@ -91,12 +102,13 @@ package("openmp")
         return (result.cflags or result.cxxflags or result.fcflags) and result
     end)
 
-    on_install("linux", "macosx", "windows", "mingw@msys", function (package)
+    on_install("linux", "macosx", "windows", "mingw@msys", function(package)
         -- we need not install anything because we need only compiler flags and deps
     end)
 
-    on_test(function (package)
-        assert(package:check_csnippets({test = [[
+    on_test(function(package)
+        assert(package:check_csnippets({
+            test = [[
         #include <stdio.h>
         #include <omp.h>
         #ifndef _OPENMP
@@ -108,5 +120,7 @@ package("openmp")
                 printf("hello %d\n", omp_get_thread_num());
             }
         }
-        ]]}))
+        ]]
+        }))
     end)
+end)

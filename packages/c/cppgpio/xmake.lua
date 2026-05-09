@@ -1,4 +1,4 @@
-package("cppgpio")
+package("cppgpio", function()
     set_homepage("https://github.com/JoachimSchurig/CppGPIO")
     set_description("C++14 GPIO library for embedded systems on Linux")
 
@@ -8,7 +8,7 @@ package("cppgpio")
     add_versions("2016.04.04", "2653a5876df8d23041eddc56e57ebd5e3ac167d1")
     add_versions("2016.03.11", "ba6fc634ebe2b519dba98dd11dc36dbda331ecc0")
 
-    on_install("linux", function (package)
+    on_install("linux", function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             target("cppgpio")
@@ -22,12 +22,15 @@ package("cppgpio")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <cppgpio.hpp>
             using namespace GPIO;
             void test() {
                 PWMOut pwm(23, 100, 0);
             }
-        ]]}, {configs = {languages = "c++14"}}))
+        ]]
+        }, {configs = {languages = "c++14"}}))
     end)
+end)

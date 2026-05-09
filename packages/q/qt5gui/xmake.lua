@@ -1,9 +1,12 @@
-package("qt5gui")
+package("qt5gui", function()
     set_base("qt5lib")
     set_kind("library")
 
-    on_load(function (package)
-        package:add("deps", "qt5core", {debug = package:is_debug(), version = package:version_str()})
+    on_load(function(package)
+        package:add("deps", "qt5core", {
+            debug = package:is_debug(),
+            version = package:version_str()
+        })
         package:data_set("libname", "Gui")
 
         if package:is_plat("android") then
@@ -16,15 +19,21 @@ package("qt5gui")
         package:base():script("load")(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         local cxflags
         if not package:is_plat("windows") then
             cxflags = "-fPIC"
         end
-        assert(package:check_cxxsnippets({test = [[
+        assert(package:check_cxxsnippets({
+            test = [[
             int test(int argc, char** argv) {
                 QGuiApplication app (argc, argv);
                 return app.exec();
             }
-        ]]}, {configs = {languages = "c++14", cxflags = cxflags}, includes = {"QGuiApplication"}}))
+        ]]
+        }, {
+            configs = {languages = "c++14", cxflags = cxflags},
+            includes = {"QGuiApplication"}
+        }))
     end)
+end)

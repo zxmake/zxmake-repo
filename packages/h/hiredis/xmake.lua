@@ -1,51 +1,71 @@
-package("hiredis")
+package("hiredis", function()
     set_homepage("https://github.com/redis/hiredis")
     set_description("Minimalistic C client for Redis >= 1.2")
     set_license("BSD-3-Clause")
 
-    add_urls("https://github.com/redis/hiredis/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/redis/hiredis.git")
-    add_versions("v1.0.2", "e0ab696e2f07deb4252dda45b703d09854e53b9703c7d52182ce5a22616c3819")
-    add_versions("v1.1.0", "fe6d21741ec7f3fc9df409d921f47dfc73a4d8ff64f4ac6f1d95f951bf7f53d6")
-    add_versions("v1.2.0", "82ad632d31ee05da13b537c124f819eb88e18851d9cb0c30ae0552084811588c")
+    add_urls(
+        "https://github.com/redis/hiredis/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/redis/hiredis.git")
+    add_versions("v1.0.2",
+                 "e0ab696e2f07deb4252dda45b703d09854e53b9703c7d52182ce5a22616c3819")
+    add_versions("v1.1.0",
+                 "fe6d21741ec7f3fc9df409d921f47dfc73a4d8ff64f4ac6f1d95f951bf7f53d6")
+    add_versions("v1.2.0",
+                 "82ad632d31ee05da13b537c124f819eb88e18851d9cb0c30ae0552084811588c")
 
     if is_plat("windows", "mingw") then
-        add_configs("shared", {description = "Build shared library.", default = true, type = "boolean", readonly = true})
-        add_configs("vs_runtime", {description = "Set vs compiler runtime.", default = "MD", readonly = true})
+        add_configs("shared", {
+            description = "Build shared library.",
+            default = true,
+            type = "boolean",
+            readonly = true
+        })
+        add_configs("vs_runtime", {
+            description = "Set vs compiler runtime.",
+            default = "MD",
+            readonly = true
+        })
     end
 
-    add_configs("openssl", {description = "with openssl library", default = false, type = "boolean"})
+    add_configs("openssl", {
+        description = "with openssl library",
+        default = false,
+        type = "boolean"
+    })
 
     add_deps("cmake")
 
-    on_load(function (package)
+    on_load(function(package)
         if package:config("openssl") then
             package:add("deps", "openssl")
         end
     end)
 
-    on_install(function (package)
+    on_install(function(package)
         if package:version() and package:version():lt("1.2.0") then
             io.replace("CMakeLists.txt",
-                "TARGET_INCLUDE_DIRECTORIES(hiredis PUBLIC $<INSTALL_INTERFACE:.>",
-                "TARGET_INCLUDE_DIRECTORIES(hiredis PUBLIC $<INSTALL_INTERFACE:include>",
-                {plain = true})
+                       "TARGET_INCLUDE_DIRECTORIES(hiredis PUBLIC $<INSTALL_INTERFACE:.>",
+                       "TARGET_INCLUDE_DIRECTORIES(hiredis PUBLIC $<INSTALL_INTERFACE:include>",
+                       {plain = true})
             if not package:config("shared") then
                 -- Following change is required for package user to call `find_package(hiredis)` to work.
-                io.replace("CMakeLists.txt", "ADD_LIBRARY(hiredis SHARED", "ADD_LIBRARY(hiredis", {plain = true})
-                io.replace("CMakeLists.txt", "ADD_LIBRARY(hiredis_ssl SHARED", "ADD_LIBRARY(hiredis_ssl", {plain = true})
+                io.replace("CMakeLists.txt", "ADD_LIBRARY(hiredis SHARED",
+                           "ADD_LIBRARY(hiredis", {plain = true})
+                io.replace("CMakeLists.txt", "ADD_LIBRARY(hiredis_ssl SHARED",
+                           "ADD_LIBRARY(hiredis_ssl", {plain = true})
             end
         end
 
-        local configs = {
-            "-DDISABLE_TESTS=ON",
-            "-DENABLE_SSL_TESTS=OFF",
-        }
+        local configs = {"-DDISABLE_TESTS=ON", "-DENABLE_SSL_TESTS=OFF"}
 
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DENABLE_SSL=" .. (package:config("openssl") and "ON" or "OFF"))
-        import("package.tools.cmake").install(package, configs, {buildir = "build"})
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DENABLE_SSL=" ..
+                         (package:config("openssl") and "ON" or "OFF"))
+        import("package.tools.cmake").install(package, configs,
+                                              {buildir = "build"})
 
         if package:version() and package:version():lt("1.2.0") then
             -- hiredis cmake builds static and shared library at the same time.
@@ -63,6 +83,8 @@ package("hiredis")
         end
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("redisCommand", {includes = "hiredis/hiredis.h"}))
+    on_test(function(package)
+        assert(package:has_cfuncs("redisCommand",
+                                  {includes = "hiredis/hiredis.h"}))
     end)
+end)

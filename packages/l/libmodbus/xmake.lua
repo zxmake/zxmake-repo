@@ -1,11 +1,13 @@
-package("libmodbus")
+package("libmodbus", function()
     set_homepage("https://libmodbus.org")
     set_description("A Modbus library for Linux, Mac OS, FreeBSD and Windows")
     set_license("LGPL-2.1")
 
-    add_urls("https://github.com/stephane/libmodbus/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/stephane/libmodbus.git")
-    add_versions("v3.1.10", "e93503749cd89fda4c8cf1ee6371a3a9cc1f0a921c165afbbc4fd96d4813fa1a")
+    add_urls(
+        "https://github.com/stephane/libmodbus/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/stephane/libmodbus.git")
+    add_versions("v3.1.10",
+                 "e93503749cd89fda4c8cf1ee6371a3a9cc1f0a921c165afbbc4fd96d4813fa1a")
 
     if is_plat("mingw") and is_subhost("msys") then
         add_extsources("pacman::libmodbus")
@@ -19,15 +21,17 @@ package("libmodbus")
         add_syslinks("ws2_32")
     end
 
-    on_load(function (package)
+    on_load(function(package)
         if (not is_host("windows")) and (not is_subhost("msys", "cygwin")) then
             package:add("deps", "autoconf", "automake", "libtool")
         end
     end)
 
-    on_install("windows", "linux", "macosx", "mingw", "msys", "cross", function (package)
+    on_install("windows", "linux", "macosx", "mingw", "msys", "cross",
+               function(package)
         if (not is_host("windows")) and (not is_subhost("msys", "cygwin")) then
-            import("package.tools.autoconf").install(package, {"--disable-tests"})
+            import("package.tools.autoconf").install(package,
+                                                     {"--disable-tests"})
             return
         end
 
@@ -62,12 +66,16 @@ package("libmodbus")
             configs.kind = "shared"
         else
             if package:is_plat("windows") then
-                io.replace("src/modbus.h", "#  define MODBUS_API __declspec(dllimport)", "#  define MODBUS_API", {plain = true})
+                io.replace("src/modbus.h",
+                           "#  define MODBUS_API __declspec(dllimport)",
+                           "#  define MODBUS_API", {plain = true})
             end
         end
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("modbus_new_tcp", {includes = "modbus/modbus.h"}))
+    on_test(function(package)
+        assert(package:has_cfuncs("modbus_new_tcp",
+                                  {includes = "modbus/modbus.h"}))
     end)
+end)

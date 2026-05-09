@@ -1,26 +1,34 @@
-package("d3d12-memory-allocator")
-    set_homepage("https://github.com/GPUOpen-LibrariesAndSDKs/D3D12MemoryAllocator")
-    set_description("Easy to integrate memory allocation library for Direct3D 12")
+package("d3d12-memory-allocator", function()
+    set_homepage(
+        "https://github.com/GPUOpen-LibrariesAndSDKs/D3D12MemoryAllocator")
+    set_description(
+        "Easy to integrate memory allocation library for Direct3D 12")
     set_license("MIT")
 
-    add_urls("https://github.com/GPUOpen-LibrariesAndSDKs/D3D12MemoryAllocator/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/GPUOpen-LibrariesAndSDKs/D3D12MemoryAllocator.git")
-    add_versions("v2.0.1", "7ce1f1dfb8821d0116eccf425b3558e6d4b28d192f4efb6e6bdb3d916d853574")
+    add_urls(
+        "https://github.com/GPUOpen-LibrariesAndSDKs/D3D12MemoryAllocator/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/GPUOpen-LibrariesAndSDKs/D3D12MemoryAllocator.git")
+    add_versions("v2.0.1",
+                 "7ce1f1dfb8821d0116eccf425b3558e6d4b28d192f4efb6e6bdb3d916d853574")
 
     add_deps("cmake")
 
-    on_install("windows|x64", function (package)
+    on_install("windows|x64", function(package)
         local configs = {}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
         import("package.tools.cmake").install(package, configs)
         if package:config("shared") then
-            os.mv(path.join(package:installdir("lib"), "*.dll"), package:installdir("bin"))
+            os.mv(path.join(package:installdir("lib"), "*.dll"),
+                  package:installdir("bin"))
         end
     end)
 
-    on_test("windows|x64", function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test("windows|x64", function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             static void test() {
                 IDXGIFactory4* dxgi_factory;
                 CreateDXGIFactory2(0, IID_PPV_ARGS(&dxgi_factory));
@@ -38,5 +46,7 @@ package("d3d12-memory-allocator")
                 D3D12MA::Allocator* allocator;
                 D3D12MA::CreateAllocator(&allocatorDesc, &allocator);
             }
-        ]]}, {configs = {languages = "c++17"}, includes = "D3D12MemAlloc.h"}))
+        ]]
+        }, {configs = {languages = "c++17"}, includes = "D3D12MemAlloc.h"}))
     end)
+end)

@@ -1,14 +1,16 @@
-package("c-vector")
+package("c-vector", function()
     set_homepage("https://github.com/Mashpoe/c-vector")
     set_description("A simple vector library for C that can store any type.")
     set_license("BSD-3-Clause")
 
-    add_urls("https://github.com/Mashpoe/c-vector/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/Mashpoe/c-vector.git")
+    add_urls(
+        "https://github.com/Mashpoe/c-vector/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/Mashpoe/c-vector.git")
 
-    add_versions("v1.0", "c1ddd2975abd54ce55309fef04cc9d47e8a356a964298f516a9e314f9fcd20d4")
+    add_versions("v1.0",
+                 "c1ddd2975abd54ce55309fef04cc9d47e8a356a964298f516a9e314f9fcd20d4")
 
-    on_install(function (package)
+    on_install(function(package)
         local configs = {}
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
@@ -26,6 +28,7 @@ package("c-vector")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("vector_create", {includes = "vec.h"}))
     end)
+end)

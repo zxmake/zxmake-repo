@@ -9,18 +9,20 @@ import("devel.git")
 import("utils.archive")
 
 local options = {
-    {nil, "repo", "v", nil, "Set repository name.",
-                            "e.g. ",
-                            "  - github:xmake-io/xmake",
-                            "  - gitlab:xmake-io/xmake"}
+    {
+        nil, "repo", "v", nil, "Set repository name.", "e.g. ",
+        "  - github:xmake-io/xmake", "  - gitlab:xmake-io/xmake"
+    }
 }
 
 -- function to get Gitlab data
 function get_gitlab_data(reponame)
     local glab = assert(find_tool("glab"), "glab not found!")
     local host = os.iorunv(glab.program, {"config", "get", "host"}):trim()
-    local graphql_query = 'query={ project(fullPath: "' .. reponame .. '") { description webUrl sshUrlToRepo name } }'
-    local repoinfo = os.iorunv(glab.program, {"api", "graphql", "-f", graphql_query})
+    local graphql_query = 'query={ project(fullPath: "' .. reponame ..
+                              '") { description webUrl sshUrlToRepo name } }'
+    local repoinfo = os.iorunv(glab.program,
+                               {"api", "graphql", "-f", graphql_query})
 
     local data = {}
     if repoinfo then
@@ -34,7 +36,7 @@ function get_gitlab_data(reponame)
                 licenseInfo = "MIT", -- NOTE: Find a way to get the project license in gitlab
                 url = project_data.webUrl,
                 sshUrl = project_data.sshUrlToRepo,
-                name = project_data.name,
+                name = project_data.name
             }
             repoinfo.data.project = data
         end
@@ -46,11 +48,8 @@ local function get_github_data(reponame)
     local gh = assert(find_tool("gh"), "gh not found!")
     local host = "github.com"
     local data = os.iorunv(gh.program, {
-        "repo",
-        "view",
-        reponame,
-        "--json",
-        "description,homepageUrl,licenseInfo,url,sshUrl,name,latestRelease",
+        "repo", "view", reponame, "--json",
+        "description,homepageUrl,licenseInfo,url,sshUrl,name,latestRelease"
     })
     if data then
         data = json.decode(data)
@@ -73,7 +72,7 @@ local function get_license_spdx_id(key)
         ["gpl-3.0"] = "GPL-3.0",
         ["mpl-2.0"] = "MPL-2.0",
         zlib = "zlib",
-        mit = "MIT",
+        mit = "MIT"
     }
     local license = licenses[key]
     if license then
@@ -82,7 +81,12 @@ local function get_license_spdx_id(key)
 
     local url = string.format("https://api.github.com/licenses/%s", key)
     local tmpfile = os.tmpfile({ramdisk = false})
-    local ok = try { function () http.download(url, tmpfile); return true end }
+    local ok = try {
+        function()
+            http.download(url, tmpfile);
+            return true
+        end
+    }
     if not ok then
         os.tryrm(tmpfile)
         return nil
@@ -100,17 +104,20 @@ function generate_package(reponame, get_data)
 
     -- generate package header
     local packagename = assert(data.name, "package name not found!"):lower()
-    local packagefile = path.join("packages", string.sub(packagename, 1, 1), packagename, "xmake.lua")
+    local packagefile = path.join("packages", string.sub(packagename, 1, 1),
+                                  packagename, "xmake.lua")
     local file = io.open(packagefile, "w")
 
     -- define package and homepage
     file:print('package("%s")', packagename)
-    local homepage = data.homepageUrl and data.homepageUrl ~= "" and data.homepageUrl or data.url
+    local homepage = data.homepageUrl and data.homepageUrl ~= "" and
+                         data.homepageUrl or data.url
     if homepage then
         file:print('    set_homepage("%s")', homepage)
     end
 
-    local description = data.description or ("The " .. packagename .. " package")
+    local description = data.description or
+                            ("The " .. packagename .. " package")
     file:print('    set_description("%s")', description)
 
     -- define license if available
@@ -128,38 +135,38 @@ function generate_package(reponame, get_data)
     local latest_release = data.latestRelease
 
     if type(latest_release) == "table" then
-        local url = string.format("https://%s/%s/archive/refs/tags/%s.tar.gz", host, reponame, latest_release.tagName)
+        local url = string.format("https://%s/%s/archive/refs/tags/%s.tar.gz",
+                                  host, reponame, latest_release.tagName)
         local giturl = string.format("https://%s/%s.git", host, reponame)
         local tmpfile = os.tmpfile({ramdisk = false}) .. ".tar.gz"
         repodir = tmpfile .. ".dir"
 
-        file:write('    add_urls("https://' .. host .. '/' .. reponame .. '/archive/refs/tags/$(version).tar.gz",\n')
+        file:write('    add_urls("https://' .. host .. '/' .. reponame ..
+                       '/archive/refs/tags/$(version).tar.gz",\n')
         file:print('             "%s")\n', giturl)
 
         print("downloading %s", url)
         http.download(url, tmpfile)
 
-        file:print('    add_versions("%s", "%s")', latest_release.tagName, hash.sha256(tmpfile))
+        file:print('    add_versions("%s", "%s")', latest_release.tagName,
+                   hash.sha256(tmpfile))
         archive.extract(tmpfile, repodir)
         os.rm(tmpfile)
     else
         local giturl = string.format("https://%s/%s.git", host, reponame)
-        repodir = os.tmpfile({ ramdisk = false })
+        repodir = os.tmpfile({ramdisk = false})
 
         file:print('    add_urls("%s")', giturl)
 
         print("downloading %s", giturl)
-        git.clone(giturl, { outputdir = repodir, depth = 1 })
+        git.clone(giturl, {outputdir = repodir, depth = 1})
 
-        local commit = git.lastcommit({ repodir = repodir })
+        local commit = git.lastcommit({repodir = repodir})
         local version = try {
             function()
                 return os.iorunv("git", {
-                    "log",
-                    "-1",
-                    "--date=format:%Y.%m.%d",
-                    "--format=%ad",
-                }, { curdir = repodir })
+                    "log", "-1", "--date=format:%Y.%m.%d", "--format=%ad"
+                }, {curdir = repodir})
             end
         }
         if version then
@@ -181,7 +188,7 @@ function generate_package(reponame, get_data)
                 add_headerfiles("src/(*.h)")
         ]])
         import("package.tools.xmake").install(package)]=]
-            end,
+            end
         },
         ["CMakeLists.txt"] = {
             deps = {"cmake"},
@@ -191,7 +198,7 @@ function generate_package(reponame, get_data)
         table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:is_debug() and "Debug" or "Release"))
         table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
         import("package.tools.cmake").install(package, configs)]]
-            end,
+            end
         },
         ["configure,configure.ac,autogen.sh"] = {
             deps = {"autoconf", "automake", "libtool"},
@@ -203,7 +210,7 @@ function generate_package(reponame, get_data)
             table.insert(configs, "--enable-debug")
         end
         import("package.tools.autoconf").install(package, configs)]]
-            end,
+            end
         },
         ["meson.build"] = {
             deps = {"meson", "ninja"},
@@ -212,7 +219,7 @@ function generate_package(reponame, get_data)
                 return [[
         table.insert(configs, "-Ddefault_library=" .. (package:config("shared") and "shared" or "static"))
         import("package.tools.meson").install(package, configs)]]
-            end,
+            end
         },
         ["BUILD,BUILD.bazel"] = {
             deps = {"bazel"},
@@ -220,7 +227,7 @@ function generate_package(reponame, get_data)
             install = function(configs, package)
                 return [[
         import("package.tools.bazel").install(package, configs)]]
-            end,
+            end
         }
     }
 
@@ -242,7 +249,9 @@ function generate_package(reponame, get_data)
     end
     local build_system
     if #build_system_detected > 0 then
-        table.sort(build_system_detected, function (a, b) return a.priority < b.priority end)
+        table.sort(build_system_detected, function(a, b)
+            return a.priority < b.priority
+        end)
         build_system = build_system_detected[1]
     end
     if not build_system then
@@ -279,7 +288,8 @@ function generate_package(reponame, get_data)
 end
 
 function main(...)
-    local opt = option.parse(table.pack(...), options, "New a package.", "", "Usage: xmake l scripts/new.lua [options]")
+    local opt = option.parse(table.pack(...), options, "New a package.", "",
+                             "Usage: xmake l scripts/new.lua [options]")
     local repo = assert(opt.repo, "repository name must be set!")
     local reponame = repo:sub(8)
 
@@ -293,5 +303,6 @@ function main(...)
         return
     end
 
-    raise("unsupported repository source. only 'github' and 'gitlab' are supported.")
+    raise(
+        "unsupported repository source. only 'github' and 'gitlab' are supported.")
 end

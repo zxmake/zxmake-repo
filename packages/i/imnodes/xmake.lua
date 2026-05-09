@@ -1,16 +1,19 @@
-package("imnodes")
+package("imnodes", function()
     set_homepage("https://github.com/Nelarius/imnodes")
     set_description("A small, dependency-free node editor for dear imgui")
     set_license("MIT")
 
-    add_urls("https://github.com/Nelarius/imnodes/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/Nelarius/imnodes.git")
+    add_urls(
+        "https://github.com/Nelarius/imnodes/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/Nelarius/imnodes.git")
 
-    add_versions("v0.5", "c19a1d8e3fabf71def02b98c43a3f4551f0a5bd3740a93474a356e8957ec2ab2")
+    add_versions("v0.5",
+                 "c19a1d8e3fabf71def02b98c43a3f4551f0a5bd3740a93474a356e8957ec2ab2")
 
     add_deps("imgui")
 
-    on_install("windows", "linux", "macosx", "mingw", "android", "iphoneos", function (package)
+    on_install("windows", "linux", "macosx", "mingw", "android", "iphoneos",
+               function(package)
         local configs = {}
         io.writefile("xmake.lua", [[
             add_requires("imgui")
@@ -32,12 +35,15 @@ package("imnodes")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <imnodes.h>
             void test() {
                 ImNodes::CreateContext();
                 ImNodes::DestroyContext();
             }
-        ]]}, {configs = {languages = "c++11"}}))
+        ]]
+        }, {configs = {languages = "c++11"}}))
     end)
+end)

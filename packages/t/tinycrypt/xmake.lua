@@ -1,11 +1,11 @@
-package("tinycrypt")
+package("tinycrypt", function()
     set_homepage("https://github.com/intel/tinycrypt")
     set_description("TinyCrypt Cryptographic Library")
 
     add_urls("https://github.com/intel/tinycrypt.git")
     add_versions("2019.9.18", "5969b0e0f572a15ed95dc272e57104faeb5eb6b0")
 
-    on_install(function (package)
+    on_install(function(package)
         local configs = {}
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
@@ -22,11 +22,15 @@ package("tinycrypt")
             configs.kind = "shared"
         end
         if package:is_plat("windows", "mingw") then
-            io.replace("lib/include/tinycrypt/ecc_platform_specific.h", "#define default_RNG_defined 1", "#define default_RNG_defined 0", {plain = true})
+            io.replace("lib/include/tinycrypt/ecc_platform_specific.h",
+                       "#define default_RNG_defined 1",
+                       "#define default_RNG_defined 0", {plain = true})
         end
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("tc_aes_encrypt", {includes = "tinycrypt/aes.h"}))
+    on_test(function(package)
+        assert(package:has_cfuncs("tc_aes_encrypt",
+                                  {includes = "tinycrypt/aes.h"}))
     end)
+end)

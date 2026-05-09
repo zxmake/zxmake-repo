@@ -1,4 +1,4 @@
-package("curlpp")
+package("curlpp", function()
     set_homepage("http://www.curlpp.org")
     set_description("C++ wrapper around libcURL")
     set_license("MIT")
@@ -8,7 +8,7 @@ package("curlpp")
 
     add_deps("libcurl")
 
-    on_install("windows", "linux", "macosx", "mingw", "cross", function (package)
+    on_install("windows", "linux", "macosx", "mingw", "cross", function(package)
         io.writefile("xmake.lua", ([[
             set_languages("c++11")
             add_rules("mode.debug", "mode.release")
@@ -26,13 +26,20 @@ package("curlpp")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             int main() {
                 curlpp::Cleanup cleaner;
                 curlpp::Easy request;
                 request.setOpt<curlpp::options::Url>("https://example.com");
             }
-        ]]}, { configs = {languages = "c++11"}, includes = {"curlpp/cURLpp.hpp", "curlpp/Easy.hpp", "curlpp/Options.hpp"}
+        ]]
+        }, {
+            configs = {languages = "c++11"},
+            includes = {
+                "curlpp/cURLpp.hpp", "curlpp/Easy.hpp", "curlpp/Options.hpp"
+            }
         }))
     end)
+end)

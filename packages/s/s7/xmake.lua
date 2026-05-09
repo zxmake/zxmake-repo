@@ -1,16 +1,21 @@
-package("s7")
+package("s7", function()
 
     set_homepage("https://ccrma.stanford.edu/software/snd/snd/s7.html")
-    set_description("s7 is a Scheme interpreter intended as an extension language for other applications.")
+    set_description(
+        "s7 is a Scheme interpreter intended as an extension language for other applications.")
 
     add_urls("https://github.com/xmake-mirror/s7.git",
              "https://cm-gitlab.stanford.edu/bil/s7.git")
 
     add_versions("2023.04.13", "505f98d69be3d9c48e096d6787d2f85c27cb3924")
 
-    add_configs("gmp", {description = "enable gmp support", default = false, type = "boolean"})
+    add_configs("gmp", {
+        description = "enable gmp support",
+        default = false,
+        type = "boolean"
+    })
 
-    on_load(function (package)
+    on_load(function(package)
         package:addenv("PATH", "bin")
         if package:config("gmp") then
             package:add("deps", "gmp")
@@ -21,7 +26,8 @@ package("s7")
         add_syslinks("pthread", "dl", "m")
     end
 
-    on_install("bsd", "cross", "cygwin", "linux", "macosx", "mingw", "msys", "wasm", "windows", function (package)
+    on_install("bsd", "cross", "cygwin", "linux", "macosx", "mingw", "msys",
+               "wasm", "windows", function(package)
         os.cp(path.join(package:scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
         if package:config("shared") then
@@ -54,3 +60,4 @@ package("s7")
             }
         ]], {includes = "s7.h"}))
     end)
+end)

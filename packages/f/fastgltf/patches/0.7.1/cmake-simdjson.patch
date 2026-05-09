@@ -52,5 +52,5 @@ index ba4ea84..d5eedcb 100644
 -    endif()
 +
  endif()
- 
+
  if (SIMDJSON_TARGET_VERSION)

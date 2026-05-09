@@ -1,14 +1,27 @@
-package("gklib")
+package("gklib", function()
     set_homepage("https://github.com/KarypisLab/GKlib")
-    set_description("A library of various helper routines and frameworks used by many of the lab's software")
+    set_description(
+        "A library of various helper routines and frameworks used by many of the lab's software")
     set_license("Apache-2.0")
 
     add_urls("https://github.com/KarypisLab/GKlib.git")
     add_versions("2023.03.26", "8bd6bad750b2b0d90800c632cf18e8ee93ad72d7")
 
-    add_configs("regex", {description = "Enable GKREGEX support", default = false, type = "boolean"})
-    add_configs("rand", {description = "Enable GKRAND support", default = false, type = "boolean"})
-    add_configs("openmp", {description = "Enable openmp", default = false, type = "boolean"})
+    add_configs("regex", {
+        description = "Enable GKREGEX support",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("rand", {
+        description = "Enable GKRAND support",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("openmp", {
+        description = "Enable openmp",
+        default = false,
+        type = "boolean"
+    })
 
     if is_plat("linux", "bsd") then
         add_syslinks("m")
@@ -18,7 +31,7 @@ package("gklib")
         add_defines("USE_GKREGEX")
     end
 
-    on_install("!iphoneos", function (package)
+    on_install("!iphoneos", function(package)
         local configs = {
             openmp = package:config("openmp"),
             regex = package:config("regex"),
@@ -46,6 +59,7 @@ package("gklib")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("gk_strstr_replace", {includes = "GKlib.h"}))
     end)
+end)

@@ -1,4 +1,4 @@
-package("cnl")
+package("cnl", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/johnmcfarlane/cnl")
     set_description("A Compositional Numeric Library for C++")
@@ -11,20 +11,25 @@ package("cnl")
     add_deps("cmake")
 
     if on_check then
-        on_check("android", function (package)
+        on_check("android", function(package)
             local ndk = package:toolchain("ndk"):config("ndkver")
-            assert(ndk and tonumber(ndk) > 22, "package(cnl) require ndk version > 22")
+            assert(ndk and tonumber(ndk) > 22,
+                   "package(cnl) require ndk version > 22")
         end)
     end
 
-    on_install(function (package)
-        io.replace("CMakeLists.txt", [[add_subdirectory("test")]], "", {plain = true})
+    on_install(function(package)
+        io.replace("CMakeLists.txt", [[add_subdirectory("test")]], "",
+                   {plain = true})
 
         import("package.tools.cmake").install(package, {
-            "-DCMAKE_BUILD_TYPE=" .. (package:is_debug() and "Debug" or "Release")
+            "-DCMAKE_BUILD_TYPE=" ..
+                (package:is_debug() and "Debug" or "Release")
         })
     end)
 
-    on_test(function (package)
-        assert(package:has_cxxincludes("cnl/all.h", {configs = {languages = "c++20"}}))
+    on_test(function(package)
+        assert(package:has_cxxincludes("cnl/all.h",
+                                       {configs = {languages = "c++20"}}))
     end)
+end)

@@ -1,4 +1,4 @@
-package("libmill")
+package("libmill", function()
     set_homepage("http://libmill.org")
     set_description("Go-style concurrency in C")
 
@@ -8,9 +8,10 @@ package("libmill")
 
     add_deps("cmake")
 
-    on_install("macosx", "linux", function (package)
+    on_install("macosx", "linux", function(package)
         local configs = {"-DBUILD_TESTING=OFF", "-DBUILD_PERF=OFF"}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
         import("package.tools.cmake").install(package, configs)
         if package:config("shared") then
             os.tryrm(path.join(package:installdir("lib"), "*.a"))
@@ -19,8 +20,9 @@ package("libmill")
         end
     end)
 
-    on_test(function (package)
-        assert(package:check_csnippets({test = [[
+    on_test(function(package)
+        assert(package:check_csnippets({
+            test = [[
             #include "libmill.h"
             static coroutine void switchtask(size_t count) {
                 yield();
@@ -28,5 +30,7 @@ package("libmill")
             void test() {
                 go(switchtask(0));
             }
-        ]]}))
+        ]]
+        }))
     end)
+end)

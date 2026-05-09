@@ -4,11 +4,11 @@ index 827ca29..cfd1b9c 100644
 +++ b/CMakeLists.txt
 @@ -15,7 +15,7 @@ else ()
  endif ()
- 
+
  # Some builds need position-independent code.
 -set (CMAKE_POSITION_INDEPENDENT_CODE ON)
 +
- 
+
  # Allow nsync users to turn the tests on or off.
  option (NSYNC_ENABLE_TESTS "Enable for building tests" ON)
 @@ -90,7 +90,9 @@ endif ()
@@ -19,7 +19,7 @@ index 827ca29..cfd1b9c 100644
 +	if (MSVC)
 +		set (NSYNC_CPP_FLAGS "/TP")
 +	endif()
- 
+
  	set (NSYNC_OS_SRC
  		${NSYNC_POSIX_SRC}
 @@ -125,7 +127,6 @@ elseif ("${CMAKE_SYSTEM_NAME}X" STREQUAL "DarwinX")
@@ -31,18 +31,18 @@ index 827ca29..cfd1b9c 100644
  elseif ("${CMAKE_SYSTEM_NAME}X" STREQUAL "LinuxX")
  	set (NSYNC_POSIX ON)
 @@ -402,11 +403,13 @@ set (CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
- 
+
  install (TARGETS nsync EXPORT nsync
  	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT RuntimeLibraries
 -	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development)
 +	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development
 +	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
- 
+
  install (TARGETS nsync_cpp EXPORT nsync_cpp OPTIONAL
  	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT RuntimeLibraries
 -	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development)
 +	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development
 +	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
- 
+
  set (NSYNC_INCLUDES
  	"public/nsync.h"

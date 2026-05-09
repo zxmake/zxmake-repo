@@ -1,17 +1,19 @@
-package("libbpf")
+package("libbpf", function()
 
     set_homepage("https://github.com/libbpf/libbpf")
     set_description("Automated upstream mirror for libbpf stand-alone build.")
 
-    add_urls("https://github.com/libbpf/libbpf/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/libbpf/libbpf.git")
-    add_versions("v0.3", "c168d84a75b541f753ceb49015d9eb886e3fb5cca87cdd9aabce7e10ad3a1efc")
+    add_urls(
+        "https://github.com/libbpf/libbpf/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/libbpf/libbpf.git")
+    add_versions("v0.3",
+                 "c168d84a75b541f753ceb49015d9eb886e3fb5cca87cdd9aabce7e10ad3a1efc")
 
     add_deps("libelf", "zlib")
 
     add_includedirs("include", "include/uapi")
 
-    on_install("linux", "android", function (package)
+    on_install("linux", "android", function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             add_requires("libelf", "zlib")
@@ -30,6 +32,8 @@ package("libbpf")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("bpf_object__open", {includes = "bpf/libbpf.h"}))
+    on_test(function(package)
+        assert(package:has_cfuncs("bpf_object__open",
+                                  {includes = "bpf/libbpf.h"}))
     end)
+end)

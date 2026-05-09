@@ -155,4 +155,3 @@ install(
     "${CMAKE_CURRENT_BINARY_DIR}/${PACKAGE_NAME}-config.cmake"
     DESTINATION "${CONFIG_INSTALL_DIR}"
 )
-

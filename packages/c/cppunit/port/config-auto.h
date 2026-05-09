@@ -1,6 +1,6 @@
 #ifndef _INCLUDE_CPPUNIT_CONFIG_AUTO_H
 #define _INCLUDE_CPPUNIT_CONFIG_AUTO_H 1
- 
+
 /* include/cppunit/config-auto.h. Generated automatically at end of configure. */
 /* config.h.  Generated from config.h.in by configure.  */
 /* config.h.in.  Generated from configure.ac by autoheader.  */
@@ -155,6 +155,6 @@
 #ifndef CPPUNIT_VERSION
 #define CPPUNIT_VERSION "1.15.1"
 #endif
- 
+
 /* once: _INCLUDE_CPPUNIT_CONFIG_AUTO_H */
 #endif

@@ -1,11 +1,14 @@
-package("libmem")
+package("libmem", function()
     set_homepage("https://github.com/rdbo/libmem")
-    set_description("Cross-platform game hacking library for C, C++, Rust, and Python, supporting process/memory hacking, hooking, detouring, and DLL/SO injection.")
+    set_description(
+        "Cross-platform game hacking library for C, C++, Rust, and Python, supporting process/memory hacking, hooking, detouring, and DLL/SO injection.")
     set_license("AGPL-3.0")
 
-    add_urls("https://github.com/rdbo/libmem/archive/refs/tags/$(version).tar.gz",
-            "https://github.com/rdbo/libmem.git")
-    add_versions("5.0.2", "99adea3e86bd3b83985dce9076adda16968646ebd9d9316c9f57e6854aeeab9c")
+    add_urls(
+        "https://github.com/rdbo/libmem/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/rdbo/libmem.git")
+    add_versions("5.0.2",
+                 "99adea3e86bd3b83985dce9076adda16968646ebd9d9316c9f57e6854aeeab9c")
 
     add_deps("capstone", "keystone")
 
@@ -26,21 +29,24 @@ package("libmem")
         end
     end)
 
-    on_install("windows", "linux", "bsd", function (package)
+    on_install("windows", "linux", "bsd", function(package)
         os.cp(path.join(package:scriptdir(), "port", "xmake.lua"), "xmake.lua")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_csnippets({test = [[
+    on_test(function(package)
+        assert(package:check_csnippets({
+            test = [[
             #include <libmem/libmem.h>
             void test() {
                 lm_thread_t resultThread;
                 lm_bool_t result = LM_GetThread(&resultThread);
             }
-        ]]}, {configs = {languages = "c11"}}))
+        ]]
+        }, {configs = {languages = "c11"}}))
 
-        assert(package:check_cxxsnippets({test = [[
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <libmem/libmem.hpp>
             #include <vector>
             #include <optional>
@@ -49,5 +55,7 @@ package("libmem")
                 std::optional<Thread> currentThread = GetThread();
                 std::optional<std::vector<Thread>> threads = EnumThreads();
             }
-        ]]}, {configs = {languages = "c++17"}}))
+        ]]
+        }, {configs = {languages = "c++17"}}))
     end)
+end)

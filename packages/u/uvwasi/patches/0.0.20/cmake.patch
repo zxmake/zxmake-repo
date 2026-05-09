@@ -4,7 +4,7 @@ index 5a5e87c..48db2d6 100644
 +++ b/CMakeLists.txt
 @@ -20,7 +20,7 @@ cmake_dependent_option(UVWASI_BUILD_TESTS
  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/out)
- 
+
  if(CMAKE_C_COMPILER_ID MATCHES "AppleClang|Clang|GNU")
 -  list(APPEND uvwasi_cflags -fvisibility=hidden --std=gnu89)
 +  list(APPEND uvwasi_cflags --std=gnu89)
@@ -14,7 +14,7 @@ index 5a5e87c..48db2d6 100644
 @@ -33,27 +33,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
    list(APPEND uvwasi_defines _GNU_SOURCE _POSIX_C_SOURCE=200112)
  endif()
- 
+
 -find_package(LIBUV QUIET)
 -if(LIBUV_FOUND)
 -  include_directories(${LIBUV_INCLUDE_DIR})
@@ -42,7 +42,7 @@ index 5a5e87c..48db2d6 100644
 @@ -97,19 +76,7 @@ if(ASAN AND CMAKE_C_COMPILER_ID MATCHES "AppleClang|GNU|Clang")
      set (CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
  endif()
- 
+
 -## Static library target.
 -add_library(uvwasi_a STATIC ${uvwasi_sources})
 -target_compile_definitions(uvwasi_a PRIVATE ${uvwasi_defines})
@@ -62,7 +62,7 @@ index 5a5e87c..48db2d6 100644
  target_include_directories(uvwasi PRIVATE ${PROJECT_SOURCE_DIR}/include)
 @@ -159,7 +126,7 @@ if(INSTALL_UVWASI AND NOT CODE_COVERAGE)
      configure_package_config_file(${PROJECT_SOURCE_DIR}/cmake/Config.cmake.in ${config_file} INSTALL_DESTINATION ${cmake_files_install_dir})
- 
+
      install(
 -        TARGETS uvwasi_a uvwasi
 +        TARGETS uvwasi

@@ -1,4 +1,4 @@
-package("nngpp")
+package("nngpp", function()
 
     set_homepage("https://github.com/cwzx/nngpp")
     set_description("C++ wrapper around the nanomsg NNG API.")
@@ -8,15 +8,19 @@ package("nngpp")
 
     add_deps("nng")
     add_deps("cmake")
-    on_install("windows", "linux", "macosx", "android", "iphoneos", "cross", function (package)
+    on_install("windows", "linux", "macosx", "android", "iphoneos", "cross",
+               function(package)
         import("package.tools.cmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <nngpp/nngpp.h>
             static void test() {
                 nng::aio aio = nng::make_aio();
             }
-        ]]}, {includes = "nngpp/nngpp.h",configs = {languages = "c++11"}}))
+        ]]
+        }, {includes = "nngpp/nngpp.h", configs = {languages = "c++11"}}))
     end)
+end)

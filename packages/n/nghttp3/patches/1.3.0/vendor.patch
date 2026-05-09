@@ -8,7 +8,7 @@ index 2f7e31c..3e3d7fb 100644
    nghttp3_unreachable.c
 -  sfparse/sfparse.c
  )
- 
+
  # Public shared library
  if(ENABLE_SHARED_LIB)
    add_library(nghttp3 SHARED ${nghttp3_SOURCES})

@@ -7,6 +7,6 @@ diff --git a/third_party/breakpad/src/client/linux/handler/exception_handler.cc 
    // large enough.
 -  static const unsigned kSigStackSize = std::max(16384, SIGSTKSZ);
 +  const unsigned kSigStackSize = std::max<unsigned>(16384, SIGSTKSZ);
- 
+
    // Only set an alternative stack if there isn't already one, or if the current
    // one is too small.

@@ -17,10 +17,10 @@ add_rules("mode.debug", "mode.release")
 set_languages("c++11")
 
 target("squish")
-    set_kind("$(kind)")
-    add_files("*.cpp")
-    add_headerfiles("squish.h")
+set_kind("$(kind)")
+add_files("*.cpp")
+add_headerfiles("squish.h")
 
-    if is_plat("windows") and is_kind("shared") then
-        add_rules("utils.symbols.export_all", {export_classes = true})
-    end
+if is_plat("windows") and is_kind("shared") then
+    add_rules("utils.symbols.export_all", {export_classes = true})
+end

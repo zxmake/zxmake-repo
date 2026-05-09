@@ -3,7 +3,7 @@ Author: Kelvin Zhang <zhangxp1998@gmail.com>
 Date:   Fri Dec 31 11:57:52 2021 -0800
 
     Fix gir scan linker error
-    
+
     Need to link gdk-pixbuf as a dependency, otherwise build for static
     library will fail due to missing libpng/libgjpeg
 
@@ -28,7 +28,7 @@ index 8b0590b..45546ad 100644
      header: 'gdk-pixbuf/gdk-pixdata.h',
      install: true,
 @@ -338,7 +340,7 @@ foreach bin: gdkpixbuf_bin
- 
+
    bin = executable(bin_name, bin_source,
                     gdkpixbuf_enum_h,
 -                   dependencies: gdk_pixbuf_deps + [ gdkpixbuf_dep ],

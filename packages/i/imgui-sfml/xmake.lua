@@ -1,13 +1,16 @@
-package("imgui-sfml")
+package("imgui-sfml", function()
     set_homepage("https://github.com/eliasdaler/imgui-sfml")
     set_description("Dear ImGui binding for use with SFML")
     set_license("MIT")
 
-    add_urls("https://github.com/eliasdaler/imgui-sfml/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/eliasdaler/imgui-sfml.git")
+    add_urls(
+        "https://github.com/eliasdaler/imgui-sfml/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/eliasdaler/imgui-sfml.git")
 
-    add_versions("v2.6", "b1195ca1210dd46c8049cfc8cae7f31cd34f1591da7de1c56297b277ac9c5cc0")
-    add_versions("v2.5", "3775c9303f656297f2392e91ffae2021e874ee319b4139c60076d6f757ede109")
+    add_versions("v2.6",
+                 "b1195ca1210dd46c8049cfc8cae7f31cd34f1591da7de1c56297b277ac9c5cc0")
+    add_versions("v2.5",
+                 "3775c9303f656297f2392e91ffae2021e874ee319b4139c60076d6f757ede109")
 
     add_deps("cmake")
     add_deps("imgui")
@@ -30,7 +33,7 @@ package("imgui-sfml")
         end
     end)
 
-    on_install("macosx", "linux", "windows", "mingw", function (package)
+    on_install("macosx", "linux", "windows", "mingw", function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("imgui")
@@ -64,8 +67,9 @@ package("imgui-sfml")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include "imgui.h"
             #include "imgui-SFML.h"
             #include <SFML/Graphics/CircleShape.hpp>
@@ -77,5 +81,7 @@ package("imgui-sfml")
                 window.setFramerateLimit(60);
                 ImGui::SFML::Init(window);
             }
-        ]]}, {configs = {languages = "c++11"}}))
+        ]]
+        }, {configs = {languages = "c++11"}}))
     end)
+end)

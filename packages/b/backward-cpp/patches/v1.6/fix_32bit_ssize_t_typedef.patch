@@ -3,7 +3,7 @@ diff -Naurw backward.hpp backward.hpp
 +++ backward.hpp
 @@ -344,7 +344,12 @@
  #include <thread>
- 
+
  #include <basetsd.h>
 +
 +#ifdef _WIN64
@@ -11,7 +11,6 @@ diff -Naurw backward.hpp backward.hpp
 +#else
 +typedef int ssize_t;
 +#endif
- 
+
  #ifndef NOMINMAX
  #define NOMINMAX
- 

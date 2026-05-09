@@ -1,42 +1,72 @@
-package("openssl")
+package("openssl", function()
     set_homepage("https://www.openssl.org/")
-    set_description("A robust, commercial-grade, and full-featured toolkit for TLS and SSL.")
+    set_description(
+        "A robust, commercial-grade, and full-featured toolkit for TLS and SSL.")
     set_license("Apache-2.0")
 
-    add_urls("https://github.com/openssl/openssl/archive/refs/tags/OpenSSL_$(version).zip", {version = function (version)
-        return version:gsub("^(%d+)%.(%d+)%.(%d+)-?(%a*)$", "%1_%2_%3%4")
-    end, excludes = "*/fuzz/*"})
-    add_versions("1.1.1-w", "c543d84c06e909bfa862d5256f6d9dad502352a580b1193ae262874e4be4d7f7")
-    add_versions("1.1.1-t", "9422774f3ce0f9cb4db5d862efbf43b4fcc096b37b4ac7157e7c5172113a8a22")
-    add_patches("1.1.1-t", path.join(os.scriptdir(), "patches", "1.1.1t.diff"), "8009edde46e5577213212ec68f8a40451ceb514fddd892240b1465213b7d2d11")
-    add_versions("1.1.1-s", "aa76dc0488bc67f5c964d085e37a0f5f452e45c68967816a336fa00f537f5cc5")
-    add_versions("1.1.1-r", "20af2fac5dff04e71c2f2d6729ee84befbea741e3aaeba18a1a541e04f3f1997")
-    add_versions("1.1.1-q", "df86e6adcff1c91a85cef139dd061ea40b7e49005e8be16522cf4864bfcf5eb8")
-    add_patches("1.1.1-q", path.join(os.scriptdir(), "patches", "1.1.1q.diff"), "cfe6929f9db2719e695be0b61f8c38fe8132544c5c58ca8d07383bfa6c675b7b")
-    add_versions("1.1.1-p", "7fe975ffe91d8343ebd021059eeea3c6b1d236c3826b3a08ef59fcbe75069f5b")
-    add_patches("1.1.1-p", path.join(os.scriptdir(), "patches", "1.1.1p.diff"), "f102fed5867e143ae3ace1febd0b2725358c614c86328e68022f1ea21491b42c")
-    add_versions("1.1.1-o", "1cd761790cf576e7f45c17798c47064f0f6756d4fcdbc1e657b0a4d9c60f3a52")
-    add_versions("1.1.1-n", "614d69141fd622bc3db2adf7c824eaa19c7e532937b2cd7144b850d692f9f150")
-    add_versions("1.1.1-m", "dab2287910427d82674618d512ba2571401539ca6ed12ab3c3143a0db9fad542")
-    add_versions("1.1.1-l", "23d8908e82b63af754018256a4eb02f13965f10067969f6a63f497960c11dbeb")
-    add_versions("1.1.1-k", "255c038f5861616f67b527434475d226f5fe00522fbd21fafd3df32019edd202")
-    add_versions("1.1.1-h", "0a976b769bdb26470971a184f5263d0c3256152d5671ed7287cf17acc4698afc")
-    add_versions("1.1.0-l", "a305d4af4b442ad61ba3d7e82905d09bfbd80424e132e10df4899d064aa47ce2")
-    add_versions("1.0.2-u", "493f8b34574d0cf8598adbdec33c84b8a06f0617787c3710d20827c01291c09c")
-    add_versions("1.0.0",  "9b67e5ad1a4234c1170ada75b66321e914da4f3ebaeaef6b28400173aaa6b378")
+    add_urls(
+        "https://github.com/openssl/openssl/archive/refs/tags/OpenSSL_$(version).zip",
+        {
+            version = function(version)
+                return
+                    version:gsub("^(%d+)%.(%d+)%.(%d+)-?(%a*)$", "%1_%2_%3%4")
+            end,
+            excludes = "*/fuzz/*"
+        })
+    add_versions("1.1.1-w",
+                 "c543d84c06e909bfa862d5256f6d9dad502352a580b1193ae262874e4be4d7f7")
+    add_versions("1.1.1-t",
+                 "9422774f3ce0f9cb4db5d862efbf43b4fcc096b37b4ac7157e7c5172113a8a22")
+    add_patches("1.1.1-t", path.join(os.scriptdir(), "patches", "1.1.1t.diff"),
+                "8009edde46e5577213212ec68f8a40451ceb514fddd892240b1465213b7d2d11")
+    add_versions("1.1.1-s",
+                 "aa76dc0488bc67f5c964d085e37a0f5f452e45c68967816a336fa00f537f5cc5")
+    add_versions("1.1.1-r",
+                 "20af2fac5dff04e71c2f2d6729ee84befbea741e3aaeba18a1a541e04f3f1997")
+    add_versions("1.1.1-q",
+                 "df86e6adcff1c91a85cef139dd061ea40b7e49005e8be16522cf4864bfcf5eb8")
+    add_patches("1.1.1-q", path.join(os.scriptdir(), "patches", "1.1.1q.diff"),
+                "cfe6929f9db2719e695be0b61f8c38fe8132544c5c58ca8d07383bfa6c675b7b")
+    add_versions("1.1.1-p",
+                 "7fe975ffe91d8343ebd021059eeea3c6b1d236c3826b3a08ef59fcbe75069f5b")
+    add_patches("1.1.1-p", path.join(os.scriptdir(), "patches", "1.1.1p.diff"),
+                "f102fed5867e143ae3ace1febd0b2725358c614c86328e68022f1ea21491b42c")
+    add_versions("1.1.1-o",
+                 "1cd761790cf576e7f45c17798c47064f0f6756d4fcdbc1e657b0a4d9c60f3a52")
+    add_versions("1.1.1-n",
+                 "614d69141fd622bc3db2adf7c824eaa19c7e532937b2cd7144b850d692f9f150")
+    add_versions("1.1.1-m",
+                 "dab2287910427d82674618d512ba2571401539ca6ed12ab3c3143a0db9fad542")
+    add_versions("1.1.1-l",
+                 "23d8908e82b63af754018256a4eb02f13965f10067969f6a63f497960c11dbeb")
+    add_versions("1.1.1-k",
+                 "255c038f5861616f67b527434475d226f5fe00522fbd21fafd3df32019edd202")
+    add_versions("1.1.1-h",
+                 "0a976b769bdb26470971a184f5263d0c3256152d5671ed7287cf17acc4698afc")
+    add_versions("1.1.0-l",
+                 "a305d4af4b442ad61ba3d7e82905d09bfbd80424e132e10df4899d064aa47ce2")
+    add_versions("1.0.2-u",
+                 "493f8b34574d0cf8598adbdec33c84b8a06f0617787c3710d20827c01291c09c")
+    add_versions("1.0.0",
+                 "9b67e5ad1a4234c1170ada75b66321e914da4f3ebaeaef6b28400173aaa6b378")
 
     on_fetch("fetch")
 
-    on_load(function (package)
+    on_load(function(package)
         if not package:is_precompiled() then
-            if package:is_plat("android") and is_subhost("windows") and os.arch() == "x64" then
+            if package:is_plat("android") and is_subhost("windows") and
+                os.arch() == "x64" then
                 -- when building for android on windows, use msys2 perl instead of strawberry-perl to avoid configure issue
-                package:add("deps", "msys2", {configs = {msystem = "MINGW64", base_devel = true}, private = true})
+                package:add("deps", "msys2", {
+                    configs = {msystem = "MINGW64", base_devel = true},
+                    private = true
+                })
             elseif is_subhost("windows") and not package:is_precompiled() then
-                package:add("deps", "nasm", { private = true })
+                package:add("deps", "nasm", {private = true})
                 -- the perl executable found in GitForWindows will fail to build OpenSSL
                 -- see https://github.com/openssl/openssl/blob/master/NOTES-PERL.md#perl-on-windows
-                package:add("deps", "strawberry-perl", { system = false, private = true })
+                package:add("deps", "strawberry-perl",
+                            {system = false, private = true})
                 -- check xmake tool jom
                 import("package.tools.jom", {try = true})
                 if jom then
@@ -61,7 +91,7 @@ package("openssl")
         end
     end)
 
-    on_install("windows", function (package)
+    on_install("windows", function(package)
         import("package.tools.jom", {try = true})
         import("package.tools.nmake")
         local configs = {"Configure", "no-tests"}
@@ -76,7 +106,8 @@ package("openssl")
             target = "VC-WIN64A"
         end
         table.insert(configs, target)
-        table.insert(configs, package:config("shared") and "shared" or "no-shared")
+        table.insert(configs,
+                     package:config("shared") and "shared" or "no-shared")
         table.insert(configs, "--prefix=" .. package:installdir())
         table.insert(configs, "--openssldir=" .. package:installdir())
         if jom then
@@ -94,14 +125,17 @@ package("openssl")
         end
     end)
 
-    on_install("mingw", function (package)
+    on_install("mingw", function(package)
         local configs = {"Configure", "no-tests"}
-        table.insert(configs, package:is_arch("i386", "x86") and "mingw" or "mingw64")
-        table.insert(configs, package:config("shared") and "shared" or "no-shared")
+        table.insert(configs,
+                     package:is_arch("i386", "x86") and "mingw" or "mingw64")
+        table.insert(configs,
+                     package:config("shared") and "shared" or "no-shared")
         local installdir = package:installdir()
         -- Use MSYS2 paths instead of Windows paths
         if is_subhost("msys") then
-            installdir = installdir:gsub("(%a):[/\\](.+)", "/%1/%2"):gsub("\\", "/")
+            installdir = installdir:gsub("(%a):[/\\](.+)", "/%1/%2"):gsub("\\",
+                                                                          "/")
         end
         table.insert(configs, "--prefix=" .. installdir)
         table.insert(configs, "--openssldir=" .. installdir)
@@ -123,14 +157,15 @@ package("openssl")
         import("package.tools.make").make(package, {"install_sw"})
     end)
 
-    on_install("linux", "macosx", "bsd", "cross", "android", function (package)
+    on_install("linux", "macosx", "bsd", "cross", "android", function(package)
         -- https://wiki.openssl.org/index.php/Compilation_and_Installation#PREFIX_and_OPENSSLDIR
         local configs = {}
         if package:is_cross() then
             local target_plat, target_arch
             if package:is_plat("macosx") then
                 target_plat = "darwin64"
-                target_arch = package:is_arch("arm64") and "arm64-cc" or "x86_64-cc"
+                target_arch = package:is_arch("arm64") and "arm64-cc" or
+                                  "x86_64-cc"
             else
                 target_plat = "linux"
                 if package:is_arch("x86_64") then
@@ -153,9 +188,12 @@ package("openssl")
                 table.insert(configs, "no-threads")
             end
         end
-        table.insert(configs, "--openssldir=" .. package:installdir():gsub("\\", "/"))
-        table.insert(configs, "--prefix=" .. package:installdir():gsub("\\", "/"))
-        table.insert(configs, package:config("shared") and "shared" or "no-shared")
+        table.insert(configs,
+                     "--openssldir=" .. package:installdir():gsub("\\", "/"))
+        table.insert(configs,
+                     "--prefix=" .. package:installdir():gsub("\\", "/"))
+        table.insert(configs,
+                     package:config("shared") and "shared" or "no-shared")
         if package:debug() then
             table.insert(configs, "--debug")
         end
@@ -167,7 +205,8 @@ package("openssl")
                 buildenvs.CPPFLAGS = buildenvs.CPPFLAGS:gsub("\\", "/")
                 buildenvs.ASFLAGS = buildenvs.ASFLAGS:gsub("\\", "/")
             end
-            os.vrunv("perl", table.join("./Configure", configs), {envs = buildenvs})
+            os.vrunv("perl", table.join("./Configure", configs),
+                     {envs = buildenvs})
         else
             os.vrunv("./config", configs, {shell = true, envs = buildenvs})
         end
@@ -177,6 +216,7 @@ package("openssl")
             os.tryrm(path.join(package:installdir("lib"), "*.a"))
         end
     end)
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("SSL_new", {includes = "openssl/ssl.h"}))
     end)
+end)

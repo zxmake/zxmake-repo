@@ -1,23 +1,28 @@
-package("rendergraph")
+package("rendergraph", function()
 
     set_homepage("https://github.com/DragonJoker/RenderGraph/")
     set_description("Vulkan render graph management library.")
     set_license("MIT")
 
-    set_urls("https://github.com/DragonJoker/RenderGraph/archive/refs/tags/$(version).tar.gz",
-         "https://github.com/DragonJoker/RenderGraph.git")
-    add_versions("v1.4.1", "7096a6384165f98ec3fab995deba10523b42a4f170f9ad9473107bc03eb50a3d")
+    set_urls(
+        "https://github.com/DragonJoker/RenderGraph/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/DragonJoker/RenderGraph.git")
+    add_versions("v1.4.1",
+                 "7096a6384165f98ec3fab995deba10523b42a4f170f9ad9473107bc03eb50a3d")
     add_versions("v1.4.0", "0009eac85885231069f7ba644d22a801e71505cc")
     add_versions("v1.3.0", "b9c68b6949c7b60ffb49f9b9997432aac5baec69")
-    add_versions("v1.2.0", "3f434cc347048656f02bfb87b0ce69ac02b9b18af4262d221c0d4b0ecf1b7bae")
-    add_versions("v1.1.0", "b2fb87cdc0cdec94d4e2a9139533e5f72c0fadfe090c085308edbb84084b4a0c")
-    add_versions("v1.0.0", "73814e89f854adb1287c33ea8d89f56ef7822977b5e974218a9a826d76a18e67")
+    add_versions("v1.2.0",
+                 "3f434cc347048656f02bfb87b0ce69ac02b9b18af4262d221c0d4b0ecf1b7bae")
+    add_versions("v1.1.0",
+                 "b2fb87cdc0cdec94d4e2a9139533e5f72c0fadfe090c085308edbb84084b4a0c")
+    add_versions("v1.0.0",
+                 "73814e89f854adb1287c33ea8d89f56ef7822977b5e974218a9a826d76a18e67")
 
     add_deps("vulkan-headers")
 
     add_links("RenderGraph")
 
-    on_install("windows|x64", "macosx", "linux", function (package)
+    on_install("windows|x64", "macosx", "linux", function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             add_requires("vulkan-headers")
@@ -37,21 +42,26 @@ package("rendergraph")
                 add_packages("vulkan-headers")
         ]])
         local configs = {}
-        if package:config("shared") then 
+        if package:config("shared") then
             configs.kind = "shared"
         end
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             static void test()
             {
                 crg::ResourceHandler handler;
                 crg::FrameGraph graph{ handler, "test" };
             }
-        ]]}, {configs = {languages = "cxx17"},
+        ]]
+        }, {
+            configs = {languages = "cxx17"},
             includes = {
-                "RenderGraph/FrameGraph.hpp",
-                "RenderGraph/ResourceHandler.hpp"}}))
+                "RenderGraph/FrameGraph.hpp", "RenderGraph/ResourceHandler.hpp"
+            }
+        }))
     end)
+end)

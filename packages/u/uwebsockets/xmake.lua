@@ -1,26 +1,43 @@
-package("uwebsockets")
+package("uwebsockets", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/uNetworking")
-    set_description("Simple, secure & standards compliant web server for the most demanding of applications.")
+    set_description(
+        "Simple, secure & standards compliant web server for the most demanding of applications.")
     set_license("Apache-2.0")
 
-    add_urls("https://github.com/uNetworking/uWebSockets/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/uNetworking/uWebSockets.git")
+    add_urls(
+        "https://github.com/uNetworking/uWebSockets/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/uNetworking/uWebSockets.git")
 
-    add_versions("v20.67.0", "8124bb46326f81d99ad3552b7a3bf78489784d3660fb60d7fe5f5337a21203a3")
-    add_versions("v20.66.0", "54d1a8cfb46e1814e1525e9bc72a4652aa708f352e55f35ef4b55804c98bfee1")
-    add_versions("v20.65.0", "e261f7c124b3b9e217fc766d6e51d4fdc4b227aa52c7a0ca5952a9e65cea4213")
-    add_versions("v20.64.0", "bb81fa773dcbd6bc738904ad496554fd131a33269570e0e86fa09213d82ba9ef")
-    add_versions("v20.62.0", "03dfc8037cf43856a41e64bbc7fc5a7cf5e6369c9158682753074ecbbe09eed1")
-    add_versions("v20.61.0", "94778209571f832740fe1a4f19dbc059990b6acc34b8789f39cda6a158178d1f")
-    add_versions("v20.60.0", "eb72223768f93d40038181653ee5b59a53736448a6ff4e8924fd56b2fcdc00db")
+    add_versions("v20.67.0",
+                 "8124bb46326f81d99ad3552b7a3bf78489784d3660fb60d7fe5f5337a21203a3")
+    add_versions("v20.66.0",
+                 "54d1a8cfb46e1814e1525e9bc72a4652aa708f352e55f35ef4b55804c98bfee1")
+    add_versions("v20.65.0",
+                 "e261f7c124b3b9e217fc766d6e51d4fdc4b227aa52c7a0ca5952a9e65cea4213")
+    add_versions("v20.64.0",
+                 "bb81fa773dcbd6bc738904ad496554fd131a33269570e0e86fa09213d82ba9ef")
+    add_versions("v20.62.0",
+                 "03dfc8037cf43856a41e64bbc7fc5a7cf5e6369c9158682753074ecbbe09eed1")
+    add_versions("v20.61.0",
+                 "94778209571f832740fe1a4f19dbc059990b6acc34b8789f39cda6a158178d1f")
+    add_versions("v20.60.0",
+                 "eb72223768f93d40038181653ee5b59a53736448a6ff4e8924fd56b2fcdc00db")
 
-    add_configs("zip", {description = "Enable libzip", default = false, type = "boolean"})
-    add_configs("deflate", {description = "Enable libdeflate", default = false, type = "boolean"})
+    add_configs("zip", {
+        description = "Enable libzip",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("deflate", {
+        description = "Enable libdeflate",
+        default = false,
+        type = "boolean"
+    })
 
     add_deps("usockets")
 
-    on_load(function (package)
+    on_load(function(package)
         if package:config("zip") then
             package:add("deps", "libzip")
             if package:config("deflate") then
@@ -32,12 +49,13 @@ package("uwebsockets")
         end
     end)
 
-    on_install("windows", "macosx", "linux", function (package)
+    on_install("windows", "macosx", "linux", function(package)
         os.cp("src/*", package:installdir("include/uwebsockets"))
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             void test(){
                 struct UserData {};
                 uWS::App().get("/hello/:name", [](auto *res, auto *req) {
@@ -61,5 +79,7 @@ package("uwebsockets")
                     }
                 }).run();
             }
-        ]]}, {configs = {languages = "cxx20"}, includes = "uwebsockets/App.h"}))
+        ]]
+        }, {configs = {languages = "cxx20"}, includes = "uwebsockets/App.h"}))
     end)
+end)

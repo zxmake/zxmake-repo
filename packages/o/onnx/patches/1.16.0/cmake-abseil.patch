@@ -25,5 +25,5 @@ index 6d7ca846..ccf65e10 100644
 -target_link_libraries(onnx PUBLIC onnx_proto)
 +target_link_libraries(onnx PUBLIC onnx_proto ${protobuf_ABSL_USED_TARGETS})
  add_onnx_global_defines(onnx)
- 
+
  if(BUILD_ONNX_PYTHON)

@@ -1,8 +1,9 @@
-package("meowhash")
+package("meowhash", function()
 
     set_kind("library", {headeronly = true})
     set_homepage("https://mollyrocket.com/meowhash")
-    set_description("Official version of the Meow hash, an extremely fast level 1 hash")
+    set_description(
+        "Official version of the Meow hash, an extremely fast level 1 hash")
     set_license("zlib")
 
     add_urls("https://github.com/cmuratori/meow_hash.git")
@@ -13,10 +14,12 @@ package("meowhash")
         add_cxflags("-maes", "-mpclmul", "-mssse3")
     end
 
-    on_install("macosx", "windows", "linux", "bsd", function (package)
+    on_install("macosx", "windows", "linux", "bsd", function(package)
         os.cp("meow_hash_x64_aesni.h", package:installdir("include"))
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("MeowHash", {includes = "meow_hash_x64_aesni.h"}))
+    on_test(function(package)
+        assert(package:has_cfuncs("MeowHash",
+                                  {includes = "meow_hash_x64_aesni.h"}))
     end)
+end)

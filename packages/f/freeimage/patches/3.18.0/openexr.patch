@@ -7,6 +7,5 @@ index cb4ac36..aaced91 100644
  #include <string.h>
  #include <map>
 +#include <functional>
- 
+
  #include "ImfNamespace.h"
- 

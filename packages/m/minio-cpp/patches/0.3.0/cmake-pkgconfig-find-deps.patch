@@ -4,7 +4,7 @@ index c2610db..abee1c8 100644
 +++ b/CMakeLists.txt
 @@ -57,15 +57,16 @@ endif()
  # ------------
- 
+
  find_package(OpenSSL REQUIRED)
 -find_package(unofficial-curlpp CONFIG REQUIRED)
 -find_package(unofficial-inih CONFIG REQUIRED)
@@ -15,7 +15,7 @@ index c2610db..abee1c8 100644
  find_package(nlohmann_json CONFIG REQUIRED)
  find_package(pugixml CONFIG REQUIRED)
  find_package(ZLIB REQUIRED)
- 
+
  list(APPEND MINIO_CPP_LIBS
 -  unofficial::curlpp::curlpp
 -  unofficial::inih::inireader
@@ -26,7 +26,7 @@ index c2610db..abee1c8 100644
 @@ -115,7 +116,7 @@ set(MINIO_CPP_HEADERS
    include/miniocpp/utils.h
  )
- 
+
 -add_library(miniocpp STATIC ${MINIO_CPP_SOURCES} ${MINIO_CPP_HEADERS})
 +add_library(miniocpp  ${MINIO_CPP_SOURCES} ${MINIO_CPP_HEADERS})
  target_compile_options(miniocpp PRIVATE ${MINIO_CPP_CFLAGS})
@@ -37,6 +37,6 @@ index c2610db..abee1c8 100644
  target_link_libraries(miniocpp PUBLIC ${MINIO_CPP_LIBS})
  set_target_properties(miniocpp PROPERTIES VERSION "${MINIO_CPP_VERSION_STRING}")
 -set_target_properties(miniocpp PROPERTIES POSITION_INDEPENDENT_CODE ON)
- 
+
  # Add a cmake alias - this is how users should use minio-cpp in their cmake projects.
  add_library(miniocpp::miniocpp ALIAS miniocpp)

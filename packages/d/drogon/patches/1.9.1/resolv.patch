@@ -3,7 +3,7 @@ index fbe2288..d7218a6 100755
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -367,11 +367,10 @@ endif (NOT WIN32)
- 
+
  if (BUILD_POSTGRESQL)
      # find postgres
 -    find_package(pg)
@@ -25,5 +25,5 @@ index fbe2288..d7218a6 100755
 -    endif (pg_FOUND)
 +    endif (PostgreSQL_FOUND)
  endif (BUILD_POSTGRESQL)
- 
+
  if (BUILD_MYSQL)

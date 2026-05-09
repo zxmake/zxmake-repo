@@ -1,4 +1,4 @@
-package("glob")
+package("glob", function()
     set_homepage("https://github.com/p-ranav/glob")
     set_description("Glob for C++17")
     set_license("MIT")
@@ -7,10 +7,18 @@ package("glob")
 
     add_versions("2024.04.18", "d025092c0e1eb1a8b226d3a799fd32680d2fd13f")
 
-    add_configs("header_only", {description = "Use header only version.", default = false, type = "boolean"})
-    add_configs("ghc_filesystem", {description = "Use ghc::filesystem instead of std::filesystem", default = false, type = "boolean"})
-    
-    on_load(function (package)
+    add_configs("header_only", {
+        description = "Use header only version.",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("ghc_filesystem", {
+        description = "Use ghc::filesystem instead of std::filesystem",
+        default = false,
+        type = "boolean"
+    })
+
+    on_load(function(package)
         if package:config("ghc_filesystem") then
             package:add("deps", "ghc_filesystem")
             package:add("defines", "GLOB_USE_GHC_FILESYSTEM")
@@ -20,7 +28,7 @@ package("glob")
         end
     end)
 
-    on_install(function (package)
+    on_install(function(package)
         if package:config("header_only") then
             os.cp("single_include/glob", package:installdir("include"))
         else
@@ -52,10 +60,17 @@ package("glob")
         end
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             void test() {
                 glob::glob("~/.b*");
             }
-        ]]}, {configs = {languages = "cxx17"}, includes = package:config("header_only") and "glob/glob.hpp" or "glob/glob.h"}))
+        ]]
+        }, {
+            configs = {languages = "cxx17"},
+            includes = package:config("header_only") and "glob/glob.hpp" or
+                "glob/glob.h"
+        }))
     end)
+end)

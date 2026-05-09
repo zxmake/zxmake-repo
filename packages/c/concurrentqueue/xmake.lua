@@ -1,32 +1,43 @@
-package("concurrentqueue")
+package("concurrentqueue", function()
     set_homepage("https://github.com/cameron314/concurrentqueue")
-    set_description("A fast multi-producer, multi-consumer lock-free concurrent queue for C++11")
+    set_description(
+        "A fast multi-producer, multi-consumer lock-free concurrent queue for C++11")
     set_license("BSD")
 
-    add_urls("https://github.com/cameron314/concurrentqueue/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/cameron314/concurrentqueue.git")
+    add_urls(
+        "https://github.com/cameron314/concurrentqueue/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/cameron314/concurrentqueue.git")
 
-    add_versions("v1.0.4", "87fbc9884d60d0d4bf3462c18f4c0ee0a9311d0519341cac7cbd361c885e5281")
+    add_versions("v1.0.4",
+                 "87fbc9884d60d0d4bf3462c18f4c0ee0a9311d0519341cac7cbd361c885e5281")
 
-    add_configs("c_api", {description = "Build C API", default = false, type = "boolean"})
+    add_configs("c_api", {
+        description = "Build C API",
+        default = false,
+        type = "boolean"
+    })
 
     add_deps("cmake")
 
     add_includedirs("include", "include/concurrentqueue/moodycamel")
 
-    on_load(function (package)
+    on_load(function(package)
         if not package:config("c_api") then
             package:set("kind", "library", {headeronly = true})
         end
     end)
 
-    on_install(function (package)
+    on_install(function(package)
         local configs = {}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:is_debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:is_debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
         import("package.tools.cmake").install(package, configs)
 
-        io.writefile(path.join(package:installdir("include"), "concurrentqueue", "concurrentqueue.h"), [[
+        io.writefile(
+            path.join(package:installdir("include"), "concurrentqueue",
+                      "concurrentqueue.h"), [[
 #pragma once
 
 #pragma message please update include <concurrentqueue/concurrentqueue.h> to <concurrentqueue.h>
@@ -52,15 +63,19 @@ package("concurrentqueue")
         end
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <concurrentqueue.h>
             void test() {
                 moodycamel::ConcurrentQueue<int> q;
                 q.enqueue(25);
             }
-        ]]}, {configs = {languages = "c++11"}}))
+        ]]
+        }, {configs = {languages = "c++11"}}))
         if package:config("c_api") then
-            assert(package:has_cfuncs("moodycamel_cq_create", {includes = "c_api/concurrentqueue.h"}))
+            assert(package:has_cfuncs("moodycamel_cq_create",
+                                      {includes = "c_api/concurrentqueue.h"}))
         end
     end)
+end)

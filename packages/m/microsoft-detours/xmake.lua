@@ -1,12 +1,13 @@
-package("microsoft-detours")
+package("microsoft-detours", function()
     set_homepage("https://github.com/microsoft/Detours")
-    set_description("Detours is a software package for monitoring and instrumenting API calls on Windows. It is distributed in source code form.")
+    set_description(
+        "Detours is a software package for monitoring and instrumenting API calls on Windows. It is distributed in source code form.")
     set_license("MIT")
 
     set_urls("https://github.com/microsoft/Detours.git")
     add_versions("2023.6.8", "734ac64899c44933151c1335f6ef54a590219221")
 
-    on_install("windows", "mingw", function (package)
+    on_install("windows", "mingw", function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             target("microsoft-detours")
@@ -24,12 +25,15 @@ package("microsoft-detours")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <windows.h>
             #include <detours.h>
             void test() {
                 DetourIsHelperProcess();
             }
-        ]]}))
+        ]]
+        }))
     end)
+end)

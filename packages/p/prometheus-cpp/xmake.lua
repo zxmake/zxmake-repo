@@ -1,17 +1,33 @@
-package("prometheus-cpp")
+package("prometheus-cpp", function()
     set_homepage("https://github.com/jupp0r/prometheus-cpp")
     set_description("Prometheus Client Library for Modern C++")
     set_license("MIT")
 
-    add_urls("https://github.com/jupp0r/prometheus-cpp/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/jupp0r/prometheus-cpp.git")
-    add_versions("v1.2.4", "48dbad454d314b836cc667ec4def93ec4a6e4255fc8387c20cacb3b8b6faee30")
-    add_versions("v1.2.1", "190734c4d8d0644c2af327ff8b5ef86cd7ea9074a48d777112394f558dd014f7")
-    add_versions("v1.0.0", "07018db604ea3e61f5078583e87c80932ea10c300d979061490ee1b7dc8e3a41")
+    add_urls(
+        "https://github.com/jupp0r/prometheus-cpp/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/jupp0r/prometheus-cpp.git")
+    add_versions("v1.2.4",
+                 "48dbad454d314b836cc667ec4def93ec4a6e4255fc8387c20cacb3b8b6faee30")
+    add_versions("v1.2.1",
+                 "190734c4d8d0644c2af327ff8b5ef86cd7ea9074a48d777112394f558dd014f7")
+    add_versions("v1.0.0",
+                 "07018db604ea3e61f5078583e87c80932ea10c300d979061490ee1b7dc8e3a41")
 
-    add_configs("pull",        {description = "Enable Pull.", default = true, type = "boolean"})
-    add_configs("push",        {description = "Enable push.", default = true, type = "boolean"})
-    add_configs("compression", {description = "Enable compression.", default = true, type = "boolean"})
+    add_configs("pull", {
+        description = "Enable Pull.",
+        default = true,
+        type = "boolean"
+    })
+    add_configs("push", {
+        description = "Enable push.",
+        default = true,
+        type = "boolean"
+    })
+    add_configs("compression", {
+        description = "Enable compression.",
+        default = true,
+        type = "boolean"
+    })
 
     add_deps("cmake")
 
@@ -19,7 +35,7 @@ package("prometheus-cpp")
         add_syslinks("pthread")
     end
 
-    on_load("linux", function (package)
+    on_load("linux", function(package)
         if package:config("pull") then
             package:add("deps", "civetweb v1.15")
             package:add("links", "prometheus-cpp-pull")
@@ -34,27 +50,31 @@ package("prometheus-cpp")
         package:add("links", "prometheus-cpp-core")
     end)
 
-    on_install("linux", function (package)
+    on_install("linux", function(package)
         local configs = {}
         for name, enabled in pairs(package:configs()) do
             if not package:extraconf("configs", name, "builtin") then
-                table.insert(configs, "-DENABLE_" .. name:upper() .. "=" .. (enabled and "ON" or "OFF"))
+                table.insert(configs, "-DENABLE_" .. name:upper() .. "=" ..
+                                 (enabled and "ON" or "OFF"))
             end
         end
         table.insert(configs, "-DGENERATE_PKGCONFIG=ON")
         table.insert(configs, "-DENABLE_TESTING=OFF")
         table.insert(configs, "-DUSE_THIRDPARTY_LIBRARIES=OFF")
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
         import("package.tools.cmake").install(package, configs)
     end)
 
-    on_test("linux", function (package)
+    on_test("linux", function(package)
         assert(package:has_cxxincludes("prometheus/counter.h"))
 
         if package:config("pull") then
             assert(package:has_cxxincludes("prometheus/exposer.h"))
-            assert(package:check_cxxsnippets({test = [[
+            assert(package:check_cxxsnippets({
+                test = [[
                 #include <array>
                 #include <chrono>
                 #include <cstdlib>
@@ -91,10 +111,18 @@ package("prometheus-cpp")
                         http_requests_counter.Add({{"method", method}}).Increment();
                     }
                 }
-            ]]}, {configs = {languages = "cxx11"}, includes = {"prometheus/counter.h", "prometheus/exposer.h", "prometheus/registry.h"}}))
+            ]]
+            }, {
+                configs = {languages = "cxx11"},
+                includes = {
+                    "prometheus/counter.h", "prometheus/exposer.h",
+                    "prometheus/registry.h"
+                }
+            }))
         end
 
         if package:config("push") then
             assert(package:has_cxxincludes("prometheus/gateway.h"))
         end
     end)
+end)

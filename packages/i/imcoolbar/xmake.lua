@@ -1,4 +1,4 @@
-package("imcoolbar")
+package("imcoolbar", function()
     set_homepage("https://github.com/aiekick/ImCoolBar")
     set_description("A Cool bar for Dear ImGui")
     set_license("MIT")
@@ -8,7 +8,8 @@ package("imcoolbar")
 
     add_deps("imgui docking")
 
-    on_install("windows", "linux", "macosx", "mingw", "android", "iphoneos", function (package)
+    on_install("windows", "linux", "macosx", "mingw", "android", "iphoneos",
+               function(package)
         local configs = {}
         io.writefile("xmake.lua", [[
             add_requires("imgui docking")
@@ -29,11 +30,14 @@ package("imcoolbar")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <ImCoolbar.h>
             void test() {
                 ImGui ::CoolBarItem();
             }
-        ]]}, {configs = {languages = "c++11"}}))
+        ]]
+        }, {configs = {languages = "c++11"}}))
     end)
+end)

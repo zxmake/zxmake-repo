@@ -1,14 +1,21 @@
-package("rttr")
+package("rttr", function()
     set_homepage("https://www.rttr.org")
-    set_description("rttr: An open source library, which adds reflection to C++.")
+    set_description(
+        "rttr: An open source library, which adds reflection to C++.")
     set_license("MIT")
-    
-    add_urls("https://github.com/rttrorg/rttr/archive/7edbd580cfad509a3253c733e70144e36f02ecd4.tar.gz",
-             "https://github.com/rttrorg/rttr.git")
-    -- 2021.08.11
-    add_versions("0.9.7", "bba4b6fac2349fa6badc701aad5e7afb87504a7089a867b1a7cbed08fb2f3a90")
 
-    add_configs("rtti", {description = "Build with RTTI support.", default = true, type = "boolean"})
+    add_urls(
+        "https://github.com/rttrorg/rttr/archive/7edbd580cfad509a3253c733e70144e36f02ecd4.tar.gz",
+        "https://github.com/rttrorg/rttr.git")
+    -- 2021.08.11
+    add_versions("0.9.7",
+                 "bba4b6fac2349fa6badc701aad5e7afb87504a7089a867b1a7cbed08fb2f3a90")
+
+    add_configs("rtti", {
+        description = "Build with RTTI support.",
+        default = true,
+        type = "boolean"
+    })
 
     if is_plat("macosx") then
         add_extsources("brew::rttr")
@@ -16,28 +23,29 @@ package("rttr")
 
     add_deps("cmake")
 
-    on_install(function (package)
+    on_install(function(package)
         io.replace("CMake/utility.cmake", "/WX", "", {plain = true})
         io.replace("CMake/utility.cmake", "-Werror", "", {plain = true})
 
         local configs = {
-            "-DBUILD_EXAMPLES=OFF",
-            "-DBUILD_DOCUMENTATION=OFF",
-            "-DBUILD_UNIT_TESTS=OFF",
-            "-DBUILD_DOCUMENTATION=OFF",
-            "-DBUILD_PACKAGE=OFF",
+            "-DBUILD_EXAMPLES=OFF", "-DBUILD_DOCUMENTATION=OFF",
+            "-DBUILD_UNIT_TESTS=OFF", "-DBUILD_DOCUMENTATION=OFF",
+            "-DBUILD_PACKAGE=OFF"
         }
         local shared = package:config("shared")
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:is_debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_RTTR_DYNAMIC=" .. (shared and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:is_debug() and "Debug" or "Release"))
+        table.insert(configs,
+                     "-DBUILD_RTTR_DYNAMIC=" .. (shared and "ON" or "OFF"))
         table.insert(configs, "-DBUILD_STATIC=" .. (shared and "OFF" or "ON"))
-        table.insert(configs, "-DBUILD_WITH_RTTI=" .. (package:config("rtti") and "ON" or "OFF"))
+        table.insert(configs, "-DBUILD_WITH_RTTI=" ..
+                         (package:config("rtti") and "ON" or "OFF"))
 
         if package:is_plat("windows") then
             os.mkdir(path.join(package:buildir(), "src/rttr/pdb"))
         end
         import("package.tools.cmake").install(package, configs)
-        if package:is_plat("windows")then
+        if package:is_plat("windows") then
             if shared then
                 package:add("defines", "RTTR_DLL")
             end
@@ -46,13 +54,14 @@ package("rttr")
         end
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <cassert>
             #include <string>
 
             #include "rttr/registration.h"
-            
+
             using namespace rttr;
 
             struct ctor_test {
@@ -95,5 +104,7 @@ package("rttr")
                     assert(ctor.is_valid());
                 }
             }
-        ]]}, { configs = {languages = "c++14"} }))
+        ]]
+        }, {configs = {languages = "c++14"}}))
     end)
+end)

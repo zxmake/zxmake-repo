@@ -1,19 +1,45 @@
-package("mysql")
+package("mysql", function()
     set_homepage("http://www.mysql.com")
     set_description("A real-time, open source transactional database.")
     set_license("GPL-2.0")
 
-    add_urls("https://github.com/mysql/mysql-server/archive/refs/tags/mysql-$(version).tar.gz")
+    add_urls(
+        "https://github.com/mysql/mysql-server/archive/refs/tags/mysql-$(version).tar.gz")
 
-    add_versions("8.0.39", "3a72e6af758236374764b7a1d682f7ab94c70ed0d00bf0cb0f7dd728352b6d96")
+    add_versions("8.0.39",
+                 "3a72e6af758236374764b7a1d682f7ab94c70ed0d00bf0cb0f7dd728352b6d96")
 
-    add_configs("server", {description = "Build server", default = false, type = "boolean"})
-    add_configs("curl", {description = "Build with curl", default = false, type = "boolean"})
-    add_configs("kerberos", {description = "Build with kerberos", default = false, type = "boolean"})
-    add_configs("fido", {description = "Build FIDO based authentication plugins", default = false, type = "boolean"})
-    add_configs("x", {description = "Build MySQL X plugin", default = false, type = "boolean"})
+    add_configs("server", {
+        description = "Build server",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("curl", {
+        description = "Build with curl",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("kerberos", {
+        description = "Build with kerberos",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("fido", {
+        description = "Build FIDO based authentication plugins",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("x", {
+        description = "Build MySQL X plugin",
+        default = false,
+        type = "boolean"
+    })
     if is_plat("windows") then
-        add_configs("debug", {description = "Enable debug symbols.", default = false, readonly = true})
+        add_configs("debug", {
+            description = "Enable debug symbols.",
+            default = false,
+            readonly = true
+        })
     end
 
     add_includedirs("include", "include/mysql")
@@ -26,11 +52,13 @@ package("mysql")
     end
 
     if on_check then
-        on_check(function (package)
+        on_check(function(package)
             local version = package:version()
             if version:ge("9.0.0") then
-                assert(package:is_arch(".*64"), "package(mysql) supports only 64-bit platforms.")
-                assert(not package:is_plat("macosx"), "package(mysql >=9.0.0) need c++20 compiler")
+                assert(package:is_arch(".*64"),
+                       "package(mysql) supports only 64-bit platforms.")
+                assert(not package:is_plat("macosx"),
+                       "package(mysql >=9.0.0) need c++20 compiler")
             end
         end)
     end
@@ -60,31 +88,43 @@ package("mysql")
 
         if package:is_cross() then
             package:add("deps", "mysql-build-tools")
-            package:add("patches", "8.0.39", "patches/8.0.39/cmake-cross-compilation.patch", "0f951afce6bcbc5b053d4e7e4aef57f602ff89960d230354f36385ca31c1c7a5")
+            package:add("patches", "8.0.39",
+                        "patches/8.0.39/cmake-cross-compilation.patch",
+                        "0f951afce6bcbc5b053d4e7e4aef57f602ff89960d230354f36385ca31c1c7a5")
         end
     end)
 
-    on_install("windows", "macosx", "linux", function (package)
+    on_install("windows", "macosx", "linux", function(package)
         import("patch").cmake(package)
 
         local configs = import("configs").get(package, false)
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:is_debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
-        table.insert(configs, "-DINSTALL_STATIC_LIBRARIES=" .. (package:config("shared") and "OFF" or "ON"))
-        table.insert(configs, "-DWITH_LTO=" .. (package:config("lto") and "ON" or "OFF"))
-        table.insert(configs, "-DWITH_ASAN=" .. (package:config("asan") and "ON" or "OFF"))
-        table.insert(configs, "-DWITH_LSAN=" .. (package:config("lsan") and "ON" or "OFF"))
-        table.insert(configs, "-DWITH_MSAN=" .. (package:config("msan") and "ON" or "OFF"))
-        table.insert(configs, "-DWITH_UBSAN=" .. (package:config("ubsan") and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:is_debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
+        table.insert(configs, "-DINSTALL_STATIC_LIBRARIES=" ..
+                         (package:config("shared") and "OFF" or "ON"))
+        table.insert(configs,
+                     "-DWITH_LTO=" .. (package:config("lto") and "ON" or "OFF"))
+        table.insert(configs, "-DWITH_ASAN=" ..
+                         (package:config("asan") and "ON" or "OFF"))
+        table.insert(configs, "-DWITH_LSAN=" ..
+                         (package:config("lsan") and "ON" or "OFF"))
+        table.insert(configs, "-DWITH_MSAN=" ..
+                         (package:config("msan") and "ON" or "OFF"))
+        table.insert(configs, "-DWITH_UBSAN=" ..
+                         (package:config("ubsan") and "ON" or "OFF"))
         if package:is_plat("windows") then
-            table.insert(configs, "-DLINK_STATIC_RUNTIME_LIBRARIES=" .. (package:has_runtime("MT", "MTd") and "ON" or "OFF"))
+            table.insert(configs, "-DLINK_STATIC_RUNTIME_LIBRARIES=" ..
+                             (package:has_runtime("MT", "MTd") and "ON" or "OFF"))
         end
         import("package.tools.cmake").install(package, configs)
 
         if package:is_plat("windows") then
             if package:config("shared") then
                 os.tryrm(package:installdir("lib/mysqlclient.lib"))
-                os.trymv(package:installdir("lib/libmysql.dll"), package:installdir("bin"))
+                os.trymv(package:installdir("lib/libmysql.dll"),
+                         package:installdir("bin"))
             else
                 os.tryrm(package:installdir("lib/libmysql.lib"))
                 os.tryrm(package:installdir("lib/libmysql.dll"))
@@ -98,6 +138,7 @@ package("mysql")
         end
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("mysql_init", {includes = "mysql.h"}))
     end)
+end)

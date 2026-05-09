@@ -1,4 +1,4 @@
-package("zasm")
+package("zasm", function()
 
     set_homepage("https://github.com/zyantific/zasm")
     set_description("x86-64 Assembler based on Zydis")
@@ -6,11 +6,17 @@ package("zasm")
     set_urls("https://github.com/zyantific/zasm.git")
     add_versions("2023.6.21", "19a642518eccbb1740865642eaf3ce79d5d5b884")
 
-    add_configs("shared", {description = "Build shared library.", default = false, type = "boolean", readonly = true})
+    add_configs("shared", {
+        description = "Build shared library.",
+        default = false,
+        type = "boolean",
+        readonly = true
+    })
 
     add_deps("zydis v4.0.0")
 
-    on_install("windows", "macosx", "linux", "bsd", "cross", "mingw", "android", function (package)
+    on_install("windows", "macosx", "linux", "bsd", "cross", "mingw", "android",
+               function(package)
         local configs = {}
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
@@ -35,13 +41,16 @@ package("zasm")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <zasm/serialization/serializer.hpp>
             #include <zasm/zasm.hpp>
             using namespace zasm;
             void test() {
                 Program program(MachineMode::AMD64);
             }
-        ]]}, {configs = {languages = "c++17"}}))
+        ]]
+        }, {configs = {languages = "c++17"}}))
     end)
+end)

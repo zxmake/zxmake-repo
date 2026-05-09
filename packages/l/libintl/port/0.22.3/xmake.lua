@@ -9,18 +9,19 @@ set_configvar("PACKAGE_BUGREPORT", "bug-gettext@gnu.org")
 set_configvar("PACKAGE_URL", "")
 
 option("installprefix")
-    set_default("")
-    set_showmenu(true)
+set_default("")
+set_showmenu(true)
 option_end()
 set_configvar("INSTALLPREFIX", get_config("installprefix"))
 if has_config("installprefix") then
     add_defines("LOCALEDIR=\"" .. get_config("installprefix") .. "/locale\"")
-    add_defines("LOCALE_ALIAS_PATH=\"" .. get_config("installprefix") .. "/locale\"")
+    add_defines("LOCALE_ALIAS_PATH=\"" .. get_config("installprefix") ..
+                    "/locale\"")
 end
 
 option("vers")
-    set_default("")
-    set_showmenu(true)
+set_default("")
+set_showmenu(true)
 option_end()
 if has_config("vers") then
     set_version(get_config("vers"))
@@ -30,8 +31,8 @@ if has_config("vers") then
 end
 
 option("relocatable")
-    set_default(true)
-    set_showmenu(true)
+set_default(true)
+set_showmenu(true)
 option_end()
 if has_config("relocatable") then
     add_defines("ENABLE_RELOCATABLE=1")
@@ -42,28 +43,28 @@ includes("@builtin/check")
 
 -- general autoconf variables
 option("GNULIB_STRERROR")
-    add_csnippets("strerror", [[#include <string.h>
+add_csnippets("strerror", [[#include <string.h>
 int test() { if (!*strerror(-2)) { return 1; } return 0; }]])
-    set_configvar("GNULIB_STRERROR", 1)
+set_configvar("GNULIB_STRERROR", 1)
 option_end()
 add_options("GNULIB_STRERROR")
 option("HAVE_UID_T")
-    add_ctypes("uid_t")
-    add_cincludes("stdlib.h")
+add_ctypes("uid_t")
+add_cincludes("stdlib.h")
 option_end()
 if not has_config("HAVE_UID_T") then
     set_configvar("uid_t", "int", {quote = false})
 end
 option("HAVE_SSIZE_T")
-    add_ctypes("ssize_t")
-    add_cincludes("sys/types.h")
+add_ctypes("ssize_t")
+add_cincludes("sys/types.h")
 option_end()
 if not has_config("HAVE_SSIZE_T") then
     set_configvar("ssize_t", "int", {quote = false})
 end
 option("HAVE_NLINK_T")
-    add_ctypes("nlink_t")
-    add_cincludes("sys/types.h")
+add_ctypes("nlink_t")
+add_cincludes("sys/types.h")
 option_end()
 if not has_config("HAVE_NLINK_T") then
     set_configvar("nlink_t", "int", {quote = false})
@@ -138,31 +139,52 @@ configvar_check_cincludes("HAVE_CRTDEFS_H", "crtdefs.h")
 configvar_check_cincludes("HAVE_BP_SYM_H", "bp-sym.h")
 configvar_check_cincludes("HAVE_XLOCALE_H", "xlocale.h")
 configvar_check_cfuncs("HAVE__NSGETEXECUTABLEPATH", "_NSGetExecutablePath")
-configvar_check_cfuncs("HAVE_MSVC_INVALID_PARAMETER_HANDLER", "_set_invalid_parameter_handler")
+configvar_check_cfuncs("HAVE_MSVC_INVALID_PARAMETER_HANDLER",
+                       "_set_invalid_parameter_handler")
 configvar_check_cfuncs("HAVE_SETLOCALE", "setlocale", {includes = "locale.h"})
 configvar_check_cfuncs("HAVE_SYMLINK", "symlink", {includes = "unistd.h"})
 configvar_check_cfuncs("GNULIB_FSCANF", "fscanf", {includes = "stdio.h"})
 configvar_check_cfuncs("GNULIB_SCANF", "scanf", {includes = "stdio.h"})
-configvar_check_cfuncs("HAVE_CANONICALIZE_FILE_NAME", "canonicalize_file_name", {includes = "stdlib.h", defines = "_GNU_SOURCE"})
-configvar_check_cfuncs("HAVE_DECL_CLEARERR_UNLOCKED", "clearerr_unlocked", {includes = "stdio.h", default = 0})
-configvar_check_cfuncs("HAVE_DECL_FEOF_UNLOCKED", "feof_unlocked", {includes = "stdio.h", default = 0})
-configvar_check_cfuncs("HAVE_DECL_FERROR_UNLOCKED", "ferror_unlocked", {includes = "stdio.h", default = 0})
-configvar_check_cfuncs("HAVE_DECL_FFLUSH_UNLOCKED", "fflush_unlocked", {includes = "stdio.h", default = 0})
-configvar_check_cfuncs("HAVE_DECL_FGETS_UNLOCKED", "fgets_unlocked", {includes = "stdio.h", defines = "_GNU_SOURCE", default = 0})
-configvar_check_cfuncs("HAVE_DECL_FPUTC_UNLOCKED", "fputc_unlocked", {includes = "stdio.h", default = 0})
-configvar_check_cfuncs("HAVE_DECL_FREAD_UNLOCKED", "fread_unlocked", {includes = "stdio.h", default = 0})
-configvar_check_cfuncs("HAVE_DECL_FWRITE_UNLOCKED", "fwrite_unlocked", {includes = "stdio.h", default = 0})
-configvar_check_cfuncs("HAVE_DECL_GETCHAR_UNLOCKED", "getchar_unlocked", {includes = "stdio.h", default = 0})
-configvar_check_cfuncs("HAVE_DECL_GETC_UNLOCKED", "getc_unlocked", {includes = "stdio.h", default = 0})
-configvar_check_cfuncs("HAVE_DECL_PUTCHAR_UNLOCKED", "putchar_unlocked", {includes = "stdio.h", default = 0})
-configvar_check_cfuncs("HAVE_DECL_PUTC_UNLOCKED", "putc_unlocked", {includes = "stdio.h", default = 0})
-configvar_check_cfuncs("HAVE_DECL_SETENV", "setenv", {includes = "stdlib.h", default = 0})
-configvar_check_cfuncs("HAVE_DECL_STRERROR_R", "strerror_r", {includes = "string.h", default = 0})
+configvar_check_cfuncs("HAVE_CANONICALIZE_FILE_NAME", "canonicalize_file_name",
+                       {includes = "stdlib.h", defines = "_GNU_SOURCE"})
+configvar_check_cfuncs("HAVE_DECL_CLEARERR_UNLOCKED", "clearerr_unlocked",
+                       {includes = "stdio.h", default = 0})
+configvar_check_cfuncs("HAVE_DECL_FEOF_UNLOCKED", "feof_unlocked",
+                       {includes = "stdio.h", default = 0})
+configvar_check_cfuncs("HAVE_DECL_FERROR_UNLOCKED", "ferror_unlocked",
+                       {includes = "stdio.h", default = 0})
+configvar_check_cfuncs("HAVE_DECL_FFLUSH_UNLOCKED", "fflush_unlocked",
+                       {includes = "stdio.h", default = 0})
+configvar_check_cfuncs("HAVE_DECL_FGETS_UNLOCKED", "fgets_unlocked", {
+    includes = "stdio.h",
+    defines = "_GNU_SOURCE",
+    default = 0
+})
+configvar_check_cfuncs("HAVE_DECL_FPUTC_UNLOCKED", "fputc_unlocked",
+                       {includes = "stdio.h", default = 0})
+configvar_check_cfuncs("HAVE_DECL_FREAD_UNLOCKED", "fread_unlocked",
+                       {includes = "stdio.h", default = 0})
+configvar_check_cfuncs("HAVE_DECL_FWRITE_UNLOCKED", "fwrite_unlocked",
+                       {includes = "stdio.h", default = 0})
+configvar_check_cfuncs("HAVE_DECL_GETCHAR_UNLOCKED", "getchar_unlocked",
+                       {includes = "stdio.h", default = 0})
+configvar_check_cfuncs("HAVE_DECL_GETC_UNLOCKED", "getc_unlocked",
+                       {includes = "stdio.h", default = 0})
+configvar_check_cfuncs("HAVE_DECL_PUTCHAR_UNLOCKED", "putchar_unlocked",
+                       {includes = "stdio.h", default = 0})
+configvar_check_cfuncs("HAVE_DECL_PUTC_UNLOCKED", "putc_unlocked",
+                       {includes = "stdio.h", default = 0})
+configvar_check_cfuncs("HAVE_DECL_SETENV", "setenv",
+                       {includes = "stdlib.h", default = 0})
+configvar_check_cfuncs("HAVE_DECL_STRERROR_R", "strerror_r",
+                       {includes = "string.h", default = 0})
 configvar_check_cfuncs("HAVE_SETENV", "setenv", {includes = "stdlib.h"})
 configvar_check_cfuncs("HAVE_PUTENV", "putenv", {includes = "stdlib.h"})
 configvar_check_cfuncs("HAVE_GETCWD", "getcwd", {includes = "unistd.h"})
-configvar_check_cfuncs("HAVE_GETEXECNAME", "getexecname", {includes = "stdlib.h"})
-configvar_check_cfuncs("HAVE_GETPROGNAME", "getprogname", {includes = "stdlib.h"})
+configvar_check_cfuncs("HAVE_GETEXECNAME", "getexecname",
+                       {includes = "stdlib.h"})
+configvar_check_cfuncs("HAVE_GETPROGNAME", "getprogname",
+                       {includes = "stdlib.h"})
 configvar_check_cfuncs("HAVE_LSTAT", "lstat", {includes = "sys/stat.h"})
 configvar_check_cfuncs("HAVE_MALLOC_POSIX", "malloc", {includes = "stdlib.h"})
 configvar_check_cfuncs("HAVE_ATEXIT", "atexit", {includes = "stdlib.h"})
@@ -179,11 +201,13 @@ configvar_check_cfuncs("HAVE_RAISE", "raise", {includes = "signal.h"})
 configvar_check_cfuncs("HAVE_READLINK", "readlink", {includes = "unistd.h"})
 configvar_check_cfuncs("HAVE_READLINKAT", "readlinkat", {includes = "unistd.h"})
 configvar_check_cfuncs("HAVE_REALPATH", "realpath", {includes = "stdlib.h"})
-configvar_check_cfuncs("FUNC_REALPATH_WORKS", "realpath", {includes = "stdlib.h"})
+configvar_check_cfuncs("FUNC_REALPATH_WORKS", "realpath",
+                       {includes = "stdlib.h"})
 configvar_check_cfuncs("HAVE_STPCPY", "stpcpy", {includes = "string.h"})
 configvar_check_cfuncs("HAVE_STRDUP", "strdup", {includes = "string.h"})
 configvar_check_cfuncs("HAVE_STRTOUL", "strtoul", {includes = "string.h"})
-configvar_check_cfuncs("HAVE_MEMPCPY", "mempcpy", {includes = "string.h", defines = "_GNU_SOURCE"})
+configvar_check_cfuncs("HAVE_MEMPCPY", "mempcpy",
+                       {includes = "string.h", defines = "_GNU_SOURCE"})
 configvar_check_cfuncs("HAVE_MMAP", "mmap", {includes = "sys/mman.h"})
 configvar_check_cfuncs("HAVE_MPROTECT", "mprotect", {includes = "sys/mman.h"})
 configvar_check_cfuncs("HAVE_MUNMAP", "munmap", {includes = "sys/mman.h"})
@@ -198,12 +222,15 @@ configvar_check_csnippets("HAVE_VISIBILITY", [[
 extern __attribute__((__visibility__("hidden"))) int hiddenvar;
 extern __attribute__((__visibility__("default"))) int exportedvar;
 extern __attribute__((__visibility__("hidden"))) int hiddenfunc(void);
-extern __attribute__((__visibility__("default"))) int exportedfunc(void);]], {default = 0})
-configvar_check_csnippets("HAVE_STRUCT_STAT_ST_ATIM_TV_NSEC", [[#include <sys/types.h>
+extern __attribute__((__visibility__("default"))) int exportedfunc(void);]],
+                          {default = 0})
+configvar_check_csnippets("HAVE_STRUCT_STAT_ST_ATIM_TV_NSEC",
+                          [[#include <sys/types.h>
 #include <sys/stat.h>
 struct stat st;
 void test() { st.st_atim.tv_nsec; }]])
-configvar_check_csnippets("TYPEOF_STRUCT_STAT_ST_ATIM_IS_STRUCT_TIMESPEC", [[#include <sys/types.h>
+configvar_check_csnippets("TYPEOF_STRUCT_STAT_ST_ATIM_IS_STRUCT_TIMESPEC",
+                          [[#include <sys/types.h>
 #include <sys/stat.h>
 #if HAVE_SYS_TIME_H
 # include <sys/time.h>
@@ -224,32 +251,40 @@ configvar_check_csnippets("GNULIB_SIGPIPE", [[#include <signal.h>
 #endif]])
 configvar_check_csnippets("HAVE_LANGINFO_CODESET", [[#include <langinfo.h>
 int test() { char* cs = nl_langinfo(CODESET); return !cs; }]])
-configvar_check_csnippets("HAVE_ENVIRON_DECL=0", [[extern struct {int foo;} environ;
-void test() {environ.foo = 1;}]], {includes = is_plat("windows") and "stdlib.h" or "unistd.h", default = 1})
+configvar_check_csnippets("HAVE_ENVIRON_DECL=0",
+                          [[extern struct {int foo;} environ;
+void test() {environ.foo = 1;}]], {
+    includes = is_plat("windows") and "stdlib.h" or "unistd.h",
+    default = 1
+})
 
 -- config.h variables
 if is_plat("windows", "mingw") then
     set_configvar("USE_WINDOWS_THREADS", 1)
 else
-option("USE_ISOC_THREADS")
+    option("USE_ISOC_THREADS")
     add_cfuncs("thrd_create")
     add_cincludes("threads.h")
-option_end()
-if has_config("USE_ISOC_THREADS") then
-    set_configvar("USE_ISOC_AND_POSIX_THREADS", 1)
-else
-    set_configvar("USE_POSIX_THREADS", 1)
+    option_end()
+    if has_config("USE_ISOC_THREADS") then
+        set_configvar("USE_ISOC_AND_POSIX_THREADS", 1)
+    else
+        set_configvar("USE_POSIX_THREADS", 1)
+    end
 end
-end
-configvar_check_ctypes("HAVE_STDINT_H_WITH_UINTMAX", "uintmax_t", {includes = "stdint.h"})
+configvar_check_ctypes("HAVE_STDINT_H_WITH_UINTMAX", "uintmax_t",
+                       {includes = "stdint.h"})
 configvar_check_ctypes("HAVE_UINTMAX_T", "uintmax_t", {includes = "stdint.h"})
 if is_plat("android") then
-    configvar_check_cfuncs("HAVE_PTHREAD_API", "pthread_create", {includes = "pthread.h"})
+    configvar_check_cfuncs("HAVE_PTHREAD_API", "pthread_create",
+                           {includes = "pthread.h"})
 else
     configvar_check_links("HAVE_PTHREAD_API", "pthread")
 end
-configvar_check_ctypes("HAVE_PTHREAD_RWLOCK", "pthread_rwlock_t", {includes = "pthread.h"})
-configvar_check_cfuncs("HAVE_THRD_CREATE", "thrd_create", {includes = "threads.h"})
+configvar_check_ctypes("HAVE_PTHREAD_RWLOCK", "pthread_rwlock_t",
+                       {includes = "pthread.h"})
+configvar_check_cfuncs("HAVE_THRD_CREATE", "thrd_create",
+                       {includes = "threads.h"})
 configvar_check_csnippets("HAVE_ALLOCA", [[
 #ifdef __GNUC__
 # define alloca __builtin_alloca
@@ -297,7 +332,8 @@ void test() {
 if is_plat("windows") and is_kind("shared") then
     set_configvar("WOE32DLL", 1)
 end
-set_configvar("SETLOCALE_NULL_ALL_MTSAFE", is_plat("windows", "linux") and 1 or 0)
+set_configvar("SETLOCALE_NULL_ALL_MTSAFE",
+              is_plat("windows", "linux") and 1 or 0)
 set_configvar("SETLOCALE_NULL_ONE_MTSAFE", 1)
 set_configvar("NEED_SETLOCALE_IMPROVED", is_plat("mingw") and 1 or 0)
 set_configvar("NEED_SETLOCALE_MTSAFE", is_plat("windows", "linux") and 0 or 1)
@@ -315,14 +351,15 @@ else
 end
 set_configvar("GNULIB_MDA_LFIND", 1)
 set_configvar("GNULIB_MDA_LSEARCH", 1)
-configvar_check_ctypes("HAVE_TYPE_VISIT", "VISIT", {includes = "search.h", default = 0})
+configvar_check_ctypes("HAVE_TYPE_VISIT", "VISIT",
+                       {includes = "search.h", default = 0})
 option("HAVE_TSEARCH")
-    add_cfuncs("tsearch")
-    add_cincludes("search.h")
+add_cfuncs("tsearch")
+add_cincludes("search.h")
 option_end()
 option("HAVE_TWALK")
-    add_cfuncs("twalk")
-    add_cincludes("search.h")
+add_cfuncs("twalk")
+add_cincludes("search.h")
 option_end()
 if has_config("HAVE_TSEARCH") and has_config("HAVE_TWALK") then
     set_configvar("HAVE_TSEARCH", 1)
@@ -349,82 +386,97 @@ end
 -- libgnuintl.h variables
 set_configvar("HAVE_NAMELESS_LOCALES", 0)
 set_configvar("ENHANCE_LOCALE_FUNCS", 0)
-configvar_check_cfuncs("HAVE_NEWLOCALE", "newlocale", {includes = (is_plat("macosx") and "xlocale.h" or "locale.h"), default = 0})
-configvar_check_cfuncs("HAVE_POSIX_PRINTF", "printf", {includes = "stdio.h", default = 0})
-configvar_check_cfuncs("HAVE_WPRINTF", "wprintf", {includes = "wchar.h", default = 0})
-configvar_check_cfuncs("HAVE_SNPRINTF", "snprintf", {includes = "stdio.h", default = 0})
-configvar_check_cfuncs("HAVE_ASPRINTF", "asprintf", {includes = "stdio.h", default = 0})
+configvar_check_cfuncs("HAVE_NEWLOCALE", "newlocale", {
+    includes = (is_plat("macosx") and "xlocale.h" or "locale.h"),
+    default = 0
+})
+configvar_check_cfuncs("HAVE_POSIX_PRINTF", "printf",
+                       {includes = "stdio.h", default = 0})
+configvar_check_cfuncs("HAVE_WPRINTF", "wprintf",
+                       {includes = "wchar.h", default = 0})
+configvar_check_cfuncs("HAVE_SNPRINTF", "snprintf",
+                       {includes = "stdio.h", default = 0})
+configvar_check_cfuncs("HAVE_ASPRINTF", "asprintf",
+                       {includes = "stdio.h", default = 0})
 
 target("intl")
-    set_kind("$(kind)")
-    add_defines("HAVE_CONFIG_H", "NO_XMALLOC", "IN_LIBRARY", "IN_LIBINTL")
-    if is_kind("shared") then
-        add_defines("BUILDING_LIBINTL", "BUILDING_DLL")
-    end
-    if is_plat("windows") then
-        add_syslinks("advapi32")
-    end
-    set_configvar("HAVE_ICONV", 0)
-    set_configvar("HAVE_ICONV_H", 0)
-    add_defines("DEPENDS_ON_LIBICONV=0")
-    set_configdir("gettext-runtime/intl")
-    add_configfiles("gettext-runtime/intl/(config.h.in)", {filename = "config.h"})
-    add_configfiles("gettext-runtime/intl/(libgnuintl.in.h)", {filename = "libgnuintl.h", pattern = "@(.-)@"})
-    add_configfiles("gettext-runtime/intl/(export.h)", {filename = "export.h", pattern = "@(.-)@"})
-    add_configfiles("gettext-runtime/intl/(gnulib-lib/search.in.h)", {filename = "tsearch.h", pattern = "@(.-)@"})
-    add_includedirs("gettext-runtime/intl", "gettext-runtime/intl/gnulib-lib")
-    add_files("gettext-runtime/intl/bindtextdom.c",
-              "gettext-runtime/intl/dcigettext.c",
-              "gettext-runtime/intl/dcngettext.c",
-              "gettext-runtime/intl/dcgettext.c",
-              "gettext-runtime/intl/dgettext.c",
-              "gettext-runtime/intl/dngettext.c",
-              "gettext-runtime/intl/explodename.c",
-              "gettext-runtime/intl/finddomain.c",
-              "gettext-runtime/intl/gettext.c",
-              "gettext-runtime/intl/hash-string.c",
-              "gettext-runtime/intl/intl-compat.c",
-              "gettext-runtime/intl/l10nflist.c",
-              "gettext-runtime/intl/langprefs.c",
-              "gettext-runtime/intl/loadmsgcat.c",
-              "gettext-runtime/intl/localealias.c",
-              "gettext-runtime/intl/log.c",
-              "gettext-runtime/intl/ngettext.c",
-              "gettext-runtime/intl/osdep.c",
-              "gettext-runtime/intl/plural.c",
-              "gettext-runtime/intl/plural-exp.c",
-              "gettext-runtime/intl/printf.c",
-              "gettext-runtime/intl/setlocale.c",
-              "gettext-runtime/intl/textdomain.c",
-              "gettext-runtime/intl/version.c",
-              "gettext-runtime/intl/gnulib-lib/localename.c",
-              "gettext-runtime/intl/gnulib-lib/localename-table.c",
-              "gettext-runtime/intl/gnulib-lib/localcharset.c",
-              "gettext-runtime/intl/gnulib-lib/relocatable.c",
-              "gettext-runtime/intl/gnulib-lib/setlocale-lock.c",
-              "gettext-runtime/intl/gnulib-lib/setlocale_null.c",
-              "gettext-runtime/intl/gnulib-lib/xsize.c",
-              "gettext-runtime/intl/gnulib-lib/tsearch.c",
-              "gettext-runtime/intl/gnulib-lib/glthread/lock.c",
-              "gettext-runtime/intl/gnulib-lib/glthread/threadlib.c")
-    if is_plat("windows") then
-        add_files("gettext-runtime/intl/gnulib-lib/windows-mutex.c",
-                  "gettext-runtime/intl/gnulib-lib/windows-rwlock.c",
-                  "gettext-runtime/intl/gnulib-lib/windows-recmutex.c",
-                  "gettext-runtime/intl/gnulib-lib/windows-once.c")
-    end
-    before_build(function (target)
-        io.gsub("gettext-runtime/intl/gnulib-lib/tsearch.h", "(definitions of _GL_FUNCDECL_RPL etc.-)\n", "%1\n#include <c++defs.h>\n")
-        io.gsub("gettext-runtime/intl/gnulib-lib/tsearch.h", "(definition of _GL_ARG_NONNULL.-)\n", "%1\n#include <arg-nonnull.h>\n")
-        io.gsub("gettext-runtime/intl/gnulib-lib/tsearch.h", "(definition of _GL_WARN_ON_USE.-)\n", "%1\n#include <warn-on-use.h>\n")
-        io.replace("gettext-runtime/intl/gnulib-lib/tsearch.c", "#include <search.h>", "#include <tsearch.h>", {plain = true})
-        os.cp("gettext-runtime/intl/libgnuintl.h", "gettext-runtime/intl/libintl.h")
-        local lines = io.readfile("gettext-runtime/intl/export.h")
-        io.replace("gettext-runtime/intl/libgnuintl.h", "#define _LIBINTL_H 1", "#define _LIBINTL_H 1\n" .. lines, {plain = true})
-        io.replace("gettext-runtime/intl/libgnuintl.h", "extern", "extern LIBINTL_DLL_EXPORTED", {plain = true})
-    end)
-    after_install(function (target)
-        io.replace("gettext-runtime/intl/libintl.h", "extern", (target:is_plat("windows") and target:kind() == "shared") and "extern __declspec(dllimport)" or "extern", {plain = true})
-        os.cp("gettext-runtime/intl/libintl.h", path.join(target:installdir(), "include", "libintl.h"))
-    end)
+set_kind("$(kind)")
+add_defines("HAVE_CONFIG_H", "NO_XMALLOC", "IN_LIBRARY", "IN_LIBINTL")
+if is_kind("shared") then
+    add_defines("BUILDING_LIBINTL", "BUILDING_DLL")
+end
+if is_plat("windows") then
+    add_syslinks("advapi32")
+end
+set_configvar("HAVE_ICONV", 0)
+set_configvar("HAVE_ICONV_H", 0)
+add_defines("DEPENDS_ON_LIBICONV=0")
+set_configdir("gettext-runtime/intl")
+add_configfiles("gettext-runtime/intl/(config.h.in)", {filename = "config.h"})
+add_configfiles("gettext-runtime/intl/(libgnuintl.in.h)",
+                {filename = "libgnuintl.h", pattern = "@(.-)@"})
+add_configfiles("gettext-runtime/intl/(export.h)",
+                {filename = "export.h", pattern = "@(.-)@"})
+add_configfiles("gettext-runtime/intl/(gnulib-lib/search.in.h)",
+                {filename = "tsearch.h", pattern = "@(.-)@"})
+add_includedirs("gettext-runtime/intl", "gettext-runtime/intl/gnulib-lib")
+add_files("gettext-runtime/intl/bindtextdom.c",
+          "gettext-runtime/intl/dcigettext.c",
+          "gettext-runtime/intl/dcngettext.c",
+          "gettext-runtime/intl/dcgettext.c", "gettext-runtime/intl/dgettext.c",
+          "gettext-runtime/intl/dngettext.c",
+          "gettext-runtime/intl/explodename.c",
+          "gettext-runtime/intl/finddomain.c", "gettext-runtime/intl/gettext.c",
+          "gettext-runtime/intl/hash-string.c",
+          "gettext-runtime/intl/intl-compat.c",
+          "gettext-runtime/intl/l10nflist.c",
+          "gettext-runtime/intl/langprefs.c",
+          "gettext-runtime/intl/loadmsgcat.c",
+          "gettext-runtime/intl/localealias.c", "gettext-runtime/intl/log.c",
+          "gettext-runtime/intl/ngettext.c", "gettext-runtime/intl/osdep.c",
+          "gettext-runtime/intl/plural.c", "gettext-runtime/intl/plural-exp.c",
+          "gettext-runtime/intl/printf.c", "gettext-runtime/intl/setlocale.c",
+          "gettext-runtime/intl/textdomain.c", "gettext-runtime/intl/version.c",
+          "gettext-runtime/intl/gnulib-lib/localename.c",
+          "gettext-runtime/intl/gnulib-lib/localename-table.c",
+          "gettext-runtime/intl/gnulib-lib/localcharset.c",
+          "gettext-runtime/intl/gnulib-lib/relocatable.c",
+          "gettext-runtime/intl/gnulib-lib/setlocale-lock.c",
+          "gettext-runtime/intl/gnulib-lib/setlocale_null.c",
+          "gettext-runtime/intl/gnulib-lib/xsize.c",
+          "gettext-runtime/intl/gnulib-lib/tsearch.c",
+          "gettext-runtime/intl/gnulib-lib/glthread/lock.c",
+          "gettext-runtime/intl/gnulib-lib/glthread/threadlib.c")
+if is_plat("windows") then
+    add_files("gettext-runtime/intl/gnulib-lib/windows-mutex.c",
+              "gettext-runtime/intl/gnulib-lib/windows-rwlock.c",
+              "gettext-runtime/intl/gnulib-lib/windows-recmutex.c",
+              "gettext-runtime/intl/gnulib-lib/windows-once.c")
+end
+before_build(function(target)
+    io.gsub("gettext-runtime/intl/gnulib-lib/tsearch.h",
+            "(definitions of _GL_FUNCDECL_RPL etc.-)\n",
+            "%1\n#include <c++defs.h>\n")
+    io.gsub("gettext-runtime/intl/gnulib-lib/tsearch.h",
+            "(definition of _GL_ARG_NONNULL.-)\n",
+            "%1\n#include <arg-nonnull.h>\n")
+    io.gsub("gettext-runtime/intl/gnulib-lib/tsearch.h",
+            "(definition of _GL_WARN_ON_USE.-)\n",
+            "%1\n#include <warn-on-use.h>\n")
+    io.replace("gettext-runtime/intl/gnulib-lib/tsearch.c",
+               "#include <search.h>", "#include <tsearch.h>", {plain = true})
+    os.cp("gettext-runtime/intl/libgnuintl.h", "gettext-runtime/intl/libintl.h")
+    local lines = io.readfile("gettext-runtime/intl/export.h")
+    io.replace("gettext-runtime/intl/libgnuintl.h", "#define _LIBINTL_H 1",
+               "#define _LIBINTL_H 1\n" .. lines, {plain = true})
+    io.replace("gettext-runtime/intl/libgnuintl.h", "extern",
+               "extern LIBINTL_DLL_EXPORTED", {plain = true})
+end)
+after_install(function(target)
+    io.replace("gettext-runtime/intl/libintl.h", "extern",
+               (target:is_plat("windows") and target:kind() == "shared") and
+                   "extern __declspec(dllimport)" or "extern", {plain = true})
+    os.cp("gettext-runtime/intl/libintl.h",
+          path.join(target:installdir(), "include", "libintl.h"))
+end)
 target_end()

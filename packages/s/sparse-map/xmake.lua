@@ -1,21 +1,26 @@
-package("sparse-map")
+package("sparse-map", function()
 
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/Tessil/sparse-map")
-    set_description("C++ implementation of a memory efficient hash map and hash set")
+    set_description(
+        "C++ implementation of a memory efficient hash map and hash set")
     set_license("MIT")
 
-    add_urls("https://github.com/Tessil/sparse-map/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/Tessil/sparse-map.git")
+    add_urls(
+        "https://github.com/Tessil/sparse-map/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/Tessil/sparse-map.git")
 
-    add_versions("v0.6.2", "7020c21e8752e59d72e37456cd80000e18671c803890a3e55ae36b295eba99f6")
+    add_versions("v0.6.2",
+                 "7020c21e8752e59d72e37456cd80000e18671c803890a3e55ae36b295eba99f6")
 
-    on_install("windows|x86", "windows|x64", "linux", "macosx", "bsd", "mingw", "msys", "android", "iphoneos", "cross", function (package)
+    on_install("windows|x86", "windows|x64", "linux", "macosx", "bsd", "mingw",
+               "msys", "android", "iphoneos", "cross", function(package)
         os.cp("include/*", package:installdir("include"))
     end)
 
-    on_test(function (package)
-      assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
           #include "tsl/sparse_map.h"
 
           void test() {
@@ -24,5 +29,7 @@ package("sparse-map")
                   it.value() = 2;
               }
           }
-      ]]}, {configs = {languages = "cxx11"}}))
-  end)
+      ]]
+        }, {configs = {languages = "cxx11"}}))
+    end)
+end)

@@ -11,6 +11,5 @@ index 6117fe6..39bdb28 100644
 +	uint32_t ucs4 = 0;
 +	size_t sucs4 = 0;
  	parserutils_error error;
- 
+
  	/* Convert a single character */
- 

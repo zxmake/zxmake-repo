@@ -1,4 +1,4 @@
-package("blah")
+package("blah", function()
     set_homepage("https://github.com/NoelFB/blah")
     set_description("A small 2d c++ game framework")
     set_license("MIT")
@@ -10,18 +10,30 @@ package("blah")
     add_deps("libsdl >=2.26")
 
     if is_plat("macosx") then
-        add_frameworks("ForceFeedback", "CoreVideo", "CoreGraphics", "CoreFoundation", "Foundation", "AppKit", "IOKit")
+        add_frameworks("ForceFeedback", "CoreVideo", "CoreGraphics",
+                       "CoreFoundation", "Foundation", "AppKit", "IOKit")
     elseif is_plat("windows") then
         add_syslinks("d3d11", "d3dcompiler", "dxguid")
-        add_configs("shared", {description = "Build shared library.", default = false, type = "boolean", readonly = true})
+        add_configs("shared", {
+            description = "Build shared library.",
+            default = false,
+            type = "boolean",
+            readonly = true
+        })
     end
 
-    on_install("windows", "macosx", "linux", function (package)
+    on_install("windows", "macosx", "linux", function(package)
         local configs = {}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
-        io.replace("CMakeLists.txt", "if (NOT DEFINED BLAH_SDL2_LIBS)", "IF(FALSE)", {plain = true})
-        import("package.tools.cmake").build(package, configs, {buildir = "build", packagedeps = "libsdl"})
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
+        io.replace("CMakeLists.txt", "if (NOT DEFINED BLAH_SDL2_LIBS)",
+                   "IF(FALSE)", {plain = true})
+        import("package.tools.cmake").build(package, configs, {
+            buildir = "build",
+            packagedeps = "libsdl"
+        })
         os.cp("include", package:installdir())
         os.trycp("build/*.a", package:installdir("lib"))
         os.trycp("build/*.so", package:installdir("lib"))
@@ -30,8 +42,9 @@ package("blah")
         os.trycp("build/*/*.dll", package:installdir("bin"))
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             using namespace Blah;
             Batch batch;
             int test() {
@@ -55,5 +68,7 @@ package("blah")
 
                 return App::run(&config);
             }
-        ]]}, {configs = {languages = "c++17"}, includes = {"blah.h"}}))
+        ]]
+        }, {configs = {languages = "c++17"}, includes = {"blah.h"}}))
     end)
+end)

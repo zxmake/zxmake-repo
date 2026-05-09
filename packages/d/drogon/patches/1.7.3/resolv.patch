@@ -5,7 +5,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
  else (BUILD_DROGON_SHARED)
      add_library(${PROJECT_NAME} STATIC)
  endif (BUILD_DROGON_SHARED)
- 
+
 +if (APPLE)
 +    target_link_libraries(${PROJECT_NAME} PUBLIC resolv)
 +endif (APPLE)

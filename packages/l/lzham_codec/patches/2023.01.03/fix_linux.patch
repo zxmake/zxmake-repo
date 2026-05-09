@@ -7,7 +7,7 @@ index 11bdbd4..75884cc 100644
  #include "lzham_core.h"
  #include "lzham_huffman_codes.h"
 +#include <cstdint>
- 
+
  namespace lzham
  {
 diff --git a/lzhamdecomp/lzham_symbol_codec.h b/lzhamdecomp/lzham_symbol_codec.h
@@ -19,6 +19,6 @@ index 306d59b..af773d5 100644
  #pragma once
  #include "lzham_prefix_coding.h"
 +#include <cstdint>
- 
+
  namespace lzham
  {

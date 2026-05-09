@@ -1,4 +1,4 @@
-package("noise-c")
+package("noise-c", function()
     set_homepage("https://github.com/rweather/noise-c")
     set_description("Noise-C, a plain C implementation of the Noise protocol")
     set_license("MIT")
@@ -8,9 +8,10 @@ package("noise-c")
 
     add_deps("autoconf", "automake", "bison", "flex")
 
-    on_install("linux", "macosx", function (package)
+    on_install("linux", "macosx", function(package)
         local configs = {}
-        table.insert(configs, "--enable-shared=" .. (package:config("shared") and "yes" or "no"))
+        table.insert(configs, "--enable-shared=" ..
+                         (package:config("shared") and "yes" or "no"))
         if package:debug() then
             table.insert(configs, "--enable-debug")
         end
@@ -20,6 +21,8 @@ package("noise-c")
         import("package.tools.autoconf").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("noise_handshakestate_set_prologue", {includes = "noise/protocol.h"}))
+    on_test(function(package)
+        assert(package:has_cfuncs("noise_handshakestate_set_prologue",
+                                  {includes = "noise/protocol.h"}))
     end)
+end)

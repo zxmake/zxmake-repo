@@ -1,8 +1,9 @@
-package("mio")
+package("mio", function()
 
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/mandreyel/mio")
-    set_description("Cross-platform C++11 header-only library for memory mapped file IO")
+    set_description(
+        "Cross-platform C++11 header-only library for memory mapped file IO")
     set_license("MIT")
 
     add_urls("https://github.com/mandreyel/mio.git")
@@ -10,7 +11,8 @@ package("mio")
     add_versions("2023.3.3", "8b6b7d878c89e81614d05edca7936de41ccdd2da")
 
     add_deps("cmake")
-    on_install("windows", "linux", "macosx", "bsd", "iphoneos", "android", function (package)
+    on_install("windows", "linux", "macosx", "bsd", "iphoneos", "android",
+               function(package)
         import("package.tools.cmake").install(package, {"-Dmio.tests=OFF"})
     end)
 
@@ -28,3 +30,4 @@ package("mio")
             ]]
         }, {configs = {languages = "c++11"}}))
     end)
+end)

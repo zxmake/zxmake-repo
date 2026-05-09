@@ -1,17 +1,21 @@
-package("implot")
+package("implot", function()
     set_homepage("https://github.com/epezent/implot")
     set_description("Immediate Mode Plotting")
     set_license("MIT")
 
-    add_urls("https://github.com/epezent/implot/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/epezent/implot.git")
+    add_urls(
+        "https://github.com/epezent/implot/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/epezent/implot.git")
 
-    add_versions("v0.16", "961df327d8a756304d1b0a67316eebdb1111d13d559f0d3415114ec0eb30abd1")
-    add_versions("v0.15", "3df87e67a1e28db86828059363d78972a298cd403ba1f5780c1040e03dfa2672")
+    add_versions("v0.16",
+                 "961df327d8a756304d1b0a67316eebdb1111d13d559f0d3415114ec0eb30abd1")
+    add_versions("v0.15",
+                 "3df87e67a1e28db86828059363d78972a298cd403ba1f5780c1040e03dfa2672")
 
     add_deps("imgui")
 
-    on_install("windows", "linux", "macosx", "mingw", "android", "iphoneos", function (package)
+    on_install("windows", "linux", "macosx", "mingw", "android", "iphoneos",
+               function(package)
         local configs = {}
         io.writefile("xmake.lua", [[
             add_requires("imgui")
@@ -32,12 +36,15 @@ package("implot")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <implot.h>
             void test() {
                 ImPlot::CreateContext();
                 ImPlot::DestroyContext();
             }
-        ]]}, {configs = {languages = "c++11"}}))
+        ]]
+        }, {configs = {languages = "c++11"}}))
     end)
+end)

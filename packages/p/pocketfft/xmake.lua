@@ -1,7 +1,8 @@
-package("pocketfft")
+package("pocketfft", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/mreineck/pocketfft")
-    set_description("FFT implementation based on FFTPack, but with several improvements")
+    set_description(
+        "FFT implementation based on FFTPack, but with several improvements")
     set_license("BSD-3-Clause")
 
     add_urls("https://github.com/mreineck/pocketfft.git")
@@ -11,15 +12,18 @@ package("pocketfft")
         add_syslinks("pthread")
     end
 
-    on_install(function (package)
+    on_install(function(package)
         os.cp("pocketfft_hdronly.h", package:installdir("include"))
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <pocketfft_hdronly.h>
             void test() {
                 pocketfft::shape_t var;
             }
-        ]]}, {configs = {languages = "c++11"}}))
+        ]]
+        }, {configs = {languages = "c++11"}}))
     end)
+end)

@@ -1,33 +1,66 @@
-package("gdal")
+package("gdal", function()
     set_homepage("https://gdal.org/")
-    set_description("GDAL is a translator library for raster and vector geospatial data formats by the Open Source Geospatial Foundation")
+    set_description(
+        "GDAL is a translator library for raster and vector geospatial data formats by the Open Source Geospatial Foundation")
     set_license("MIT")
 
-    add_urls("https://github.com/OSGeo/gdal/releases/download/v$(version)/gdal-$(version).tar.gz")
-    add_versions("3.9.2", "c9767e79ca7245f704bfbcb47d771b2dc317d743536b78d648c3e92b95fbc21e")
-    add_versions("3.9.1", "46cd95ad0f270af0cd317ddc28fa5e0a7ad0b0fd160a7bd22909150df53e3418")
-    add_versions("3.9.0", "3b29b573b60d156cf160805290474b625c4197ca36a79fd14f83ec8f77f29ba0")
-    add_versions("3.8.5", "0c865c7931c7e9bb4832f50fb53aec8676cbbaccd6e55945011b737fb89a49c2")
-    add_versions("3.5.1", "7c4406ca010dc8632703a0a326f39e9db25d9f1f6ebaaeca64a963e3fac123d1")
+    add_urls(
+        "https://github.com/OSGeo/gdal/releases/download/v$(version)/gdal-$(version).tar.gz")
+    add_versions("3.9.2",
+                 "c9767e79ca7245f704bfbcb47d771b2dc317d743536b78d648c3e92b95fbc21e")
+    add_versions("3.9.1",
+                 "46cd95ad0f270af0cd317ddc28fa5e0a7ad0b0fd160a7bd22909150df53e3418")
+    add_versions("3.9.0",
+                 "3b29b573b60d156cf160805290474b625c4197ca36a79fd14f83ec8f77f29ba0")
+    add_versions("3.8.5",
+                 "0c865c7931c7e9bb4832f50fb53aec8676cbbaccd6e55945011b737fb89a49c2")
+    add_versions("3.5.1",
+                 "7c4406ca010dc8632703a0a326f39e9db25d9f1f6ebaaeca64a963e3fac123d1")
 
     add_deps("cmake")
-    add_configs("apps", {description = "Build GDAL applications.", default = false, type = "boolean"})
-    add_configs("curl", {description = "Use CURL.", default = false, type = "boolean"})
-    add_configs("geos", {description = "Use GEOS.", default = false, type = "boolean"})
-    add_configs("gif", {description = "Use GIF.", default = false, type = "boolean"})
-    add_configs("iconv", {description = "Use Iconv.", default = false, type = "boolean"})
-    add_configs("jpeg", {description = "Use JPEG.", default = false, type = "boolean"})
-    add_configs("openjpeg", {description = "Use OpenJPEG.", default = true, type = "boolean"}) -- default true to keep compatibility
-    add_configs("openssl", {description = "Use OpenSSL.", default = false, type = "boolean"})
-    add_configs("png", {description = "Use PNG.", default = false, type = "boolean"})
-    add_configs("sqlite3", {description = "Use SQLite3.", default = false, type = "boolean"})
-    add_configs("xercesc", {description = "Use Xerces-C.", default = false, type = "boolean"})
+    add_configs("apps", {
+        description = "Build GDAL applications.",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("curl",
+                {description = "Use CURL.", default = false, type = "boolean"})
+    add_configs("geos",
+                {description = "Use GEOS.", default = false, type = "boolean"})
+    add_configs("gif",
+                {description = "Use GIF.", default = false, type = "boolean"})
+    add_configs("iconv",
+                {description = "Use Iconv.", default = false, type = "boolean"})
+    add_configs("jpeg",
+                {description = "Use JPEG.", default = false, type = "boolean"})
+    add_configs("openjpeg", {
+        description = "Use OpenJPEG.",
+        default = true,
+        type = "boolean"
+    }) -- default true to keep compatibility
+    add_configs("openssl", {
+        description = "Use OpenSSL.",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("png",
+                {description = "Use PNG.", default = false, type = "boolean"})
+    add_configs("sqlite3", {
+        description = "Use SQLite3.",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("xercesc", {
+        description = "Use Xerces-C.",
+        default = false,
+        type = "boolean"
+    })
 
     if is_plat("windows") then
         add_syslinks("wsock32", "ws2_32")
     end
 
-    on_load(function (package)
+    on_load(function(package)
         package:add("deps", "proj", {configs = {curl = package:config("curl")}})
 
         local configdeps = {
@@ -40,7 +73,7 @@ package("gdal")
             openssl = "openssl3",
             png = "libpng",
             sqlite3 = "sqlite3",
-            xercesc = "xerces-c",
+            xercesc = "xerces-c"
         }
 
         for name, dep in pairs(configdeps) do
@@ -50,15 +83,19 @@ package("gdal")
         end
     end)
 
-    on_install("windows|x86", "windows|x64", "macosx", "linux", function (package)
+    on_install("windows|x86", "windows|x64", "macosx", "linux",
+               function(package)
         local configs = {
-            "-DBUILD_TESTING=OFF",
-            "-DGDAL_USE_EXTERNAL_LIBS=OFF",
-            "-DBUILD_JAVA_BINDINGS=OFF", "-DBUILD_CSHARP_BINDINGS=OFF", "-DBUILD_PYTHON_BINDINGS=OFF"
+            "-DBUILD_TESTING=OFF", "-DGDAL_USE_EXTERNAL_LIBS=OFF",
+            "-DBUILD_JAVA_BINDINGS=OFF", "-DBUILD_CSHARP_BINDINGS=OFF",
+            "-DBUILD_PYTHON_BINDINGS=OFF"
         }
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
-        table.insert(configs, "-DBUILD_APPS=" .. (package:config("apps") and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
+        table.insert(configs, "-DBUILD_APPS=" ..
+                         (package:config("apps") and "ON" or "OFF"))
 
         local packagedeps = {"proj"}
         if package:config("curl") then
@@ -106,18 +143,24 @@ package("gdal")
             table.insert(configs, "-DGDAL_USE_XERCESC=ON")
         end
 
-        --fix gdal compile on msvc debug mode
+        -- fix gdal compile on msvc debug mode
         local cxflags
         if package:debug() and package:is_plat("windows") then
             cxflags = "/FS"
         end
-        import("package.tools.cmake").install(package, configs,
-            {cxflags = cxflags, packagedeps = packagedeps})
+        import("package.tools.cmake").install(package, configs, {
+            cxflags = cxflags,
+            packagedeps = packagedeps
+        })
         if package:config("apps") then
             package:addenv("PATH", "bin")
         end
     end)
 
-    on_test(function (package)
-        assert(package:has_cxxfuncs("GDALAllRegister", {configs = {languages = "c++11"}, includes = "ogrsf_frmts.h"}))
+    on_test(function(package)
+        assert(package:has_cxxfuncs("GDALAllRegister", {
+            configs = {languages = "c++11"},
+            includes = "ogrsf_frmts.h"
+        }))
     end)
+end)

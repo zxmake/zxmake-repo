@@ -1,7 +1,8 @@
-package("imgui-filebrowser")
+package("imgui-filebrowser", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/AirGuanZ/imgui-filebrowser")
-    set_description("File browser implementation for dear-imgui. C++17 is required.")
+    set_description(
+        "File browser implementation for dear-imgui. C++17 is required.")
     set_license("MIT")
 
     add_urls("https://github.com/AirGuanZ/imgui-filebrowser.git")
@@ -10,16 +11,20 @@ package("imgui-filebrowser")
 
     add_deps("imgui")
 
-    on_install("macosx", "linux", "windows", "mingw", "android", "iphoneos", function (package)
+    on_install("macosx", "linux", "windows", "mingw", "android", "iphoneos",
+               function(package)
         os.cp("imfilebrowser.h", package:installdir("include"))
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <imgui.h>
             #include <imfilebrowser.h>
             void test() {
                 ImGui::FileBrowser fileDialog;
             }
-        ]]}, {configs = {languages = "c++17"}}))
+        ]]
+        }, {configs = {languages = "c++17"}}))
     end)
+end)

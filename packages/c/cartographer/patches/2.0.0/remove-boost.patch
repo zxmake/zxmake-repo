@@ -5,7 +5,7 @@ index eec8469..96881ad 100644
 @@ -17,12 +17,14 @@
  #ifndef CARTOGRAPHER_COMMON_PORT_H_
  #define CARTOGRAPHER_COMMON_PORT_H_
- 
+
 -#include <boost/iostreams/device/back_inserter.hpp>
 -#include <boost/iostreams/filter/gzip.hpp>
 -#include <boost/iostreams/filtering_stream.hpp>
@@ -17,11 +17,11 @@ index eec8469..96881ad 100644
 +#include <functional>
 +
 +#include <zlib.h>
- 
+
  namespace cartographer {
- 
+
 @@ -47,22 +49,54 @@ inline int64 RoundToInt64(const double x) { return std::lround(x); }
- 
+
  inline void FastGzipString(const std::string& uncompressed,
                             std::string* compressed) {
 -  boost::iostreams::filtering_ostream out;
@@ -54,7 +54,7 @@ index eec8469..96881ad 100644
 +
 +    deflateEnd(&zs);
  }
- 
+
  inline void FastGunzipString(const std::string& compressed,
                               std::string* decompressed) {
 -  boost::iostreams::filtering_ostream out;
@@ -85,5 +85,5 @@ index eec8469..96881ad 100644
 +
 +    inflateEnd(&zs);
  }
- 
+
  }  // namespace common

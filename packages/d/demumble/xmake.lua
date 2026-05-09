@@ -1,4 +1,4 @@
-package("demumble")
+package("demumble", function()
     set_kind("binary")
     set_homepage("https://github.com/nico/demumble")
     set_description("A better c++filt and a better undname.exe, in one binary.")
@@ -9,7 +9,7 @@ package("demumble")
 
     add_deps("cmake")
 
-    on_install("@linux", "@macosx", "@windows", function (package)
+    on_install("@linux", "@macosx", "@windows", function(package)
         import("package.tools.cmake").install(package, {}, {buildir = "build"})
         if package:is_plat("windows") then
             os.cp("build/Release/demumble.exe", package:installdir("bin"))
@@ -18,6 +18,8 @@ package("demumble")
         end
     end)
 
-    on_test(function (package)
-        os.vrunv("demumble" .. (package:is_plat("windows") and ".exe" or ""), {"_Z4funcPci"})
+    on_test(function(package)
+        os.vrunv("demumble" .. (package:is_plat("windows") and ".exe" or ""),
+                 {"_Z4funcPci"})
     end)
+end)

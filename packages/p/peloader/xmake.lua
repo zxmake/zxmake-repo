@@ -1,4 +1,4 @@
-package("peloader")
+package("peloader", function()
     set_kind("binary")
     set_homepage("https://github.com/Hagrid29/PELoader")
     set_description("PE loader with various shellcode injection techniques")
@@ -9,7 +9,7 @@ package("peloader")
 
     add_deps("libpeconv")
 
-    on_install("@windows", "@mingw", "@msys", function (package)
+    on_install("@windows", "@mingw", "@msys", function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             add_requires("libpeconv")
@@ -23,6 +23,7 @@ package("peloader")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         os.vrun("PELoader")
     end)
+end)

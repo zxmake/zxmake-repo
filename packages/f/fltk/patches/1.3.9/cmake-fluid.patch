@@ -4,7 +4,7 @@ index 6e8bc5d..e1983f3 100644
 +++ b/CMake/export.cmake
 @@ -20,6 +20,7 @@
  #######################################################################
- 
+
  # Set the fluid executable path
 +if (FLTK_BUILD_FLUID)
  if (CMAKE_CROSSCOMPILING)
@@ -15,6 +15,5 @@ index 6e8bc5d..e1983f3 100644
    set (FLUID fluid) # export
  endif (CMAKE_CROSSCOMPILING)
 +endif ()
- 
+
  add_subdirectory(src)
- 

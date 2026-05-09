@@ -3,22 +3,22 @@ import("lib.detect.find_library")
 
 function _find_package(package, opt)
     local rdir = (package:is_arch("x64", "x86_64") and "intel64" or "ia32")
-    local paths = {
-        "$(env TBB_ROOT)",
-        "$(env ONEAPI_ROOT)/tbb/latest"
-    }
+    local paths = {"$(env TBB_ROOT)", "$(env ONEAPI_ROOT)/tbb/latest"}
 
     -- find includes and links
     local result = {links = {}, linkdirs = {}, includedirs = {}}
     for _, lib in ipairs({"tbb", "tbbmalloc", "tbbmalloc_proxy"}) do
-        local linkinfo = find_library(lib, paths, {suffixes = {"lib", path.join("lib", rdir, "vc14")}})
+        local linkinfo = find_library(lib, paths, {
+            suffixes = {"lib", path.join("lib", rdir, "vc14")}
+        })
         if linkinfo then
             table.insert(result.linkdirs, linkinfo.linkdir)
             table.insert(result.links, lib)
         end
     end
     result.linkdirs = table.unique(result.linkdirs)
-    local incpath = find_path(path.join("tbb", "tbb.h"), paths, {suffixes = "include"})
+    local incpath = find_path(path.join("tbb", "tbb.h"), paths,
+                              {suffixes = "include"})
     if incpath then
         table.insert(result.includedirs, incpath)
     end
@@ -47,7 +47,7 @@ function main(package, opt)
     if opt.system and package.find_package then
         local result
         result = _find_package(package, opt)
-        
+
         if not result then
             result = package:find_package("tbb", opt)
         end

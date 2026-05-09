@@ -1,7 +1,8 @@
-package("wil")
+package("wil", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/microsoft/wil")
-    set_description("The Windows Implementation Libraries (WIL) is a header-only C++ library created to make life easier for developers on Windows through readable type-safe C++ interfaces for common Windows coding patterns.")
+    set_description(
+        "The Windows Implementation Libraries (WIL) is a header-only C++ library created to make life easier for developers on Windows through readable type-safe C++ interfaces for common Windows coding patterns.")
     set_license("MIT")
 
     add_urls("https://github.com/microsoft/wil.git")
@@ -9,16 +10,22 @@ package("wil")
     add_versions("2023.12.16", "572b8728926eb9c8fc55572bb4b84bb92dabd79d")
     add_versions("2024.08.03", "f0c6a81c0c9a4b23b6801f40554b8bec425a83b4")
 
-    on_install("windows", function (package)
+    on_install("windows", function(package)
         os.cp("include", package:installdir())
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <windows.h>
             #include <wil/win32_helpers.h>
             void test() {
                 auto foo = wil::GetModuleInstanceHandle();
             }
-        ]]}, {configs = {languages = "c++17"}, includes = {"windows.h", "wil/win32_helpers.h"}}))
+        ]]
+        }, {
+            configs = {languages = "c++17"},
+            includes = {"windows.h", "wil/win32_helpers.h"}
+        }))
     end)
+end)

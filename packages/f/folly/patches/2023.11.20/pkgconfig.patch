@@ -2,7 +2,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -512,12 +512,12 @@ endif()
- 
+
  file(
    GENERATE
 -  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/libfolly.pc

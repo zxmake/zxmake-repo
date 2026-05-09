@@ -1,4 +1,4 @@
-package("imgui-color-text-edit")
+package("imgui-color-text-edit", function()
     set_homepage("https://github.com/BalazsJako/ImGuiColorTextEdit")
     set_description("Colorizing text editor for ImGui")
     set_license("MIT")
@@ -8,7 +8,8 @@ package("imgui-color-text-edit")
 
     add_deps("imgui")
 
-    on_install("macosx", "linux", "windows", "mingw", "android", "iphoneos", function (package)
+    on_install("macosx", "linux", "windows", "mingw", "android", "iphoneos",
+               function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             set_languages("c++11")
@@ -25,10 +26,13 @@ package("imgui-color-text-edit")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             void test() {
                 TextEditor editor;
             }
-        ]]}, {configs = {languages = "c++11"}, includes = "TextEditor.h"}))
+        ]]
+        }, {configs = {languages = "c++11"}, includes = "TextEditor.h"}))
     end)
+end)

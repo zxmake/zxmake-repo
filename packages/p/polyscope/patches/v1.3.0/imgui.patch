@@ -3,29 +3,29 @@ index 71301973..502319ce 100644
 --- a/deps/imgui/CMakeLists.txt
 +++ b/deps/imgui/CMakeLists.txt
 @@ -19,7 +19,7 @@ endif()
- 
+
  if("${POLYSCOPE_BACKEND_OPENGL3_GLFW}")
- 
+
 -  set(SRCS imgui/imgui.cpp imgui/imgui_draw.cpp imgui/imgui_widgets.cpp imgui/imgui_demo.cpp imgui/examples/imgui_impl_glfw.cpp imgui/examples/imgui_impl_opengl3.cpp)
 +  set(SRCS imgui/imgui.cpp imgui/imgui_draw.cpp imgui/imgui_tables.cpp imgui/imgui_widgets.cpp imgui/imgui_demo.cpp imgui/backends/imgui_impl_glfw.cpp imgui/backends/imgui_impl_opengl3.cpp)
- 
+
    add_library(
            imgui
 @@ -36,7 +36,6 @@ if("${POLYSCOPE_BACKEND_OPENGL3_GLFW}")
        # On macOS, get openGL & friends from Frameworks; do not use GLAD at all
- 
+
        add_definitions(-DGLFW_INCLUDE_GLCOREARB)
 -      add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_CUSTOM=<GLFW/glfw3.h>)
- 
+
        # NOTE: This code is essentially duplicated here and in polyscope/src/CMakeLists.txt
- 
+
 @@ -60,7 +59,7 @@ elseif("${POLYSCOPE_BACKEND_OPENGL_MOCK}")
    add_definitions(-DIMGUI_DISABLE_WIN32_DEFAULT_CLIPBOARD_FUNCTIONS)
    add_definitions(-DIMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS)
-   
+
 -  set(SRCS imgui/imgui.cpp imgui/imgui_draw.cpp imgui/imgui_widgets.cpp)
 +  set(SRCS imgui/imgui.cpp imgui/imgui_draw.cpp imgui/imgui_tables.cpp imgui/imgui_widgets.cpp imgui/imgui_demo.cpp)
- 
+
    add_library(
            imgui
 diff --git a/deps/imgui/imgui b/deps/imgui/imgui
@@ -40,16 +40,16 @@ index 04a1a9e7..7c6074cc 100644
 --- a/include/polyscope/render/opengl/gl_engine.h
 +++ b/include/polyscope/render/opengl/gl_engine.h
 @@ -23,8 +23,8 @@
- 
+
  #include "imgui.h"
  #define IMGUI_IMPL_OPENGL_LOADER_GLAD
 -#include "examples/imgui_impl_glfw.h"
 -#include "examples/imgui_impl_opengl3.h"
 +#include "backends/imgui_impl_glfw.h"
 +#include "backends/imgui_impl_opengl3.h"
- 
+
  #include <unordered_map>
- 
+
 diff --git a/include/polyscope/scalar_quantity.ipp b/include/polyscope/scalar_quantity.ipp
 index dab47e43..5a0cc072 100644
 --- a/include/polyscope/scalar_quantity.ipp
@@ -126,21 +126,21 @@ index c5c38f08..9c0c0a13 100644
 --- a/src/point_cloud_parameterization_quantity.cpp
 +++ b/src/point_cloud_parameterization_quantity.cpp
 @@ -149,7 +149,8 @@ void PointCloudParameterizationQuantity::buildCustomUI() {
- 
- 
+
+
    // Modulo stripey width
 -  if (ImGui::DragFloat("period", &checkerSize.get(), .001, 0.0001, 1.0, "%.4f", 2.0)) {
-+  if (ImGui::DragFloat("period", &checkerSize.get(), .001, 0.0001, 1.0, "%.4f", 
++  if (ImGui::DragFloat("period", &checkerSize.get(), .001, 0.0001, 1.0, "%.4f",
 +                       ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoRoundToFormat)) {
      setCheckerSize(getCheckerSize());
    }
- 
+
 diff --git a/src/render/engine.cpp b/src/render/engine.cpp
 index a0a5125d..267b741f 100644
 --- a/src/render/engine.cpp
 +++ b/src/render/engine.cpp
 @@ -208,9 +208,12 @@ void Engine::buildEngineGui() {
- 
+
      ImGui::SetNextTreeNodeOpen(false, ImGuiCond_FirstUseEver);
      if (ImGui::TreeNode("Tone Mapping")) {
 -      ImGui::SliderFloat("exposure", &exposure, 0.1, 2.0, "%.3f", 2.);
@@ -152,7 +152,7 @@ index a0a5125d..267b741f 100644
 +                         ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoRoundToFormat);
 +      ImGui::SliderFloat("gamma", &gamma, 0.5, 3.0, "%.3f",
 +                         ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoRoundToFormat);
- 
+
        ImGui::TreePop();
      }
 diff --git a/src/ribbon_artist.cpp b/src/ribbon_artist.cpp
@@ -161,7 +161,7 @@ index 417817ac..88d3d5b4 100644
 +++ b/src/ribbon_artist.cpp
 @@ -152,7 +152,8 @@ void RibbonArtist::buildParametersGUI() {
    }
- 
+
    ImGui::PushItemWidth(150);
 -  if (ImGui::SliderFloat("Ribbon width", ribbonWidth.get().getValuePtr(), 0.0, .1, "%.5f", 3.)) {
 +  if (ImGui::SliderFloat("Ribbon width", ribbonWidth.get().getValuePtr(), 0.0, .1, "%.5f",
@@ -176,7 +176,7 @@ index 9d9fcc67..b4040f3e 100644
 @@ -104,7 +104,8 @@ void SurfaceCountQuantity::buildCustomUI() {
    ImGui::DragFloatRange2("Color Range", &vizRangeLow, &vizRangeHigh, (dataRangeHigh - dataRangeLow) / 100.,
                           dataRangeLow, dataRangeHigh, "Min: %.3e", "Max: %.3e");
- 
+
 -  if (ImGui::SliderFloat("Radius", pointRadius.get().getValuePtr(), 0.0, .1, "%.5f", 3.)) {
 +  if (ImGui::SliderFloat("Radius", pointRadius.get().getValuePtr(), 0.0, .1, "%.5f",
 +                         ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoRoundToFormat)) {
@@ -189,10 +189,10 @@ index 3b9851af..57b3d303 100644
 +++ b/src/surface_distance_quantity.cpp
 @@ -93,7 +93,8 @@ void SurfaceDistanceQuantity::buildCustomUI() {
    }
- 
+
    // Modulo stripey width
 -  if (ImGui::DragFloat("Stripe size", stripeSize.get().getValuePtr(), .001, 0.0001, 1.0, "%.4f", 2.0)) {
-+  if (ImGui::DragFloat("Stripe size", stripeSize.get().getValuePtr(), .001, 0.0001, 1.0, "%.4f", 
++  if (ImGui::DragFloat("Stripe size", stripeSize.get().getValuePtr(), .001, 0.0001, 1.0, "%.4f",
 +                       ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoRoundToFormat)) {
      stripeSize.manuallyChanged();
      requestRedraw();
@@ -216,21 +216,21 @@ index c9e8ebea..7d1d2d8a 100644
 --- a/src/surface_parameterization_quantity.cpp
 +++ b/src/surface_parameterization_quantity.cpp
 @@ -154,7 +154,8 @@ void SurfaceParameterizationQuantity::buildCustomUI() {
- 
- 
+
+
    // Modulo stripey width
 -  if (ImGui::DragFloat("period", &checkerSize.get(), .001, 0.0001, 1.0, "%.4f", 2.0)) {
-+  if (ImGui::DragFloat("period", &checkerSize.get(), .001, 0.0001, 1.0, "%.4f", 
++  if (ImGui::DragFloat("period", &checkerSize.get(), .001, 0.0001, 1.0, "%.4f",
 +                       ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoRoundToFormat)) {
      setCheckerSize(getCheckerSize());
    }
- 
+
 diff --git a/src/vector_artist.cpp b/src/vector_artist.cpp
 index 633a12ff..6135bbfe 100644
 --- a/src/vector_artist.cpp
 +++ b/src/vector_artist.cpp
 @@ -90,13 +90,15 @@ void VectorArtist::buildParametersUI() {
- 
+
    // Only get to set length for non-ambient vectors
    if (vectorType != VectorType::AMBIENT) {
 -    if (ImGui::SliderFloat("Length", vectorLengthMult.get().getValuePtr(), 0.0, .1, "%.5f", 3.)) {
@@ -240,7 +240,7 @@ index 633a12ff..6135bbfe 100644
        requestRedraw();
      }
    }
- 
+
 -  if (ImGui::SliderFloat("Radius", vectorRadius.get().getValuePtr(), 0.0, .1, "%.5f", 3.)) {
 +  if (ImGui::SliderFloat("Radius", vectorRadius.get().getValuePtr(), 0.0, .1, "%.5f",
 +                         ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoRoundToFormat)) {
@@ -267,12 +267,10 @@ index 6b93f885..27a16bfd 100644
          farClipRatio = farClipRatioF;
          requestRedraw();
        }
- 
+
        // Move speed
        float moveScaleF = view::moveScale;
 -      ImGui::SliderFloat(" Move Speed", &moveScaleF, 0.0, 1.0, "%.5f", 3.);
 +      ImGui::SliderFloat(" Move Speed", &moveScaleF, 0.0, 1.0, "%.5f",
 +                         ImGuiSliderFlags_Logarithmic | ImGuiSliderFlags_NoRoundToFormat);
        view::moveScale = moveScaleF;
- 
- 

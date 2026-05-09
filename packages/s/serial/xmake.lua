@@ -1,4 +1,4 @@
-package("serial")
+package("serial", function()
     set_homepage("http://wjwwood.github.io/serial")
     set_description("Cross-platform, Serial Port library written in C++")
     set_license("MIT")
@@ -14,7 +14,8 @@ package("serial")
         add_frameworks("IOKit", "Foundation")
     end
 
-    on_install("windows", "linux", "macosx", "mingw", "cross", "wasm", function (package)
+    on_install("windows", "linux", "macosx", "mingw", "cross", "wasm",
+               function(package)
         local configs = {}
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
@@ -49,11 +50,14 @@ package("serial")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <serial/serial.h>
             void test() {
                 serial::list_ports();
             }
-        ]]}))
+        ]]
+        }))
     end)
+end)

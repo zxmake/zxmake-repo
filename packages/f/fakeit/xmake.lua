@@ -1,32 +1,32 @@
-package("fakeit")
+package("fakeit", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/eranpeer/FakeIt")
-    set_description("C++ mocking made easy. A simple yet very expressive, headers only library for c++ mocking.")
+    set_description(
+        "C++ mocking made easy. A simple yet very expressive, headers only library for c++ mocking.")
     set_license("MIT")
 
-    add_urls("https://github.com/eranpeer/FakeIt/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/eranpeer/FakeIt.git")
+    add_urls(
+        "https://github.com/eranpeer/FakeIt/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/eranpeer/FakeIt.git")
 
-    add_versions("2.4.1", "f5234a36d42363cb7ccd2cf99c8a754c832d9092035d984ad40aafa5371d0e95")
-    add_versions("2.4.0", "eb79459ad6a97a5c985e3301b0d44538bdce2ba26115afe040f3874688edefb5")
+    add_versions("2.4.1",
+                 "f5234a36d42363cb7ccd2cf99c8a754c832d9092035d984ad40aafa5371d0e95")
+    add_versions("2.4.0",
+                 "eb79459ad6a97a5c985e3301b0d44538bdce2ba26115afe040f3874688edefb5")
 
     local test_frameworks = {
-        "gtest",
-        "mstest",
-        "boost",
-        "catch",
-        "tpunit",
-        "mettle",
-        "qtest",
-        "nunit",
-        "cute",
-        "doctest",
-        "standalone",
+        "gtest", "mstest", "boost", "catch", "tpunit", "mettle", "qtest",
+        "nunit", "cute", "doctest", "standalone"
     }
 
-    add_configs("framework", {description = "Choose test library to use", default = "standalone", type = "string", values = test_frameworks})
+    add_configs("framework", {
+        description = "Choose test library to use",
+        default = "standalone",
+        type = "string",
+        values = test_frameworks
+    })
 
-    on_load(function (package)
+    on_load(function(package)
         local framework = package:config("framework")
         if framework == "gtest" then
             package:add("deps", "gtest")
@@ -39,17 +39,21 @@ package("fakeit")
         end
     end)
 
-    on_install(function (package)
-        os.vcp(path.join("single_header", package:config("framework"), "*"), package:installdir("include"))
+    on_install(function(package)
+        os.vcp(path.join("single_header", package:config("framework"), "*"),
+               package:installdir("include"))
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             struct SomeInterface {
                 virtual int foo(int) = 0;
             };
             void test() {
                 fakeit::Mock<SomeInterface> mock;
             }
-        ]]}, {configs = {languages = "c++11"}, includes = "fakeit.hpp"}))
+        ]]
+        }, {configs = {languages = "c++11"}, includes = "fakeit.hpp"}))
     end)
+end)

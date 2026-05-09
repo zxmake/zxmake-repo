@@ -1,12 +1,16 @@
-package("clip")
+package("clip", function()
     set_homepage("https://github.com/dacap/clip")
-    set_description("Library to copy/retrieve content to/from the clipboard/pasteboard.")
+    set_description(
+        "Library to copy/retrieve content to/from the clipboard/pasteboard.")
     set_license("MIT")
 
     set_urls("https://github.com/dacap/clip/archive/refs/tags/v$(version).zip")
-    add_versions("1.9", "905615eb1ceef15e96468891ad85b7aa6836bcda690006d61fa061ca029b2060")
-    add_versions("1.8", "9df8728c9ce7c3afcfc9a0c6718e064319f0cdffb927243ac1ca3be591578d00")
-    add_versions("1.5", "4ed7f54184c27c79a8f2382ba747dce11aeb4552017abf5588587369a6caeb6b")
+    add_versions("1.9",
+                 "905615eb1ceef15e96468891ad85b7aa6836bcda690006d61fa061ca029b2060")
+    add_versions("1.8",
+                 "9df8728c9ce7c3afcfc9a0c6718e064319f0cdffb927243ac1ca3be591578d00")
+    add_versions("1.5",
+                 "4ed7f54184c27c79a8f2382ba747dce11aeb4552017abf5588587369a6caeb6b")
 
     add_deps("cmake", "libpng")
     if is_plat("linux") then
@@ -20,16 +24,20 @@ package("clip")
 
     add_includedirs("include")
 
-    on_install("linux", "windows", "mingw@windows,msys", "macos", function(package)
+    on_install("linux", "windows", "mingw@windows,msys", "macos",
+               function(package)
         local configs = {}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
         table.insert(configs, "-DCLIP_EXAMPLES=OFF")
         table.insert(configs, "-DCLIP_TESTS=OFF")
         if package:config("shared") and package:is_plat("windows") then
             table.insert(configs, "-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON")
         end
-        import("package.tools.cmake").install(package, configs, { buildir="build" })
+        import("package.tools.cmake").install(package, configs,
+                                              {buildir = "build"})
         os.cp("clip.h", package:installdir("include/clip"))
         os.trycp("build/*.a", package:installdir("lib"))
         os.trycp("build/*.dylib", package:installdir("lib"))
@@ -39,10 +47,12 @@ package("clip")
     end)
 
     on_test(function(package)
-        assert(package:check_cxxsnippets({ test = [[
+        assert(package:check_cxxsnippets({
+            test = [[
               #include <clip/clip.h>
               #include <string>
               void test() { clip::set_text("foo"); }
-          ]]}
-        ))
+          ]]
+        }))
     end)
+end)

@@ -1,14 +1,22 @@
-package("rsm-bsa")
+package("rsm-bsa", function()
     set_homepage("https://github.com/Ryan-rsm-McKenzie/bsa")
-    set_description("C++ library for working with the Bethesda archive file format")
+    set_description(
+        "C++ library for working with the Bethesda archive file format")
     set_license("MIT")
 
-    add_urls("https://github.com/Ryan-rsm-McKenzie/bsa/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/Ryan-rsm-McKenzie/bsa.git")
+    add_urls(
+        "https://github.com/Ryan-rsm-McKenzie/bsa/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/Ryan-rsm-McKenzie/bsa.git")
 
-    add_versions("4.1.0", "c2942eb1adc35114a256720a917cfae833aa98482da3b38f9d652762d1c281b2")
+    add_versions("4.1.0",
+                 "c2942eb1adc35114a256720a917cfae833aa98482da3b38f9d652762d1c281b2")
 
-    add_configs("xmem", {description = "build support for the xmem codec proxy", default = false, type = "boolean", readonly = true})
+    add_configs("xmem", {
+        description = "build support for the xmem codec proxy",
+        default = false,
+        type = "boolean",
+        readonly = true
+    })
 
     add_deps("rsm-mmio", "rsm-binary-io", "lz4", "zlib")
     if is_plat("windows", "linux") then
@@ -18,7 +26,7 @@ package("rsm-bsa")
         end
     end
 
-    on_load(function (package)
+    on_load(function(package)
         if package:config("xmem") then
             package:add("defines", "BSA_SUPPORT_XMEM=1")
             package:add("deps", "reproc", "expected-lite", "xbyak")
@@ -27,7 +35,7 @@ package("rsm-bsa")
         end
     end)
 
-    on_install("windows", "linux", function (package)
+    on_install("windows", "linux", function(package)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
 
         local configs = {}
@@ -38,13 +46,16 @@ package("rsm-bsa")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <bsa/tes4.hpp>
             void test() {
                 const char payload[] = { "Hello world!\n" };
                 bsa::tes4::file f;
                 f.set_data({ reinterpret_cast<const std::byte*>(payload), sizeof(payload) - 1 });
             }
-        ]]}, {configs = {languages = "c++20"}}))
+        ]]
+        }, {configs = {languages = "c++20"}}))
     end)
+end)

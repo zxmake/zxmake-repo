@@ -6,7 +6,8 @@ if has_config("gmp") then
     add_requires("gmp")
 end
 
-target("libs7") do
+target("libs7")
+do
     set_kind("$(kind)")
     set_basename("s7")
     add_files("s7.c")
@@ -22,7 +23,8 @@ target("libs7") do
     end
 end
 
-target("s7") do
+target("s7")
+do
     set_kind("binary")
     add_defines("WITH_MAIN")
     add_files("s7.c")

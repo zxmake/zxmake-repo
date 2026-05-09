@@ -1,4 +1,4 @@
-package("bluez")
+package("bluez", function()
     set_homepage("http://www.bluez.org")
     set_description("Library for the Bluetooth protocol stack for Linux")
     set_license("GPL-2.0-or-later")
@@ -8,7 +8,7 @@ package("bluez")
     add_versions("5.69", "bbe41152d4c1c3fd608f3d933dba445a790a5331")
     add_versions("5.68", "d764f78f27653bc1df71c462e9aca7a18bc75f9f")
 
-    on_install("linux", function (package)
+    on_install("linux", function(package)
         os.cp("lib/*.h", "bluetooth/")
         io.writefile("xmake.lua", [[
             target("bluez")
@@ -23,6 +23,8 @@ package("bluez")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("str2ba", {includes = "bluetooth/bluetooth.h"}))
+    on_test(function(package)
+        assert(
+            package:has_cfuncs("str2ba", {includes = "bluetooth/bluetooth.h"}))
     end)
+end)

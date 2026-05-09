@@ -20,7 +20,7 @@ index 396afcde7dd01..efdb86282e10c 100644
 +++ b/src/core/windows/SDL_xinput.h
 @@ -212,7 +212,7 @@ typedef struct
  #endif /* HAVE_XINPUT_H */
- 
+
  /* This struct is not defined in XInput headers. */
 -typedef struct _XINPUT_CAPABILITIES_EX
 +typedef struct
@@ -33,7 +33,7 @@ index 396afcde7dd01..efdb86282e10c 100644
      DWORD unk2;
 -} XINPUT_CAPABILITIES_EX, *PXINPUT_CAPABILITIES_EX;
 +} SDL_XINPUT_CAPABILITIES_EX;
- 
+
  /* Forward decl's for XInput API's we load dynamically and use if available */
  typedef DWORD(WINAPI *XInputGetState_t)(
 @@ -244,7 +244,7 @@ typedef DWORD(WINAPI *XInputGetCapabilitiesEx_t)(
@@ -43,27 +43,27 @@ index 396afcde7dd01..efdb86282e10c 100644
 -    XINPUT_CAPABILITIES_EX *pCapabilitiesEx /* [out] Receives the capabilities */
 +    SDL_XINPUT_CAPABILITIES_EX *pCapabilitiesEx /* [out] Receives the capabilities */
  );
- 
+
  typedef DWORD(WINAPI *XInputGetBatteryInformation_t)(
 diff --git a/src/joystick/windows/SDL_xinputjoystick.c b/src/joystick/windows/SDL_xinputjoystick.c
 index 3a2e912ca381b..1ae7fb489957e 100644
 --- a/src/joystick/windows/SDL_xinputjoystick.c
 +++ b/src/joystick/windows/SDL_xinputjoystick.c
 @@ -117,7 +117,7 @@ static const char *GetXInputName(const Uint8 userid, BYTE SubType)
- 
+
  static SDL_bool GetXInputDeviceInfo(Uint8 userid, Uint16 *pVID, Uint16 *pPID, Uint16 *pVersion)
  {
 -    XINPUT_CAPABILITIES_EX capabilities;
 +    SDL_XINPUT_CAPABILITIES_EX capabilities;
- 
+
      if (!XINPUTGETCAPABILITIESEX || XINPUTGETCAPABILITIESEX(1, userid, 0, &capabilities) != ERROR_SUCCESS) {
          return SDL_FALSE;
 @@ -143,7 +143,7 @@ static SDL_bool GetXInputDeviceInfo(Uint8 userid, Uint16 *pVID, Uint16 *pPID, Ui
- 
+
  int SDL_XINPUT_GetSteamVirtualGamepadSlot(Uint8 userid)
  {
 -    XINPUT_CAPABILITIES_EX capabilities;
 +    SDL_XINPUT_CAPABILITIES_EX capabilities;
- 
+
      if (XINPUTGETCAPABILITIESEX &&
          XINPUTGETCAPABILITIESEX(1, userid, 0, &capabilities) == ERROR_SUCCESS &&

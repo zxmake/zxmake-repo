@@ -1,6 +1,7 @@
-package("memplumber")
+package("memplumber", function()
     set_homepage("https://github.com/seladb/MemPlumber")
-    set_description("MemPlumber is a library that helps developers with debugging of memory allocations and detection of memory leaks in C++ applications")
+    set_description(
+        "MemPlumber is a library that helps developers with debugging of memory allocations and detection of memory leaks in C++ applications")
     set_license("MIT")
 
     add_urls("https://github.com/seladb/MemPlumber.git")
@@ -10,18 +11,24 @@ package("memplumber")
         add_deps("libbacktrace")
     end
 
-    add_configs("collect_static_var_data", {description = "Collect data also on static variable memory allocation", default = false, type = "boolean"})
+    add_configs("collect_static_var_data", {
+        description = "Collect data also on static variable memory allocation",
+        default = false,
+        type = "boolean"
+    })
 
-    on_install("windows", "linux", "macosx", "mingw", function (package)
+    on_install("windows", "linux", "macosx", "mingw", function(package)
         io.replace("memplumber.cpp", "unsigned long", "uintptr_t")
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
         local configs = {}
-        configs.collect_static_var_data = package:config("collect_static_var_data")
+        configs.collect_static_var_data = package:config(
+                                              "collect_static_var_data")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <memplumber.h>
             void test() {
                 MemPlumber::start();
@@ -33,5 +40,7 @@ package("memplumber")
 
                 MemPlumber::stopAndFreeAllMemory();
             }
-        ]]}, {configs = {languages = "cxx11"}}))
+        ]]
+        }, {configs = {languages = "cxx11"}}))
     end)
+end)

@@ -1,27 +1,56 @@
-package("fftw")
+package("fftw", function()
 
     set_homepage("http://fftw.org/")
-    set_description("A C subroutine library for computing the discrete Fourier transform (DFT) in one or more dimensions.")
+    set_description(
+        "A C subroutine library for computing the discrete Fourier transform (DFT) in one or more dimensions.")
     set_license("GPL-2.0")
 
     add_urls("http://fftw.org/fftw-$(version).tar.gz")
-    add_versions("3.3.8", "6113262f6e92c5bd474f2875fa1b01054c4ad5040f6b0da7c03c98821d9ae303")
-    add_versions("3.3.9", "bf2c7ce40b04ae811af714deb512510cc2c17b9ab9d6ddcf49fe4487eea7af3d")
-    add_versions("3.3.10", "56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467")
+    add_versions("3.3.8",
+                 "6113262f6e92c5bd474f2875fa1b01054c4ad5040f6b0da7c03c98821d9ae303")
+    add_versions("3.3.9",
+                 "bf2c7ce40b04ae811af714deb512510cc2c17b9ab9d6ddcf49fe4487eea7af3d")
+    add_versions("3.3.10",
+                 "56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467")
 
-    add_configs("precision", {description = "Float number precision.", default = "double", type = "string", values = {"float", "double", "quad", "long"}})
-    add_configs("thread", {description = "Thread model used.", default = "fftw", type = "string", values = {"none", "fftw", "openmp"}})
-    add_configs("enable_mpi", {description = "Enable MPI support.", default = false, type = "boolean"})
-    add_configs("simd", {description = "SIMD instruction sets used.", default = "avx2", type = "string", values = {"none", "sse", "sse2", "avx", "avx2", "avx512", "avx-128-fma", "kcvi", "altivec", "vsx", "neon", "generic-simd128", "generic-simd256"}})
+    add_configs("precision", {
+        description = "Float number precision.",
+        default = "double",
+        type = "string",
+        values = {"float", "double", "quad", "long"}
+    })
+    add_configs("thread", {
+        description = "Thread model used.",
+        default = "fftw",
+        type = "string",
+        values = {"none", "fftw", "openmp"}
+    })
+    add_configs("enable_mpi", {
+        description = "Enable MPI support.",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("simd", {
+        description = "SIMD instruction sets used.",
+        default = "avx2",
+        type = "string",
+        values = {
+            "none", "sse", "sse2", "avx", "avx2", "avx512", "avx-128-fma",
+            "kcvi", "altivec", "vsx", "neon", "generic-simd128",
+            "generic-simd256"
+        }
+    })
 
     if is_plat("windows") then
         add_deps("cmake")
     end
 
-    on_install("windows", function (package)
+    on_install("windows", function(package)
         local configs = {"-DBUILD_TESTS=OFF"}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
         if package:config("shared") then
             package:add("defines", "FFTW_DLL")
             table.insert(configs, "-DWITH_COMBINED_THREADS=ON")
@@ -38,7 +67,8 @@ package("fftw")
         elseif package:config("thread") == "openmp" then
             table.insert(configs, "-DENABLE_OPENMP=ON")
         end
-        local simds = import("core.base.hashset").of("sse", "sse2", "avx", "avx2")
+        local simds = import("core.base.hashset").of("sse", "sse2", "avx",
+                                                     "avx2")
         local simd = package:config("simd")
         if simd ~= "none" and simds:has(simd) then
             table.insert(configs, "-DENABLE_" .. string.upper(simd) .. "=ON")
@@ -46,7 +76,7 @@ package("fftw")
         import("package.tools.cmake").install(package, configs)
     end)
 
-    on_install("linux", "macosx", function (package)
+    on_install("linux", "macosx", function(package)
         local configs = {}
         if package:config("shared") then
             table.insert(configs, "--enable-shared")
@@ -79,6 +109,7 @@ package("fftw")
         import("package.tools.autoconf").install(package, configs)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("fftw_execute", {includes = "fftw3.h"}))
     end)
+end)

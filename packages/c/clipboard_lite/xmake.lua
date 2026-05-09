@@ -1,4 +1,4 @@
-package("clipboard_lite")
+package("clipboard_lite", function()
     set_homepage("https://github.com/smasherprog/clipboard_lite")
     set_description("cross platform clipboard library")
     set_license("MIT")
@@ -15,7 +15,7 @@ package("clipboard_lite")
         add_frameworks("CoreFoundation", "Cocoa")
     end
 
-    on_install("windows", "macosx", "mingw", function (package)
+    on_install("windows", "macosx", "mingw", function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             if is_plat("linux") then
@@ -49,11 +49,14 @@ package("clipboard_lite")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <Clipboard_Lite.h>
             void test() {
                 auto clipboard = SL::Clipboard_Lite::CreateClipboard();
             }
-        ]]}, {configs = {languages = "c++14"}}))
+        ]]
+        }, {configs = {languages = "c++14"}}))
     end)
+end)

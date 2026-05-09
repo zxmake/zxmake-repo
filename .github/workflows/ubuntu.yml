@@ -16,7 +16,7 @@ jobs:
         mode: [debug, release]
 
     runs-on: ${{ matrix.os }}
-  
+
     steps:
       - uses: actions/checkout@v1
 

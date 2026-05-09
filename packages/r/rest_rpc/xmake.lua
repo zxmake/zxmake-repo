@@ -1,7 +1,8 @@
-package("rest_rpc")
+package("rest_rpc", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/qicosmos/rest_rpc")
-    set_description("c++11, high performance, cross platform, easy to use rpc framework.")
+    set_description(
+        "c++11, high performance, cross platform, easy to use rpc framework.")
     set_license("MIT")
 
     add_urls("https://github.com/qicosmos/rest_rpc.git")
@@ -13,12 +14,13 @@ package("rest_rpc")
         add_syslinks("ws2_32")
     end
 
-    on_install("windows", "macosx", "linux", "mingw", function (package)
+    on_install("windows", "macosx", "linux", "mingw", function(package)
         os.cp("include", package:installdir())
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include "rest_rpc.hpp"
             void test() {
                 rest_rpc::rpc_client client("127.0.0.1", 9000);
@@ -26,5 +28,7 @@ package("rest_rpc")
                 int result = client.call<int>("add", 1, 2);
                 client.run();
             }
-        ]]}, {configs = {languages = "c++11"}}))
+        ]]
+        }, {configs = {languages = "c++11"}}))
     end)
+end)

@@ -1,4 +1,4 @@
-package("vulkan-hpp")
+package("vulkan-hpp", function()
 
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/KhronosGroup/Vulkan-Hpp/")
@@ -29,9 +29,13 @@ package("vulkan-hpp")
     add_versions("v1.3.283", "2fbc146feefa43b8201af4b01eb3570110f9fa32")
     add_versions("v1.3.290", "e3b0737d57e81875361bf1943f083eac902dacb7")
 
-    add_configs("modules", {description = "Build with C++20 modules support.", default = false, type = "boolean"})
+    add_configs("modules", {
+        description = "Build with C++20 modules support.",
+        default = false,
+        type = "boolean"
+    })
 
-    on_load(function (package)
+    on_load(function(package)
         if not package:config("modules") then
             package:add("deps", "cmake")
             if package:is_plat("linux") then
@@ -40,8 +44,8 @@ package("vulkan-hpp")
         end
     end)
 
-
-    on_install("windows|x86", "windows|x64", "linux", "macosx", "mingw", "android", "iphoneos", function (package)
+    on_install("windows|x86", "windows|x64", "linux", "macosx", "mingw",
+               "android", "iphoneos", function(package)
         local arch_prev
         local plat_prev
         if (package:is_plat("mingw") or package:is_cross()) and package.plat_set then
@@ -66,9 +70,10 @@ package("vulkan-hpp")
         os.runv(path.join("build", "VulkanHppGenerator"))
         if not package:config("modules") then
             os.cp("Vulkan-Headers/include", package:installdir())
-            os.cp("vulkan/*.hpp", package:installdir(path.join("include", "vulkan")))
+            os.cp("vulkan/*.hpp",
+                  package:installdir(path.join("include", "vulkan")))
         else
-            io.writefile("xmake.lua", [[ 
+            io.writefile("xmake.lua", [[
                 target("vulkan-hpp")
                     set_kind("static")
                     set_languages("c++20")
@@ -85,8 +90,9 @@ package("vulkan-hpp")
         end
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             void test() {
                 vk::ApplicationInfo ai;
                 ai.pApplicationName = "Test";
@@ -95,5 +101,7 @@ package("vulkan-hpp")
                 ai.engineVersion = VK_MAKE_API_VERSION(1,0,0,0);
                 ai.apiVersion = VK_API_VERSION_1_0;
             }
-        ]]}, {includes = "vulkan/vulkan.hpp", configs = {languages = "c++14"} }))
+        ]]
+        }, {includes = "vulkan/vulkan.hpp", configs = {languages = "c++14"}}))
     end)
+end)

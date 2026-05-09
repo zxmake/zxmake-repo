@@ -1,4 +1,4 @@
-package("exprtk")
+package("exprtk", function()
 
     set_kind("library", {headeronly = true})
     set_homepage("https://www.partow.net/programming/exprtk/index.html")
@@ -13,13 +13,15 @@ package("exprtk")
     elseif is_plat("mingw") then
         add_cxxflags("-Wa,-mbig-obj")
     end
-    
-    on_install("windows", "linux", "macosx", "bsd", "iphoneos", "android", "wasm", "cross", function (package)
+
+    on_install("windows", "linux", "macosx", "bsd", "iphoneos", "android",
+               "wasm", "cross", function(package)
         os.cp("exprtk.hpp", package:installdir("include"))
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             void test() {
                 double x;
                 const std::string expression_string =
@@ -33,5 +35,7 @@ package("exprtk")
                 expression.register_symbol_table(symbol_table);
                 parser.compile(expression_string,expression);
             }
-        ]]}, {configs = {languages = "c++14"}, includes = "exprtk.hpp"}))
+        ]]
+        }, {configs = {languages = "c++14"}, includes = "exprtk.hpp"}))
     end)
+end)

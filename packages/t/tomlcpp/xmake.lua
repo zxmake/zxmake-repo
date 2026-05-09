@@ -1,4 +1,4 @@
-package("tomlcpp")
+package("tomlcpp", function()
     set_homepage("https://github.com/cktan/tomlcpp")
     set_description("No fanfare TOML C++ Library")
     set_license("MIT")
@@ -8,7 +8,7 @@ package("tomlcpp")
 
     add_deps("tomlc99")
 
-    on_install(function (package)
+    on_install(function(package)
         io.writefile("xmake.lua", [[
             add_requires("tomlc99")
             set_languages("c++14")
@@ -25,11 +25,14 @@ package("tomlcpp")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <tomlcpp.hpp>
             void test() {
                 auto res = toml::parseFile("sample.toml");
             }
-        ]]}, {configs = {languages = "c++14"}}))
+        ]]
+        }, {configs = {languages = "c++14"}}))
     end)
+end)

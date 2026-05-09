@@ -1,14 +1,17 @@
-package("verilator")
+package("verilator", function()
     set_kind("toolchain")
     set_homepage("https://verilator.org")
-    set_description("Verilator open-source SystemVerilog simulator and lint system")
+    set_description(
+        "Verilator open-source SystemVerilog simulator and lint system")
 
-    add_urls("https://github.com/verilator/verilator/archive/refs/tags/$(version).tar.gz")
+    add_urls(
+        "https://github.com/verilator/verilator/archive/refs/tags/$(version).tar.gz")
     add_urls("https://github.com/verilator/verilator.git")
 
-    add_versions("v5.016", "66fc36f65033e5ec904481dd3d0df56500e90c0bfca23b2ae21b4a8d39e05ef1")
+    add_versions("v5.016",
+                 "66fc36f65033e5ec904481dd3d0df56500e90c0bfca23b2ae21b4a8d39e05ef1")
 
-    on_load(function (package)
+    on_load(function(package)
         if not package:is_precompiled() then
             if package:is_plat("windows") then
                 package:add("deps", "cmake")
@@ -24,7 +27,7 @@ package("verilator")
         package:addenv("VERILATOR_ROOT", ".")
     end)
 
-    on_install("windows", function (package)
+    on_install("windows", function(package)
         import("package.tools.cmake")
         local configs = {}
         local cxflags = {}
@@ -39,12 +42,14 @@ package("verilator")
         local envs = cmake.buildenvs(package)
         envs.VERILATOR_ROOT = nil
         envs.WIN_FLEX_BISON = winflexbison:installdir()
-        io.replace("src/CMakeLists.txt", '${ASTGEN} -I"${srcdir}"', '${ASTGEN} -I "${srcdir}"', {plain = true})
+        io.replace("src/CMakeLists.txt", '${ASTGEN} -I"${srcdir}"',
+                   '${ASTGEN} -I "${srcdir}"', {plain = true})
         cmake.install(package, configs, {envs = envs, cxflags = cxflags})
-        os.cp(path.join(package:installdir("bin"), "verilator_bin.exe"), path.join(package:installdir("bin"), "verilator.exe"))
+        os.cp(path.join(package:installdir("bin"), "verilator_bin.exe"),
+              path.join(package:installdir("bin"), "verilator.exe"))
     end)
 
-    on_install("linux", "macosx", function (package)
+    on_install("linux", "macosx", function(package)
         import("package.tools.autoconf")
         local configs = {}
         local cxflags = {}
@@ -61,6 +66,7 @@ package("verilator")
         autoconf.install(package, configs, {envs = envs})
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         os.vrun("verilator --version")
     end)
+end)

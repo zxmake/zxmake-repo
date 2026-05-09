@@ -1,4 +1,4 @@
-package("v8")
+package("v8", function()
     set_homepage("https://chromium.googlesource.com/v8/v8.git")
     set_description("V8 JavaScript Engine")
 
@@ -11,26 +11,20 @@ package("v8")
         add_syslinks("pthread", "dl")
     elseif is_plat("windows") then
         add_syslinks("user32", "winmm", "advapi32", "dbghelp", "shlwapi")
-        add_configs("vs_runtime", {description = "Set vs runtime.", default = "MT", readonly = true})
+        add_configs("vs_runtime", {
+            description = "Set vs runtime.",
+            default = "MT",
+            readonly = true
+        })
     end
 
-    add_links("v8_monolith",
-              "v8_initializers",
-              "v8_init",
-              "v8_compiler",
-              "v8_compiler_opt",
-              "v8_cppgc_shared",
-              "v8_bigint",
-              "v8_snapshot",
-              "v8_base_without_compiler",
-              "v8_libplatform",
-              "v8_libbase",
-              "torque_base",
-              "torque_generated_definitions",
-              "cppgc_base",
+    add_links("v8_monolith", "v8_initializers", "v8_init", "v8_compiler",
+              "v8_compiler_opt", "v8_cppgc_shared", "v8_bigint", "v8_snapshot",
+              "v8_base_without_compiler", "v8_libplatform", "v8_libbase",
+              "torque_base", "torque_generated_definitions", "cppgc_base",
               "torque_ls_base")
 
-    on_install("linux", "macosx", "windows", function (package)
+    on_install("linux", "macosx", "windows", function(package)
         import("core.base.global")
 
         -- maybe we need set proxy, e.g. `xmake g --proxy=http://127.0.0.1:xxxx`
@@ -66,11 +60,15 @@ package("v8")
             v8_monolithic = true,
             v8_use_external_startup_data = false,
             v8_enable_test_features = false,
-            v8_enable_i18n_support = false}
+            v8_enable_i18n_support = false
+        }
 
         if package:is_plat("windows") then
-            configs.extra_cflags = {(package:config("vs_runtime"):startswith("MT") and "/MT" or "/MD")}
-            configs.is_clang = false 
+            configs.extra_cflags = {
+                (package:config("vs_runtime"):startswith("MT") and "/MT" or
+                    "/MD")
+            }
+            configs.is_clang = false
         end
         import("package.tools.gn").build(package, configs, {buildir = "out.gn"})
         os.cp("include", package:installdir())
@@ -79,6 +77,10 @@ package("v8")
         os.trycp("out.gn/obj/*.dll", package:installdir("bin"))
     end)
 
-    on_test(function (package)
-        assert(package:has_cxxfuncs("v8::V8::InitializePlatform(0)", {configs = {languages = "c++17"}, includes = "v8.h"}))
+    on_test(function(package)
+        assert(package:has_cxxfuncs("v8::V8::InitializePlatform(0)", {
+            configs = {languages = "c++17"},
+            includes = "v8.h"
+        }))
     end)
+end)

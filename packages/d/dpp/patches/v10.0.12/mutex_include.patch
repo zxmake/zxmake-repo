@@ -8,6 +8,6 @@ index dbb2b6f8..7b4db79d 100644
  #include <dpp/exception.h>
 +#include <mutex>
 +#include <cstring>
- 
+
  namespace dpp
  {

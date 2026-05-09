@@ -1,12 +1,15 @@
-package("libdisasm")
+package("libdisasm", function()
     set_homepage("https://bastard.sourceforge.net/libdisasm.html")
-    set_description("The libdisasm library provides basic disassembly of Intel x86 instructions from a binary stream.")
+    set_description(
+        "The libdisasm library provides basic disassembly of Intel x86 instructions from a binary stream.")
     set_license("MIT")
 
-    add_urls("http://downloads.sourceforge.net/project/bastard/libdisasm/$(version)/libdisasm-$(version).tar.gz")
-    add_versions("0.23", "de3e578aa582af6e1d7729f39626892fb72dc6573658a221e0905f42a65433da")
+    add_urls(
+        "http://downloads.sourceforge.net/project/bastard/libdisasm/$(version)/libdisasm-$(version).tar.gz")
+    add_versions("0.23",
+                 "de3e578aa582af6e1d7729f39626892fb72dc6573658a221e0905f42a65433da")
 
-    on_install(function (package)
+    on_install(function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             target("libdisasm")
@@ -17,11 +20,14 @@ package("libdisasm")
                     add_rules("utils.symbols.export_all")
                 end
         ]])
-        io.replace("libdisasm/x86_disasm.c", "buf_rva+offset", "(buf_rva+offset)", {plain = true})
-        io.replace("libdisasm/x86_disasm.c", "buf_rva + offset", "(buf_rva+offset)", {plain = true})
+        io.replace("libdisasm/x86_disasm.c", "buf_rva+offset",
+                   "(buf_rva+offset)", {plain = true})
+        io.replace("libdisasm/x86_disasm.c", "buf_rva + offset",
+                   "(buf_rva+offset)", {plain = true})
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("x86_init", {includes = "libdisasm/libdis.h"}))
     end)
+end)

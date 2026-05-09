@@ -1,15 +1,21 @@
-package("unzip")
+package("unzip", function()
 
     set_kind("binary")
     set_homepage("http://infozip.sourceforge.net/UnZip.html")
-    set_description("UnZip is an extraction utility for archives compressed in .zip format.")
+    set_description(
+        "UnZip is an extraction utility for archives compressed in .zip format.")
 
     add_urls("https://github.com/LuaDist/unzip/archive/refs/tags/$(version).zip")
-    add_versions("6.0", "44d392d0087f658e4955389c42cac41c02facfac134b9c64d3ac82fb20ea92a7")
+    add_versions("6.0",
+                 "44d392d0087f658e4955389c42cac41c02facfac134b9c64d3ac82fb20ea92a7")
 
-    on_install("@windows", "@macosx", "@linux", function (package)
-        io.replace("win32/win32.c", "#include \"../unzip.h\"", "#include \"../unzip.h\"\n#ifdef CR\n#undef CR\n#endif", {plain = true})
-        io.replace("win32/nt.c", "#include \"../unzip.h\"", "#include \"../unzip.h\"\n#ifdef CR\n#undef CR\n#endif", {plain = true})
+    on_install("@windows", "@macosx", "@linux", function(package)
+        io.replace("win32/win32.c", "#include \"../unzip.h\"",
+                   "#include \"../unzip.h\"\n#ifdef CR\n#undef CR\n#endif",
+                   {plain = true})
+        io.replace("win32/nt.c", "#include \"../unzip.h\"",
+                   "#include \"../unzip.h\"\n#ifdef CR\n#undef CR\n#endif",
+                   {plain = true})
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             includes("@builtin/check")
@@ -34,6 +40,7 @@ package("unzip")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         os.vrun("unzip --help")
     end)
+end)

@@ -1,14 +1,17 @@
-package("mmeter")
+package("mmeter", function()
     set_homepage("https://github.com/LMauricius/MMeter")
-    set_description("A simple WIP profiler library for c++. Include the 2 files and you're ready to go.")
+    set_description(
+        "A simple WIP profiler library for c++. Include the 2 files and you're ready to go.")
     set_license("MIT")
 
-    set_urls("https://github.com/LMauricius/MMeter/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/LMauricius/MMeter.git")
+    set_urls(
+        "https://github.com/LMauricius/MMeter/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/LMauricius/MMeter.git")
 
-    add_versions("2.0", "7c6186e5e93da09d12c012167bd9247a07345e94e00f57e4f3579188fbd58b5d")
+    add_versions("2.0",
+                 "7c6186e5e93da09d12c012167bd9247a07345e94e00f57e4f3579188fbd58b5d")
 
-    on_install(function (package)
+    on_install(function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             target("mmeter")
@@ -24,10 +27,13 @@ package("mmeter")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             void test() {
                 MMETER_FUNC_PROFILER;
             }
-        ]]}, {configs = {languages = "c++17"}, includes = "MMeter.h"}))
+        ]]
+        }, {configs = {languages = "c++17"}, includes = "MMeter.h"}))
     end)
+end)

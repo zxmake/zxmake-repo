@@ -1,11 +1,11 @@
-package("gifdec")
+package("gifdec", function()
     set_homepage("https://github.com/lecram/gifdec")
     set_description("small C GIF decoder")
 
     add_urls("https://github.com/lecram/gifdec.git")
     add_versions("2021.12.04", "1dcbae19363597314f6623010cc80abad4e47f7c")
 
-    on_install(function (package)
+    on_install(function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             target("gifdec")
@@ -19,6 +19,7 @@ package("gifdec")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("gd_open_gif", {includes = "gifdec.h"}))
     end)
+end)

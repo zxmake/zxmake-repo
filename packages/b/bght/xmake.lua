@@ -1,4 +1,4 @@
-package("bght")
+package("bght", function()
 
     set_kind("library", {headeronly = true})
     set_homepage("https://owensgroup.github.io/BGHT/")
@@ -8,10 +8,12 @@ package("bght")
     add_urls("https://github.com/owensgroup/BGHT.git")
     add_versions("2024.03.06", "fd58966b20f76c7cd1aa1bdae58e28f6e3a7d242")
 
-    on_install(function (package)
+    on_install(function(package)
         os.cp("include/bght", package:installdir("include"))
     end)
 
-    on_test(function (package)
-        assert(os.isfile(path.join(package:installdir("include"), "bght", "bcht.hpp")))
+    on_test(function(package)
+        assert(os.isfile(path.join(package:installdir("include"), "bght",
+                                   "bcht.hpp")))
     end)
+end)

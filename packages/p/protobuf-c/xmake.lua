@@ -1,16 +1,21 @@
-package("protobuf-c")
+package("protobuf-c", function()
 
     set_homepage("https://github.com/protobuf-c/protobuf-c")
     set_description("Google's data interchange format for c")
 
-    add_urls("https://github.com/protobuf-c/protobuf-c/releases/download/v$(version)/protobuf-c-$(version).tar.gz")
-    add_versions("1.5.0", "7b404c63361ed35b3667aec75cc37b54298d56dd2bcf369de3373212cc06fd98")
-    add_versions("1.3.1", "51472d3a191d6d7b425e32b612e477c06f73fe23e07f6a6a839b11808e9d2267")
+    add_urls(
+        "https://github.com/protobuf-c/protobuf-c/releases/download/v$(version)/protobuf-c-$(version).tar.gz")
+    add_versions("1.5.0",
+                 "7b404c63361ed35b3667aec75cc37b54298d56dd2bcf369de3373212cc06fd98")
+    add_versions("1.3.1",
+                 "51472d3a191d6d7b425e32b612e477c06f73fe23e07f6a6a839b11808e9d2267")
 
     -- fix "error: no type named 'Reflection' in 'google::protobuf::Message'"
     -- see https://github.com/protobuf-c/protobuf-c/pull/342
     -- and https://github.com/protobuf-c/protobuf-c/issues/356
-    add_patches("1.3.1", path.join(os.scriptdir(), "patches", "1.3.1", "342.patch"), "ab78f9eeff2840cacf5b6b143d284e50e43166ec2cbfa78cd47fd8db1e387c6d")
+    add_patches("1.3.1",
+                path.join(os.scriptdir(), "patches", "1.3.1", "342.patch"),
+                "ab78f9eeff2840cacf5b6b143d284e50e43166ec2cbfa78cd47fd8db1e387c6d")
 
     add_deps("protobuf-cpp 3.19.4")
     if is_plat("windows") then
@@ -22,7 +27,7 @@ package("protobuf-c")
         add_syslinks("pthread")
     end
 
-    on_load(function (package)
+    on_load(function(package)
         package:addenv("PATH", "bin")
     end)
 
@@ -49,7 +54,7 @@ package("protobuf-c")
     --     os.cp("build_*/Release/protoc-gen-c.exe", path.join(package:installdir("bin"), "protoc-c.exe"))
     -- end)
 
-    on_install("linux", "macosx", function (package)
+    on_install("linux", "macosx", function(package)
         local configs = {}
         if package:config("pic") ~= false then
             table.insert(configs, "--with-pic")
@@ -64,7 +69,7 @@ package("protobuf-c")
         import("package.tools.autoconf").install(package, configs)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         if package:is_cross() then
             return
         end
@@ -79,5 +84,8 @@ package("protobuf-c")
             }
         ]])
         os.vrun("protoc-c test.proto -I. --c_out=.")
-        assert(package:check_csnippets({test = io.readfile("test.pb-c.c")}, {configs = {includedirs = {".", package:installdir("include")}}}))
+        assert(package:check_csnippets({test = io.readfile("test.pb-c.c")}, {
+            configs = {includedirs = {".", package:installdir("include")}}
+        }))
     end)
+end)

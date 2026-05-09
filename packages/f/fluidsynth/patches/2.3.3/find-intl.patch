@@ -5,7 +5,7 @@ index 986b594..77e6d2b 100644
 @@ -356,6 +356,8 @@ endif ( WIN32 )
  # Check for threads and math
  find_package ( Threads REQUIRED )
- 
+
 +unset ( HAS_LIBM CACHE )
 +unset ( MATH_LIBRARY CACHE )
  find_library ( HAS_LIBM NAMES "m" )
@@ -194,7 +194,7 @@ index f6fa6f1..e29d4b1 100644
 +    list(APPEND _glib2_link_directories "${_pcre_path}")
 +    list(APPEND _glib2_link_libraries "pcre2-8")
    endif()
- 
+
    # pkg_check_modules consider these as LDFLAGS_OTHER rather instead of
 diff --git a/cmake_admin/FindSndFile.cmake b/cmake_admin/FindSndFile.cmake
 deleted file mode 100644

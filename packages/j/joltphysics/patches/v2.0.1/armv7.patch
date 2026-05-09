@@ -19,7 +19,7 @@ index 04bc67d84..de0c8f88b 100644
      dependencies {
 -        classpath 'com.android.tools.build:gradle:7.4.1'
 +        classpath 'com.android.tools.build:gradle:7.4.2'
- 
+
          // NOTE: Do not place your application dependencies here; they belong
          // in the individual module build.gradle files
 diff --git a/Jolt/Core/FPControlWord.h b/Jolt/Core/FPControlWord.h
@@ -29,16 +29,16 @@ index 9c47a040a..b66344da0 100644
 @@ -60,7 +60,7 @@ class FPControlWord : public NonCopyable
  	unsigned int mPrevState;
  };
- 
+
 -#elif defined(JPH_CPU_ARM)
 +#elif defined(JPH_CPU_ARM) && defined(JPH_USE_NEON)
- 
+
  /// Helper class that needs to be put on the stack to update the state of the floating point control word.
  /// This state is kept per thread.
 @@ -91,6 +91,37 @@ class FPControlWord : public NonCopyable
  	uint64		mPrevState;
  };
- 
+
 +#elif defined(JPH_CPU_ARM)
 +
 +/// Helper class that needs to be put on the stack to update the state of the floating point control word.
@@ -71,7 +71,7 @@ index 9c47a040a..b66344da0 100644
 +};
 +
  #elif defined(JPH_CPU_WASM)
- 
+
  // Not supported
 diff --git a/Jolt/Core/TickCounter.h b/Jolt/Core/TickCounter.h
 index a9d1272a3..9a8967d31 100644

@@ -29,6 +29,5 @@ index 22f90c9..633050e 100644
                  if (static_cast<size_t>(nSend) < static_cast<size_t>(n))
                  {
                      if (!ioChannelPtr_->isWriting())
--- 
+--
 2.37.1.windows.1
-

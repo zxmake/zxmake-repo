@@ -36,7 +36,7 @@ index 4a0af14..b714742 100644
 -                    auto       &tuple = obj.GetValue<Tuple>();
 +                    auto       &tuple = obj.template GetValue<Tuple>();
                      bool const shared = current_instr.payload.template GetValue<bool>();
- 
+
                      if( obj.IsConst() ) {
 @@ -718,7 +718,7 @@ private:
                  } else {
@@ -44,7 +44,7 @@ index 4a0af14..b714742 100644
                      auto &rhs = current_instr.payload;
 -                    auto &tuple = lhs.GetValue<Tuple>();
 +                    auto &tuple = lhs.template GetValue<Tuple>();
- 
+
                      std::size_t  idx = static_cast<std::size_t>(-1);
                      if( rhs.GetTypeInfo()->IsSame( TypeString ) ) {
 @@ -741,7 +741,7 @@ private:
@@ -84,7 +84,7 @@ index 4a0af14..b714742 100644
                          continue;
                      } else if( not tuple.ContainsIdx( idx ) ) {
 @@ -953,21 +953,21 @@ private:
- 
+
                       // get the sequence
                      auto &seq_val = mStack[s - 1];
 -                    if( not seq_val.GetTypeInfo()->IsSame<IntegerSequence>() && not seq_val.GetTypeInfo()->IsSame<Tuple>() ) {
@@ -93,7 +93,7 @@ index 4a0af14..b714742 100644
                          run = false;
                          continue;
                      }
- 
+
                      //FIXME: if seq_val is a sequence already we should use a reference for in later versions it will be possible to manipulate it elsewhere in the loop.
 -                    auto  seq = seq_val.GetTypeInfo()->IsSame<Tuple>()
 -                        ? IntegerSequence( 0LL, static_cast<Integer>(seq_val.GetValue<Tuple>().Size() - 1), 1LL )
@@ -102,12 +102,12 @@ index 4a0af14..b714742 100644
 +                        ? IntegerSequence( 0LL, static_cast<Integer>(seq_val.template GetValue<Tuple>().Size() - 1), 1LL )
 +                        : seq_val.template GetValue<IntegerSequence>();
                      seq.Reset();
- 
+
                      // create the index variable
                      // TODO: add mDebugInfo SourceLocation!
 -                    mStack[s - 2] = rContext.AddValueObject( mStack[s - 2].GetValue<std::string>(), ValueObject( seq.Current(), ValueConfig(ValueShared, ValueMutable)));
 +                    mStack[s - 2] = rContext.AddValueObject( mStack[s - 2].template GetValue<std::string>(), ValueObject( seq.Current(), ValueConfig(ValueShared, ValueMutable)));
- 
+
                      // store the seqeunce
                      mStack[s - 1] = ValueObject( std::move(seq), ValueConfig(ValueShared, ValueMutable));
 @@ -978,7 +978,7 @@ private:

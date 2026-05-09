@@ -16,7 +16,7 @@ index fe6307e..9873e62 100644
 -        ../lshpack/lshpack.c
      )
  ENDIF()
- 
+
 @@ -133,12 +131,13 @@ IF(LSQUIC_SHARED_LIB)
  ELSE()
    add_library(lsquic STATIC ${lsquic_STAT_SRCS})
@@ -25,7 +25,7 @@ index fe6307e..9873e62 100644
 +target_link_libraries(lsquic PRIVATE ls-hpack ls-qpack)
  target_include_directories(
      lsquic PUBLIC $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/lsquic>)
- 
+
  install(TARGETS lsquic
      EXPORT lsquic-targets
 +    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

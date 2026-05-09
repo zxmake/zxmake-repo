@@ -4,17 +4,18 @@ import("lib.detect.find_library")
 function _find_package(package, opt)
     local rdir = (package:is_arch("x64", "x86_64") and "intel64" or "ia32")
     local suffix = (package:config("interface") == 32 and "lp64" or "ilp64")
-    local paths = {
-        "$(env MKL_ROOT)",
-        "$(env ONEAPI_ROOT)/mkl/latest"
-    }
+    local paths = {"$(env MKL_ROOT)", "$(env ONEAPI_ROOT)/mkl/latest"}
 
     -- find library
     local result = {links = {}, linkdirs = {}, includedirs = {}}
     if package:config("interface") == 64 then
         result.defines = {"MKL_ILP64"}
     end
-    local linkinfo = find_library("mkl_core", paths, {suffixes = {"lib", path.join("lib", rdir), path.join("lib", rdir, "gcc*")}})
+    local linkinfo = find_library("mkl_core", paths, {
+        suffixes = {
+            "lib", path.join("lib", rdir), path.join("lib", rdir, "gcc*")
+        }
+    })
     if not linkinfo then
         return
     end
@@ -56,7 +57,8 @@ function _find_package(package, opt)
     end
 
     -- find include
-    local includepath = find_path(path.join("mkl.h"), paths, {suffixes = "include"})
+    local includepath = find_path(path.join("mkl.h"), paths,
+                                  {suffixes = "include"})
     if includepath then
         table.insert(result.includedirs, includepath)
     end

@@ -1,4 +1,4 @@
-package("tinyfiledialogs")
+package("tinyfiledialogs", function()
 
     set_homepage("https://sourceforge.net/projects/tinyfiledialogs/")
     set_description("Native dialog library for WINDOWS MAC OSX GTK+ QT CONSOLE")
@@ -11,7 +11,7 @@ package("tinyfiledialogs")
     if is_plat("windows") then
         add_syslinks("comdlg32", "ole32", "user32", "shell32")
     end
-    on_install("windows", "linux", "macosx", function (package)
+    on_install("windows", "linux", "macosx", function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             target("tinyfiledialogs")
@@ -22,8 +22,9 @@ package("tinyfiledialogs")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_csnippets({test = [[
+    on_test(function(package)
+        assert(package:check_csnippets({
+            test = [[
             #include <stdio.h>
             #include <string.h>
             #include "tinyfiledialogs.h"
@@ -31,5 +32,7 @@ package("tinyfiledialogs")
                 char const * lWillBeGraphicMode;
                 lWillBeGraphicMode = tinyfd_inputBox("tinyfd_query", NULL, NULL);
             }
-        ]]}))
+        ]]
+        }))
     end)
+end)

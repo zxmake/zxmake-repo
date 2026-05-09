@@ -19,5 +19,5 @@ index 4fd3e252..0865d2e4 100644
 -  const google::protobuf::Message::Reflection *reflection = mess.GetReflection();
 +  const google::protobuf::Reflection *reflection = mess.GetReflection();
    google::protobuf::UnknownFieldSet *fs = reflection->MutableUnknownFields(&mess);
- 
+
  #if GOOGLE_PROTOBUF_VERSION >= 2001000

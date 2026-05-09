@@ -1,15 +1,31 @@
-package("sqlcipher")
+package("sqlcipher", function()
 
     set_homepage("https://www.zetetic.net/sqlcipher/")
-    set_description("SQLCipher is a standalone fork of the SQLite database library that adds 256 bit AES encryption of database files and other security features")
+    set_description(
+        "SQLCipher is a standalone fork of the SQLite database library that adds 256 bit AES encryption of database files and other security features")
 
-    set_urls("https://github.com/sqlcipher/sqlcipher/archive/refs/tags/v$(version).tar.gz")
-    add_versions("4.6.0", "879fb030c36bc5138029af6aa3ae3f36c28c58e920af05ac7ca78a5915b2fa3c")
-    add_versions("4.5.3", "5c9d672eba6be4d05a9a8170f70170e537ae735a09c3de444a8ad629b595d5e2")
+    set_urls(
+        "https://github.com/sqlcipher/sqlcipher/archive/refs/tags/v$(version).tar.gz")
+    add_versions("4.6.0",
+                 "879fb030c36bc5138029af6aa3ae3f36c28c58e920af05ac7ca78a5915b2fa3c")
+    add_versions("4.5.3",
+                 "5c9d672eba6be4d05a9a8170f70170e537ae735a09c3de444a8ad629b595d5e2")
 
-    add_configs("encrypt",  { description = "enable encrypt", default = true, type = "boolean"})
-    add_configs("temp_store",  { description = "use an in-ram database for temporary tables", default = "2", values = {"0", "1", "2" , "3"}})
-    add_configs("threadsafe",  { description = "sqltie thread safe mode", default = "1", values = {"0", "1", "2"}})
+    add_configs("encrypt", {
+        description = "enable encrypt",
+        default = true,
+        type = "boolean"
+    })
+    add_configs("temp_store", {
+        description = "use an in-ram database for temporary tables",
+        default = "2",
+        values = {"0", "1", "2", "3"}
+    })
+    add_configs("threadsafe", {
+        description = "sqltie thread safe mode",
+        default = "1",
+        values = {"0", "1", "2"}
+    })
 
     if is_plat("iphoneos") then
         add_frameworks("Security")
@@ -26,7 +42,7 @@ package("sqlcipher")
         add_syslinks("dl", "m", "z")
     end
 
-    on_load(function (package)
+    on_load(function(package)
         if package:is_plat("windows") and package:config("shared") then
             package:add("defines", "SQLITE_API=__declspec(dllimport)")
         end
@@ -36,7 +52,7 @@ package("sqlcipher")
         end
     end)
 
-    on_install("windows", function (package)
+    on_install("windows", function(package)
         local openssl = package:dep("openssl"):fetch()
         assert(openssl, "Failed fetch openssl library!")
 
@@ -50,12 +66,20 @@ package("sqlcipher")
             libpaths = libpaths .. " /LIBPATH:" .. dir
         end
 
-        local temp_store = " -DSQLITE_TEMP_STORE=" .. package:config("temp_store")
-        local thread_safe = " -DSQLITE_THREADSAFE=" .. package:config("threadsafe")
-        io.replace("Makefile.msc", "TCC = $(TCC) -DSQLITE_TEMP_STORE=1", "TCC = $(TCC) -DSQLITE_HAS_CODEC" .. rtcc_include .. temp_store, {plain = true})
-        io.replace("Makefile.msc", "TCC = $(TCC) -DSQLITE_THREADSAFE=1", "TCC = $(TCC)" .. thread_safe, {plain = true})
-        io.replace("Makefile.msc", "RCC = $(RCC) -DSQLITE_TEMP_STORE=1", "RCC = $(RCC) -DSQLITE_HAS_CODEC" .. rtcc_include .. temp_store, {plain = true})
-        io.replace("Makefile.msc", "RCC = $(RCC) -DSQLITE_THREADSAFE=1", "RCC = $(RCC)" .. thread_safe, {plain = true})
+        local temp_store = " -DSQLITE_TEMP_STORE=" ..
+                               package:config("temp_store")
+        local thread_safe = " -DSQLITE_THREADSAFE=" ..
+                                package:config("threadsafe")
+        io.replace("Makefile.msc", "TCC = $(TCC) -DSQLITE_TEMP_STORE=1",
+                   "TCC = $(TCC) -DSQLITE_HAS_CODEC" .. rtcc_include ..
+                       temp_store, {plain = true})
+        io.replace("Makefile.msc", "TCC = $(TCC) -DSQLITE_THREADSAFE=1",
+                   "TCC = $(TCC)" .. thread_safe, {plain = true})
+        io.replace("Makefile.msc", "RCC = $(RCC) -DSQLITE_TEMP_STORE=1",
+                   "RCC = $(RCC) -DSQLITE_HAS_CODEC" .. rtcc_include ..
+                       temp_store, {plain = true})
+        io.replace("Makefile.msc", "RCC = $(RCC) -DSQLITE_THREADSAFE=1",
+                   "RCC = $(RCC)" .. thread_safe, {plain = true})
 
         import("package.tools.nmake")
         local envs = nmake.buildenvs(package)
@@ -65,7 +89,8 @@ package("sqlcipher")
         envs.SQLITE3LIB = "sqlcipher.lib"
         envs.SQLITE3EXE = "sqlcipher.exe"
         envs.SQLITE3EXEPDB = "/pdb:sqlcipher.pdb"
-        envs.LTLIBS = "advapi32.lib user32.lib ws2_32.lib crypt32.lib wsock32.lib libcrypto.lib libssl.lib"
+        envs.LTLIBS =
+            "advapi32.lib user32.lib ws2_32.lib crypt32.lib wsock32.lib libcrypto.lib libssl.lib"
         envs.LTLIBPATHS = libpaths
         envs.PLATFORM = package:arch()
 
@@ -78,7 +103,7 @@ package("sqlcipher")
         os.cp("sqlite3ext.h", package:installdir("include"))
     end)
 
-    on_install("linux", "macosx", "iphoneos", "cross", function (package)
+    on_install("linux", "macosx", "iphoneos", "cross", function(package)
         os.vrunv("./configure", {"--with-crypto-lib=none"})
         import("package.tools.make").build(package, {"sqlite3.c"})
         local configs = {}
@@ -92,6 +117,7 @@ package("sqlcipher")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("sqlite3_open_v2", {includes = "sqlite3.h"}))
     end)
+end)

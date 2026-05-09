@@ -1,4 +1,4 @@
-package("isocline")
+package("isocline", function()
     set_homepage("https://github.com/daanx/isocline")
     set_description("Isocline is a portable GNU readline alternative ")
     set_license("MIT")
@@ -9,20 +9,24 @@ package("isocline")
 
     add_deps("cmake")
 
-    on_install(function (package)
-        io.replace("src/completers.c", "__finddata64_t", "_finddatai64_t", {plain = true})
-        
+    on_install(function(package)
+        io.replace("src/completers.c", "__finddata64_t", "_finddatai64_t",
+                   {plain = true})
+
         local configs = {}
-        
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
-       
+
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
+
         if package:is_plat("windows") and package:config("shared") then
             table.insert(configs, "-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON")
         end
 
-        import("package.tools.cmake").build(package, configs, {buildir = "build"})
-       
+        import("package.tools.cmake").build(package, configs,
+                                            {buildir = "build"})
+
         os.cp("include", package:installdir())
 
         os.trycp("build/**.a", package:installdir("lib"))
@@ -32,10 +36,13 @@ package("isocline")
         os.trycp("build/**.dll", package:installdir("bin"))
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             void test() {
                 ic_set_history("history.txt", 100);
             }
-        ]]}, {configs = {languages = "c++11"}, includes = "isocline.h"}))
+        ]]
+        }, {configs = {languages = "c++11"}, includes = "isocline.h"}))
     end)
+end)

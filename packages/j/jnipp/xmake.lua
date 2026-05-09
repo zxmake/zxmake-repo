@@ -1,12 +1,14 @@
-package("jnipp")
+package("jnipp", function()
     set_homepage("https://github.com/mitchdowd/jnipp")
     set_description("C++ wrapper for the Java Native Interface")
     set_license("MIT")
 
-    add_urls("https://github.com/mitchdowd/jnipp/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/mitchdowd/jnipp.git")
+    add_urls(
+        "https://github.com/mitchdowd/jnipp/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/mitchdowd/jnipp.git")
 
-    add_versions("v1.0.0", "e5ff425e1af81d6c0a80420f5b3a46986cdb5f2a1c34449e2fb262eb2edf885b")
+    add_versions("v1.0.0",
+                 "e5ff425e1af81d6c0a80420f5b3a46986cdb5f2a1c34449e2fb262eb2edf885b")
 
     if is_plat("windows") then
         add_syslinks("advapi32")
@@ -14,7 +16,8 @@ package("jnipp")
 
     add_deps("openjdk")
 
-    on_install("windows|x64", "linux|x86_64", "macosx|x86_64", "macosx|arm64", "mingw|x86_64", function (package)
+    on_install("windows|x64", "linux|x86_64", "macosx|x86_64", "macosx|arm64",
+               "mingw|x86_64", function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             add_requires("openjdk")
@@ -34,13 +37,16 @@ package("jnipp")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <jnipp.h>
             void test() {
                 jni::Vm vm;
                 jni::Class Integer = jni::Class("java/lang/Integer");
                 jni::Object i = Integer.newInstance("1000");
             }
-        ]]}, {configs = {languages = "c++14"}}))
+        ]]
+        }, {configs = {languages = "c++14"}}))
     end)
+end)

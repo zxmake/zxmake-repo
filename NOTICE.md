@@ -12,5 +12,3 @@ which can be obtained at:
     * https://github.com/xmake-io/xmake/blob/master/LICENSE.md (Apache License 2.0)
   * HOMEPAGE:
     * http://www.tboox.org/
-
-

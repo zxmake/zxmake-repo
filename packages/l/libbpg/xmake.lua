@@ -1,18 +1,28 @@
-package("libbpg")
+package("libbpg", function()
 
     set_homepage("https://bellard.org/bpg/")
-    set_description("Image format meant to improve on JPEG quality and file size")
+    set_description(
+        "Image format meant to improve on JPEG quality and file size")
 
     add_urls("https://bellard.org/bpg/libbpg-$(version).tar.gz")
-    add_versions("0.9.8", "c0788e23bdf1a7d36cb4424ccb2fae4c7789ac94949563c4ad0e2569d3bf0095")
+    add_versions("0.9.8",
+                 "c0788e23bdf1a7d36cb4424ccb2fae4c7789ac94949563c4ad0e2569d3bf0095")
 
-    add_configs("shared", {description = "Build shared library.", default = false, type = "boolean", readonly = true})
+    add_configs("shared", {
+        description = "Build shared library.",
+        default = false,
+        type = "boolean",
+        readonly = true
+    })
 
-    on_install("windows", "macosx", "linux", function (package)
+    on_install("windows", "macosx", "linux", function(package)
         if package:is_plat("windows") then
-            io.replace("libavutil/internal.h", "#pragma comment", "//", {plain = true})
-            io.replace("config.h", "#define HAVE_ATOMICS_GCC 1", "#define HAVE_ATOMICS_GCC 0", {plain = true})
-            io.replace("config.h", "#define HAVE_ATOMICS_WIN32 0", "#define HAVE_ATOMICS_WIN32 1", {plain = true})
+            io.replace("libavutil/internal.h", "#pragma comment", "//",
+                       {plain = true})
+            io.replace("config.h", "#define HAVE_ATOMICS_GCC 1",
+                       "#define HAVE_ATOMICS_GCC 0", {plain = true})
+            io.replace("config.h", "#define HAVE_ATOMICS_WIN32 0",
+                       "#define HAVE_ATOMICS_WIN32 1", {plain = true})
         end
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
@@ -35,6 +45,7 @@ package("libbpg")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("bpg_decoder_open", {includes = "libbpg.h"}))
     end)
+end)

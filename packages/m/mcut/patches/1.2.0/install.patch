@@ -3,9 +3,9 @@ index 464854d..6801276 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -297,25 +297,10 @@ endif()
- 
+
  # TODO: package documentation files
- 
+
 -if(MCUT_BUILD_AS_SHARED_LIB)
 -	#
 -	# dynamic libs
@@ -19,7 +19,7 @@ index 464854d..6801276 100644
 -	#
 -	# static libs
 -	#
--	
+-
 -	install(TARGETS ${mpn_static_lib_name}
 -			ARCHIVE
 -			DESTINATION lib/static
@@ -29,6 +29,6 @@ index 464854d..6801276 100644
 +	RUNTIME DESTINATION bin
 +	LIBRARY DESTINATION lib
 +	ARCHIVE DESTINATION lib)
- 
+
  #
  # headers

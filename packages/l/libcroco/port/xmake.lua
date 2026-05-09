@@ -4,14 +4,15 @@ add_rules("mode.debug", "mode.release")
 add_requires("glib", "libxml2")
 
 option("installprefix")
-    set_default("")
-    set_showmenu(true)
+set_default("")
+set_showmenu(true)
 option_end()
 if has_config("installprefix") then
     local prefix = get_config("installprefix")
     set_configvar("prefix", prefix)
     set_configvar("CROCO_CFLAGS", "-I" .. prefix .. "/include")
-    set_configvar("CROCO_LIBS", "-L" .. prefix .. "/lib -lglib-2.0 -pthread -lm -lpcre -lxml2")
+    set_configvar("CROCO_LIBS", "-L" .. prefix ..
+                      "/lib -lglib-2.0 -pthread -lm -lpcre -lxml2")
 end
 set_configvar("exec_prefix", "${prefix}")
 set_configvar("libdir", "${exec_prefix}/lib")
@@ -25,8 +26,8 @@ local mver = ""
 local major_ver = ""
 local minor_ver = ""
 option("vers")
-    set_default("")
-    set_showmenu(true)
+set_default("")
+set_showmenu(true)
 option_end()
 if has_config("vers") then
     set_version(get_config("vers"))
@@ -44,28 +45,30 @@ end
 set_configvar("G_DISABLE_CHECKS", 0)
 
 target("croco")
-    set_basename("croco-" .. mver)
-    set_kind("$(kind)")
-    add_files("src/*.c")
-    add_includedirs("src", {public = true})
-    add_packages("glib", "libxml2", {public = true})
-    set_configdir("src")
-    add_configfiles("src/libcroco-config.h.in", {pattern = "@(.-)@"})
-    add_headerfiles("src/*.h", {prefixdir = "libcroco-" .. mver .. "/libcroco"})
+set_basename("croco-" .. mver)
+set_kind("$(kind)")
+add_files("src/*.c")
+add_includedirs("src", {public = true})
+add_packages("glib", "libxml2", {public = true})
+set_configdir("src")
+add_configfiles("src/libcroco-config.h.in", {pattern = "@(.-)@"})
+add_headerfiles("src/*.h", {prefixdir = "libcroco-" .. mver .. "/libcroco"})
 target_end()
 
 target("csslint")
-    set_basename("csslint-" .. mver)
-    set_kind("binary")
-    add_deps("croco")
-    add_files("csslint/csslint.c")
-    set_configdir(".")
-    if not is_plat("windows") then
-        add_configfiles("croco-config.in", {pattern = "@(.-)@"})
-        add_configfiles("libcroco.pc.in", {pattern = "@(.-)@"})
-        after_install(function (target)
-            os.cp("croco-config", path.join(target:installdir(), "bin", "croco-" .. mver .. "-config"))
-            os.cp("libcroco.pc", path.join(target:installdir(), "lib", "pkgconfig", "libcroco-" .. mver .. ".pc"))
-        end)
-    end
+set_basename("csslint-" .. mver)
+set_kind("binary")
+add_deps("croco")
+add_files("csslint/csslint.c")
+set_configdir(".")
+if not is_plat("windows") then
+    add_configfiles("croco-config.in", {pattern = "@(.-)@"})
+    add_configfiles("libcroco.pc.in", {pattern = "@(.-)@"})
+    after_install(function(target)
+        os.cp("croco-config", path.join(target:installdir(), "bin",
+                                        "croco-" .. mver .. "-config"))
+        os.cp("libcroco.pc", path.join(target:installdir(), "lib", "pkgconfig",
+                                       "libcroco-" .. mver .. ".pc"))
+    end)
+end
 target_end()

@@ -13,7 +13,7 @@
 @@ -69,6 +69,12 @@
              utf8)
  #endif
- 
+
 +DEFENCODING(( "UTF-8-MAC",              /* utf8-nfd */
 +            "UTF8-MAC",                 /* label from samba 2.2jp */
 +            ),
@@ -1109,7 +1109,7 @@
 +unicode_decomposeable(u_int16_t character) {
 +	const u_int8_t *bitmap = __CFUniCharDecomposableBitmap;
 +	u_int8_t value;
-+	
++
 +	if (character < 0x00C0)
 +		return (0);
 +
@@ -1164,7 +1164,7 @@
 +	int nullterm  = ((flags & UTF_NO_NULL_TERM) == 0);
 +	int decompose = (flags & UTF_DECOMPOSED);
 +	int result = 0;
-+	
++
 +	bufstart = utf8p;
 +	bufend = bufstart + buflen;
 +	if (nullterm)
@@ -1190,7 +1190,7 @@
 +			if (utf8p >= bufend) {
 +				result = ENAMETOOLONG;
 +				break;
-+			}			
++			}
 +			*utf8p++ = ucs_ch;
 +
 +		} else if (ucs_ch < 0x800) {
@@ -1217,7 +1217,7 @@
 +						break;
 +					}
 +					--charcnt;
-+					++ucsp;				
++					++ucsp;
 +					*utf8p++ = 0xf0 | (pair >> 18);
 +					*utf8p++ = 0x80 | (0x3f & (pair >> 12));
 +					*utf8p++ = 0x80 | (0x3f & (pair >> 6));
@@ -1232,9 +1232,9 @@
 +			*utf8p++ = 0xe0 | (ucs_ch >> 12);
 +			*utf8p++ = 0x80 | (0x3f & (ucs_ch >> 6));
 +			*utf8p++ = 0x80 | (0x3f & ucs_ch);
-+		}	
++		}
 +	}
-+	
++
 +	*utf8len = utf8p - bufstart;
 +	if (nullterm)
 +		*utf8p++ = '\0';
@@ -1477,19 +1477,19 @@
 +
 +	if (value & RECURSIVE_DECOMPOSITION) {
 +	    usedLength = unicode_recursive_decompose((u_int16_t)*bmpMappings, convertedChars);
-+	
++
 +	    --length;	/* Decrement for the first char */
 +	    if (!usedLength)
 +	    	return 0;
 +	    ++bmpMappings;
 +	    convertedChars += usedLength;
 +	}
-+	
++
 +	usedLength += length;
-+	
++
 +	while (length--)
 +		*(convertedChars++) = *(bmpMappings++);
-+	
++
 +	return (usedLength);
 +}
 +
@@ -1561,7 +1561,7 @@
 +		            ((base - HANGUL_LBASE)*(HANGUL_VCOUNT*HANGUL_TCOUNT)) +
 +		            ((combining  - HANGUL_VBASE)*HANGUL_TCOUNT));
 +		}
-+	
++
 +		/* 3 char Hangul sequences */
 +		if ((combining > HANGUL_TBASE) &&
 +		    (base >= HANGUL_SBASE && base < (HANGUL_SBASE + HANGUL_SCOUNT))) {

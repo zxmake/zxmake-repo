@@ -1,4 +1,4 @@
-package("cpp20-http-client")
+package("cpp20-http-client", function()
     set_homepage("https://github.com/avocadoboi/cpp20-http-client")
     set_description("An HTTP(S) client library for C++20.")
     set_license("MIT")
@@ -13,7 +13,8 @@ package("cpp20-http-client")
         add_deps("openssl")
     end
 
-    on_install("windows", "linux", "macosx", "bsd", "android", "cross", function (package)
+    on_install("windows", "linux", "macosx", "bsd", "android", "cross",
+               function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             if not is_plat("windows") then
@@ -38,13 +39,16 @@ package("cpp20-http-client")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <cpp20_http_client.hpp>
             void test() {
                 auto const response = http_client::get("https://www.google.com")
                     .add_header({.name="HeaderName", .value="header value"})
                     .send();
             }
-        ]]}, {configs = {languages = "c++20"}}))
+        ]]
+        }, {configs = {languages = "c++20"}}))
     end)
+end)

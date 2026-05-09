@@ -1,7 +1,8 @@
-package("rxcpp")
+package("rxcpp", function()
     set_kind("library", {headeronly = true})
     set_homepage("http://reactivex.io/RxCpp/")
-    set_description("Compose async and event-based programs using observable sequences and LINQ-style query operators.")
+    set_description(
+        "Compose async and event-based programs using observable sequences and LINQ-style query operators.")
     set_license("Apache-2.0")
 
     set_urls("https://github.com/ReactiveX/RxCpp.git")
@@ -13,7 +14,8 @@ package("rxcpp")
     end)
 
     on_test(function(package)
-        assert(package:check_cxxsnippets({test = [[
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <rxcpp/rx.hpp>
             #include <iostream>
 
@@ -24,5 +26,7 @@ package("rxcpp")
                     [] () { std::cout << "OnCompleted\n"; }
                 );
             }
-        ]]}, {configs = {languages = "c++11"}}))
+        ]]
+        }, {configs = {languages = "c++11"}}))
     end)
+end)

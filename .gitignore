@@ -20,7 +20,6 @@
 .ccache
 .demo
 .svn
-.vscode
 .DS_Store
 .xmake
 cscope.*

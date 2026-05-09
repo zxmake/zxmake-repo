@@ -1,19 +1,28 @@
-package("doxygen")
+package("doxygen", function()
     set_kind("binary")
     set_homepage("https://www.doxygen.nl/")
     set_license("GPL-2.0")
 
-    add_urls("https://doxygen.nl/files/doxygen-$(version).src.tar.gz", {alias = "archive"})
-    add_urls("https://github.com/doxygen/doxygen/releases/download/Release_$(version).src.tar.gz", {
-        alias = "archive",
-        version = function (version) return format("%s/doxygen-%s", version:gsub("%.", "_"), version) end
-    })
+    add_urls("https://doxygen.nl/files/doxygen-$(version).src.tar.gz",
+             {alias = "archive"})
+    add_urls(
+        "https://github.com/doxygen/doxygen/releases/download/Release_$(version).src.tar.gz",
+        {
+            alias = "archive",
+            version = function(version)
+                return format("%s/doxygen-%s", version:gsub("%.", "_"), version)
+            end
+        })
     add_urls("https://github.com/doxygen/doxygen.git", {alias = "github"})
 
-    add_versions("archive:1.10.0", "dd7c556b4d96ca5e682534bc1f1a78a5cfabce0c425b14c1b8549802686a4442")
-    add_versions("archive:1.9.6", "297f8ba484265ed3ebd3ff3fe7734eb349a77e4f95c8be52ed9977f51dea49df")
-    add_versions("archive:1.9.5", "55b454b35d998229a96f3d5485d57a0a517ce2b78d025efb79d57b5a2e4b2eec")
-    add_versions("archive:1.9.3", "f352dbc3221af7012b7b00935f2dfdc9fb67a97d43287d2f6c81c50449d254e0")
+    add_versions("archive:1.10.0",
+                 "dd7c556b4d96ca5e682534bc1f1a78a5cfabce0c425b14c1b8549802686a4442")
+    add_versions("archive:1.9.6",
+                 "297f8ba484265ed3ebd3ff3fe7734eb349a77e4f95c8be52ed9977f51dea49df")
+    add_versions("archive:1.9.5",
+                 "55b454b35d998229a96f3d5485d57a0a517ce2b78d025efb79d57b5a2e4b2eec")
+    add_versions("archive:1.9.3",
+                 "f352dbc3221af7012b7b00935f2dfdc9fb67a97d43287d2f6c81c50449d254e0")
     add_versions("github:1.10.0", "Release_1_10_0")
     add_versions("github:1.9.6", "Release_1_9_6")
     add_versions("github:1.9.5", "Release_1_9_5")
@@ -26,27 +35,29 @@ package("doxygen")
         add_deps("python 3.x", {kind = "binary", private = true})
     end
 
-    on_load("@windows", function (package)
+    on_load("@windows", function(package)
         if package:is_built() then
             package:add("deps", "cmake", "bison >=2.7", "flex")
             package:add("deps", "python 3.x", {kind = "binary"})
         end
     end)
 
-    on_install("@windows", "@macosx", "@linux", function (package)
+    on_install("@windows", "@macosx", "@linux", function(package)
         local configs = {}
         local cxflags = {}
         if package:is_plat("windows") then
             -- these 2 flags are required to make doxygen compile on windows
             table.insert(cxflags, "/utf-8")
             table.insert(cxflags, "/DGHC_WITH_EXCEPTIONS")
-            table.insert(cxflags, "/EHsc")  -- to reduce warnings
+            table.insert(cxflags, "/EHsc") -- to reduce warnings
         end
 
         os.rm("templates/*/PaxHeader")
-        import("package.tools.cmake").install(package, configs, {cxflags = cxflags, jobs = 1})
+        import("package.tools.cmake").install(package, configs,
+                                              {cxflags = cxflags, jobs = 1})
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         os.vrun("doxygen -v")
     end)
+end)

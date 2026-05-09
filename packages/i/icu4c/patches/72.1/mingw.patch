@@ -5,7 +5,7 @@ index 30f6e5b..7cadf9d 100644
 @@ -15,11 +15,6 @@
  # If you prefer to have the DLLs in the lib folder, then set this to NO instead.
  MINGW_MOVEDLLSTOBINDIR = YES
- 
+
 -# We install sbin tools into the same bin directory because
 -# pkgdata needs some of the tools in sbin, and we can't always depend on
 -# icu-config working on Windows.
@@ -15,12 +15,12 @@ index 30f6e5b..7cadf9d 100644
  GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
  GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
 @@ -81,6 +76,10 @@ else
- SO_TARGET_VERSION_SUFFIX = 
+ SO_TARGET_VERSION_SUFFIX =
  endif
- 
+
 +## Remove shared library 's'
-+STATIC_PREFIX_WHEN_USED = 
-+STATIC_PREFIX = 
++STATIC_PREFIX_WHEN_USED =
++STATIC_PREFIX =
 +
  # Static library prefix and file extension
  LIBSICU = $(LIBPREFIX)$(STATIC_PREFIX)$(ICUPREFIX)
@@ -32,7 +32,7 @@ index fb64c56..40b436a 100644
 @@ -15,11 +15,6 @@ MINGW_MOVEDLLSTOBINDIR = YES
  # This file is similar to mh-mingw
  # Any changes made here may also need to be made in mh-mingw
- 
+
 -# We install sbin tools into the same bin directory because
 -# pkgdata needs some of the tools in sbin, and we can't always depend on
 -# icu-config working on Windows.
@@ -42,12 +42,12 @@ index fb64c56..40b436a 100644
  GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
  GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
 @@ -81,6 +76,10 @@ else
- SO_TARGET_VERSION_SUFFIX = 
+ SO_TARGET_VERSION_SUFFIX =
  endif
- 
+
 +## Remove shared library 's'
-+STATIC_PREFIX_WHEN_USED = 
-+STATIC_PREFIX = 
++STATIC_PREFIX_WHEN_USED =
++STATIC_PREFIX =
 +
  # Static library prefix and file extension
  LIBSICU = lib$(LIBPREFIX)$(STATIC_PREFIX)$(ICUPREFIX)

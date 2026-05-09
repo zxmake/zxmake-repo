@@ -14,16 +14,16 @@ function(extract_from_makefile PATTERN RETURN FILEPATH)
     if("${CONTENTS}" STREQUAL "")
         message(AUTHOR_WARNING "No match for \"${PATTERN}\" found in file ${FILEPATH}")
     endif()
-    # Return 
+    # Return
     set(${RETURN} ${CONTENTS} PARENT_SCOPE)
 endfunction(extract_from_makefile)
 
 # Function to extract C sources from makefile
 function(extract_sources SUBFOLDER ALLSOURCES)
     extract_from_makefile("lib[a-zA-Z1-9_]*_la_SOURCES[ \t]*=[ \t]*(((\\\\\n)?[^\n])*)" SOURCEFILES "${SUBFOLDER}/Makefile.am")
-    # Add the folder in front of the file names 
+    # Add the folder in front of the file names
     string(REGEX REPLACE "([^;]+)" "${SUBFOLDER}/\\1" SOURCEFILES "${SOURCEFILES}")
-    # Return 
+    # Return
     set(${ALLSOURCES} ${${ALLSOURCES}} ${SOURCEFILES} PARENT_SCOPE)
 endfunction(extract_sources)
 
@@ -49,7 +49,7 @@ file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/gsl_types.h "${GSLTYPES_H}")
 file(GLOB_RECURSE PUBLIC_HEADERS gsl*.h)
 list(APPEND PUBLIC_HEADERS ${CMAKE_CURRENT_BINARY_DIR}/gsl_types.h)
 
-# The debug libraries have a "d" postfix so that CMake's FindGSL.cmake 
+# The debug libraries have a "d" postfix so that CMake's FindGSL.cmake
 # module can distinguish between Release and Debug libraries
 set(CMAKE_DEBUG_POSTFIX "d")
 

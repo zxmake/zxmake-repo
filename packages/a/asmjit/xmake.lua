@@ -1,6 +1,7 @@
-package("asmjit")
+package("asmjit", function()
     set_homepage("https://asmjit.com/")
-    set_description("AsmJit is a lightweight library for machine code generation written in C++ language.")
+    set_description(
+        "AsmJit is a lightweight library for machine code generation written in C++ language.")
     set_license("zlib")
 
     add_urls("https://github.com/asmjit/asmjit.git")
@@ -15,19 +16,22 @@ package("asmjit")
 
     add_deps("cmake")
 
-    on_install("!iphoneos", function (package)
+    on_install("!iphoneos", function(package)
         if not package:config("shared") then
             package:add("defines", "ASMJIT_STATIC")
         end
 
         local configs = {}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DASMJIT_STATIC=" .. (package:config("shared") and "OFF" or "ON"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DASMJIT_STATIC=" ..
+                         (package:config("shared") and "OFF" or "ON"))
         import("package.tools.cmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             typedef int (*Func)(void);
             void test() {
                 using namespace asmjit;
@@ -43,5 +47,7 @@ package("asmjit")
                 rt.release(fn);
                 return;
             }
-        ]]}, {configs = {languages = "c++17"}, includes = "asmjit/asmjit.h"}))
+        ]]
+        }, {configs = {languages = "c++17"}, includes = "asmjit/asmjit.h"}))
     end)
+end)

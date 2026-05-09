@@ -3,7 +3,7 @@ Author: Kelvin Zhang <zhangxp1998@gmail.com>
 Date:   Fri Dec 31 09:31:00 2021 -0800
 
     Use meson dependency to link against apple framework
-    
+
     Using ld_flags would work, but that does not propagate ldflags to users
     of glib. Meson's dependency() call will propagate apple framework
     dependencies to downstream users.
@@ -28,14 +28,14 @@ index f78f32969..13750dd83 100644
 @@ -310,6 +310,8 @@ glib_sources = files(
    'gprintf.c',
  )
- 
+
 +platform_deps = []
 +
  if host_system == 'windows'
    glib_win_rc = configure_file(
      input: 'glib.rc.in',
 @@ -330,6 +332,13 @@ endif
- 
+
  if glib_have_cocoa
    glib_sources += files('gosxutils.m')
 +  framework_dep = dependency('appleframeworks', modules : ['Foundation', 'CoreFoundation', 'AppKit'])
@@ -46,23 +46,23 @@ index f78f32969..13750dd83 100644
 +  framework_dep = dependency('appleframeworks', modules : 'Carbon')
 +  platform_deps += [framework_dep]
  endif
- 
+
  glib_sources += files('gthread-@0@.c'.format(threads_implementation))
 diff --git a/meson.build b/meson.build
 index 9d1b76c56..f780fa82e 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -769,8 +769,6 @@ if host_system == 'darwin'
- 
+
    add_project_arguments(objcc.get_supported_arguments(warning_objc_args), language: 'objc')
- 
+
 -  osx_ldflags += ['-Wl,-framework,CoreFoundation']
 -
    # Mac OS X Carbon support
    glib_have_carbon = objcc.compiles('''#include <Carbon/Carbon.h>
                                         #include <CoreServices/CoreServices.h>''',
 @@ -778,7 +776,6 @@ if host_system == 'darwin'
- 
+
    if glib_have_carbon
      glib_conf.set('HAVE_CARBON', true)
 -    osx_ldflags += '-Wl,-framework,Carbon'
@@ -70,10 +70,10 @@ index 9d1b76c56..f780fa82e 100644
                                                    #if MAC_OS_X_VERSION_MIN_REQUIRED < 1090
                                                    #error Compiling for minimum OS X version before 10.9
 @@ -795,7 +792,6 @@ if host_system == 'darwin'
- 
+
    if glib_have_cocoa
      glib_conf.set('HAVE_COCOA', true)
 -    osx_ldflags += ['-Wl,-framework,Foundation', '-Wl,-framework,AppKit']
    endif
- 
+
    # FIXME: libgio mix C and objC source files and there is no way to reliably

@@ -5,7 +5,7 @@ index 6c70b55f9..22878365c 100644
 @@ -557,92 +557,5 @@ if(USE_CUSTOM_LIBCXX)
    target_link_libraries(libcxx libcxxabi)
  endif()
- 
+
 -# Add minimal googletest targets. The provided one has many side-effects, and
 -# googletest has a very straightforward build.
 -add_library(boringssl_gtest third_party/googletest/src/gtest-all.cc)
@@ -101,10 +101,10 @@ index d9cfa5c51..1dc878597 100644
 +++ b/crypto/CMakeLists.txt
 @@ -91,7 +91,6 @@ function(perlasm dest src)
  endfunction()
- 
+
  add_subdirectory(fipsmodule)
 -add_subdirectory(test)
- 
+
  if(FIPS_DELOCATE OR FIPS_SHARED)
    SET_SOURCE_FILES_PROPERTIES(fipsmodule/bcm.o PROPERTIES EXTERNAL_OBJECT true)
 @@ -472,96 +471,3 @@ endif()
@@ -209,9 +209,9 @@ index 4f4abf8a4..2ee9b88fc 100644
 --- a/ssl/CMakeLists.txt
 +++ b/ssl/CMakeLists.txt
 @@ -46,20 +46,3 @@ add_dependencies(ssl global_target)
- 
+
  target_link_libraries(ssl crypto)
- 
+
 -add_executable(
 -  ssl_test
 -

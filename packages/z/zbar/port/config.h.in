@@ -476,4 +476,3 @@
 #ifndef X_DISPLAY_MISSING
 # define HAVE_X
 #endif
-

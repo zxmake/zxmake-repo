@@ -1,4 +1,4 @@
-package("depot_tools")
+package("depot_tools", function()
     set_kind("binary")
     set_homepage("https://chromium.googlesource.com/chromium/tools/depot_tools")
     set_description("Tools for working with Chromium development")
@@ -12,7 +12,7 @@ package("depot_tools")
     -- we use external ninja instead of depot_tools/ninja which eating ram until VM exhaustion (16GB)
     add_deps("ninja", {private = true, system = false})
 
-    on_load(function (package)
+    on_load(function(package)
         package:addenv("PATH", ".")
         package:addenv("PATH", "python-bin")
         package:addenv("DEPOT_TOOLS_UPDATE", "0")
@@ -20,7 +20,7 @@ package("depot_tools")
         package:addenv("DEPOT_TOOLS_WIN_TOOLCHAIN", "0")
     end)
 
-    on_install("linux", "macosx", "windows", function (package)
+    on_install("linux", "macosx", "windows", function(package)
         import("core.base.global")
         local sourcedir = os.curdir()
         os.cp("*", package:installdir())
@@ -37,10 +37,13 @@ package("depot_tools")
         envs.PATH = table.join(sourcedir, path.splitenv(os.getenv("PATH")))
         -- skip to check and update obsolete URL
         io.replace("./update_depot_tools",
-            'CANONICAL_GIT_URL="https://chromium.googlesource.com/chromium/tools/depot_tools.git"',
-            'CANONICAL_GIT_URL="https://github.com/xmake-mirror/depot_tools.git"', {plain = true})
-        io.replace("./update_depot_tools", 'remote_url=$(eval "$GIT" config --get remote.origin.url)',
-            'remote_url="https://github.com/xmake-mirror/depot_tools.git"', {plain = true})
+                   'CANONICAL_GIT_URL="https://chromium.googlesource.com/chromium/tools/depot_tools.git"',
+                   'CANONICAL_GIT_URL="https://github.com/xmake-mirror/depot_tools.git"',
+                   {plain = true})
+        io.replace("./update_depot_tools",
+                   'remote_url=$(eval "$GIT" config --get remote.origin.url)',
+                   'remote_url="https://github.com/xmake-mirror/depot_tools.git"',
+                   {plain = true})
         os.vrunv("git", {"config", "user.email", "you@example.com"})
         os.vrunv("git", {"config", "user.name", "me"})
         os.vrunv("git", {"commit", "-a", "-m", "..."})
@@ -50,13 +53,14 @@ package("depot_tools")
         else
             os.vrunv("./gclient", {"--verbose"}, {shell = true, envs = envs})
         end
-        local ninja = path.join(package:dep("ninja"):installdir("bin"), "ninja" .. (is_host("windows") and ".exe" or ""))
+        local ninja = path.join(package:dep("ninja"):installdir("bin"),
+                                "ninja" .. (is_host("windows") and ".exe" or ""))
         if ninja and os.isfile(ninja) then
             os.cp(ninja, package:installdir())
         end
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         import("core.base.global")
         os.vrun("python3 --version")
         os.vrun("ninja --version")
@@ -67,5 +71,7 @@ package("depot_tools")
             envs.HTTPS_PROXY = proxy
             envs.ALL_PROXY = proxy
         end
-        os.vrunv(is_host("windows") and "gclient.bat" or "gclient", {"--version"}, {envs = envs})
+        os.vrunv(is_host("windows") and "gclient.bat" or "gclient",
+                 {"--version"}, {envs = envs})
     end)
+end)

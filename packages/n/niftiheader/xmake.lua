@@ -1,8 +1,9 @@
-package("niftiheader")
+package("niftiheader", function()
 
     set_kind("library", {headeronly = true})
     set_homepage("https://nifti.nimh.nih.gov/")
-    set_description("Header structure descriptions for the nifti1 and nifti2 file formats.")
+    set_description(
+        "Header structure descriptions for the nifti1 and nifti2 file formats.")
     set_license("Public Domain")
 
     add_urls("https://github.com/xmake-mirror/nifti2.git")
@@ -17,3 +18,4 @@ package("niftiheader")
         assert(package:has_ctypes("nifti_1_header", {includes = {"nifti1.h"}}))
         assert(package:has_ctypes("nifti_2_header", {includes = {"nifti2.h"}}))
     end)
+end)

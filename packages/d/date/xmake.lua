@@ -1,4 +1,4 @@
-package("date")
+package("date", function()
 
     set_homepage("https://github.com/HowardHinnant/date")
     set_description("A date and time library for use with C++11 and C++14.")
@@ -20,28 +20,34 @@ package("date")
         add_deps("zlib")
     end
 
-    on_install(function (package)
-        local configs = {"-DBUILD_TZ_LIB=ON",
-                         "-DUSE_SYSTEM_TZ_DB=ON"}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
+    on_install(function(package)
+        local configs = {"-DBUILD_TZ_LIB=ON", "-DUSE_SYSTEM_TZ_DB=ON"}
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
         import("package.tools.cmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <date/date.h>
             void test() {
                 using namespace date;
                 year_month_weekday_last{year{2015}, month{3u}, weekday_last{weekday{0u}}};
             }
-        ]]}, {configs = {languages = "c++11"}}))
-        assert(package:check_cxxsnippets({test = [[
+        ]]
+        }, {configs = {languages = "c++11"}}))
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <date/tz.h>
             void test() {
                 using namespace date;
                 using namespace std::chrono;
                 make_zoned(current_zone(), system_clock::now());
             }
-        ]]}, {configs = {languages = "c++11"}}))
+        ]]
+        }, {configs = {languages = "c++11"}}))
     end)
+end)

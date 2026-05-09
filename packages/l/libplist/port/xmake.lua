@@ -13,11 +13,11 @@ if version then
 end
 
 target("plist")
-    set_kind("$(kind)")
-    add_files("libcnary/*.c|cnary.c", "src/*.c")
-    add_includedirs("src", "include", "libcnary/include")
-    add_headerfiles("include/(plist/*.h)")
+set_kind("$(kind)")
+add_files("libcnary/*.c|cnary.c", "src/*.c")
+add_includedirs("src", "include", "libcnary/include")
+add_headerfiles("include/(plist/*.h)")
 
-    if is_kind("static") then
-        add_defines("LIBPLIST_STATIC")
-    end
+if is_kind("static") then
+    add_defines("LIBPLIST_STATIC")
+end

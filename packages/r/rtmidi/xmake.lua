@@ -1,17 +1,28 @@
-package("rtmidi")
+package("rtmidi", function()
     set_homepage("https://github.com/thestk/rtmidi")
-    set_description("A set of C++ classes that provide a common API for realtime MIDI input/output across Linux (ALSA & JACK), Macintosh OS X (CoreMIDI) and Windows (Multimedia)")
+    set_description(
+        "A set of C++ classes that provide a common API for realtime MIDI input/output across Linux (ALSA & JACK), Macintosh OS X (CoreMIDI) and Windows (Multimedia)")
 
-    add_urls("https://github.com/thestk/rtmidi/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/thestk/rtmidi.git")
+    add_urls(
+        "https://github.com/thestk/rtmidi/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/thestk/rtmidi.git")
 
-    add_versions("6.0.0", "ef7bcda27fee6936b651c29ebe9544c74959d0b1583b716ce80a1c6fea7617f0")
+    add_versions("6.0.0",
+                 "ef7bcda27fee6936b651c29ebe9544c74959d0b1583b716ce80a1c6fea7617f0")
 
     if is_plat("linux") then
-        add_configs("alsa", {default = false, description = "Use alsa api on linux.", type = "boolean"})
+        add_configs("alsa", {
+            default = false,
+            description = "Use alsa api on linux.",
+            type = "boolean"
+        })
     end
     if is_plat("linux", "macosx", "bsd") then
-        add_configs("jack", {default = false, description = "Use jack api on posix.", type = "boolean"})
+        add_configs("jack", {
+            default = false,
+            description = "Use jack api on posix.",
+            type = "boolean"
+        })
     end
 
     if is_plat("windows", "mingw") then
@@ -37,17 +48,23 @@ package("rtmidi")
         end
     end)
 
-    on_install("windows", "linux", "macosx", "bsd", "mingw", "msys", "iphoneos", "cross", "wasm", function (package)
+    on_install("windows", "linux", "macosx", "bsd", "mingw", "msys", "iphoneos",
+               "cross", "wasm", function(package)
         local configs = {"-DRTMIDI_BUILD_TESTING=OFF"}
-        table.insert(configs, "-DRTMIDI_API_ALSA=" .. (package:config("alsa") and "ON" or "OFF"))
-        table.insert(configs, "-DRTMIDI_API_JACK=" .. (package:config("jack") and "ON" or "OFF"))
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:is_debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
+        table.insert(configs, "-DRTMIDI_API_ALSA=" ..
+                         (package:config("alsa") and "ON" or "OFF"))
+        table.insert(configs, "-DRTMIDI_API_JACK=" ..
+                         (package:config("jack") and "ON" or "OFF"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:is_debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
         import("package.tools.cmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <rtmidi/RtMidi.h>
             void test() {
                 try {
@@ -56,5 +73,7 @@ package("rtmidi")
                     error.printMessage();
                 }
             }
-        ]]}, {configs = {languages = "c++11"}}))
+        ]]
+        }, {configs = {languages = "c++11"}}))
     end)
+end)

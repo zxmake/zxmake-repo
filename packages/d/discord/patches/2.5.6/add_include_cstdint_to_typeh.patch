@@ -4,9 +4,8 @@ index 8c7cc2b..86b63c7 100644
 +++ b/cpp/types.h
 @@ -1,5 +1,7 @@
  #pragma once
- 
+
 +#include <cstdint>
 +
  #include "ffi.h"
  #include "event.h"
- 

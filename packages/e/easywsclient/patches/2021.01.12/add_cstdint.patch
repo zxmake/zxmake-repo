@@ -33,10 +33,9 @@ index 08c4a7b..df60500 100644
 --- a/easywsclient.hpp
 +++ b/easywsclient.hpp
 @@ -10,6 +10,7 @@
- 
+
  #include <string>
  #include <vector>
 +#include <cstdint>
- 
+
  namespace easywsclient {
- 

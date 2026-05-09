@@ -14,7 +14,7 @@ index 491f5b8a..18e682db 100644
 @@ -136,7 +136,7 @@ class basic_flex_body<TextBody, FileBody>::value_type
  	inline bool is_text() const noexcept { return !is_file();      }
  	inline bool is_file() const noexcept { return file_.is_open(); }
- 
+
 -    inline void set_to_text_limit(std::uint64_t v) const noexcept
 +    inline void set_to_text_limit(std::uint64_t v) noexcept
      {

@@ -1,13 +1,15 @@
-package("pthreads4w")
+package("pthreads4w", function()
 
     set_homepage("https://sourceforge.net/projects/pthreads4w/")
     set_description("POSIX Threads for Win32")
 
-    set_urls("https://github.com/xmake-mirror/pthreads4w/archive/$(version).tar.gz",
-             "https://github.com/xmake-mirror/pthreads4w.git",
-             "https://gitee.com/xmake-mirror/pthreads4w.git")
+    set_urls(
+        "https://github.com/xmake-mirror/pthreads4w/archive/$(version).tar.gz",
+        "https://github.com/xmake-mirror/pthreads4w.git",
+        "https://gitee.com/xmake-mirror/pthreads4w.git")
 
-    add_versions("3.0.0", "31f20963840c26d78fb20224577b7e677018b3eb3000c3570db88528043adc20")
+    add_versions("3.0.0",
+                 "31f20963840c26d78fb20224577b7e677018b3eb3000c3570db88528043adc20")
 
     add_includedirs("include/pthread")
 
@@ -15,7 +17,7 @@ package("pthreads4w")
         add_deps("autoconf", "automake")
     end
 
-    on_install("windows|x64", "windows|x86", function (package)
+    on_install("windows|x64", "windows|x86", function(package)
         local target = "VC"
         if not package:config("shared") then
             target = target .. "-static"
@@ -35,7 +37,7 @@ package("pthreads4w")
         end
     end)
 
-    on_install("mingw@macosx,linux", function (package)
+    on_install("mingw@macosx,linux", function(package)
         local configs = {}
         if package:config("shared") then
             table.insert(configs, "--enable-shared=yes")
@@ -57,6 +59,7 @@ package("pthreads4w")
         os.vrunv("make", {"V=1", target})
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("pthread_create", {includes = "pthread.h"}))
     end)
+end)

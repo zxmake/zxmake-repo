@@ -1,27 +1,35 @@
-package("tgbot-cpp")
+package("tgbot-cpp", function()
     set_homepage("http://reo7sp.github.io/tgbot-cpp")
     set_description("C++ library for Telegram bot API")
     set_license("MIT")
 
-    set_urls("https://github.com/reo7sp/tgbot-cpp/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/reo7sp/tgbot-cpp.git")
+    set_urls(
+        "https://github.com/reo7sp/tgbot-cpp/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/reo7sp/tgbot-cpp.git")
 
-    add_versions("v1.8", "43ff1a359b8db026e58e517703e616accaae33e01ebc7e87613632b7e4653467")
-    add_versions("v1.7.3", "f1d2863a7ac77f2a58b3c6f8a163b4d6e9d191ab5bff0dcf6e271adabf9111a9")
-    add_versions("v1.7.2", "3a41c25c5e4b60bda3f278550a380f1c7c382fd50ea1ab1801edc837d1535462")
+    add_versions("v1.8",
+                 "43ff1a359b8db026e58e517703e616accaae33e01ebc7e87613632b7e4653467")
+    add_versions("v1.7.3",
+                 "f1d2863a7ac77f2a58b3c6f8a163b4d6e9d191ab5bff0dcf6e271adabf9111a9")
+    add_versions("v1.7.2",
+                 "3a41c25c5e4b60bda3f278550a380f1c7c382fd50ea1ab1801edc837d1535462")
 
-    add_configs("curl", {description = "Use curl-based http client CurlHttpClient", default = false, type = "boolean"})
+    add_configs("curl", {
+        description = "Use curl-based http client CurlHttpClient",
+        default = false,
+        type = "boolean"
+    })
 
     add_deps("openssl", "zlib")
     add_deps("boost", {configs = {system = true}})
 
-    on_load(function (package)
+    on_load(function(package)
         if package:config("curl") then
             package:add("deps", "libcurl", {configs = {openssl = true}})
         end
     end)
 
-    on_install("windows", "linux", "macosx", "mingw", "cross", function (package)
+    on_install("windows", "linux", "macosx", "mingw", "cross", function(package)
         io.writefile("xmake.lua", [[
             add_requires("openssl", "zlib")
             add_requires("boost", {configs = {system = true}})
@@ -54,11 +62,14 @@ package("tgbot-cpp")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <tgbot/tgbot.h>
             void test() {
                 TgBot::Bot bot("PLACE YOUR TOKEN HERE");
             }
-        ]]}, {configs = {languages = "c++17"}}))
+        ]]
+        }, {configs = {languages = "c++17"}}))
     end)
+end)

@@ -1,4 +1,4 @@
-package("libyaml")
+package("libyaml", function()
 
     set_homepage("http://pyyaml.org/wiki/LibYAML")
     set_description("Canonical source repository for LibYAML.")
@@ -6,16 +6,18 @@ package("libyaml")
 
     set_urls("https://github.com/yaml/libyaml/archive/$(version).tar.gz",
              "https://github.com/yaml/libyaml.git")
-    add_versions("0.2.2", "46bca77dc8be954686cff21888d6ce10ca4016b360ae1f56962e6882a17aa1fe")
-    add_versions("0.2.5", "fa240dbf262be053f3898006d502d514936c818e422afdcf33921c63bed9bf2e")
+    add_versions("0.2.2",
+                 "46bca77dc8be954686cff21888d6ce10ca4016b360ae1f56962e6882a17aa1fe")
+    add_versions("0.2.5",
+                 "fa240dbf262be053f3898006d502d514936c818e422afdcf33921c63bed9bf2e")
 
-    on_load("windows", function (package)
+    on_load("windows", function(package)
         if not package:config("shared") then
             package:add("defines", "YAML_DECLARE_STATIC")
         end
     end)
 
-    on_install("windows", "macosx", "linux", "mingw", function (package)
+    on_install("windows", "macosx", "linux", "mingw", function(package)
         local ver = package:version()
         io.writefile("xmake.lua", format([[
             add_rules("mode.debug", "mode.release")
@@ -36,9 +38,13 @@ package("libyaml")
                     add_defines("YAML_DECLARE_EXPORT")
                 end
         ]], ver:major(), ver:minor(), ver:patch(), ver))
-        import("package.tools.xmake").install(package, {kind = package:config("shared") and "shared" or "static"})
+        import("package.tools.xmake").install(package, {
+            kind = package:config("shared") and "shared" or "static"
+        })
     end)
 
-    on_test(function (package)
-        assert(package:has_cfuncs("yaml_document_initialize", {includes = "yaml.h"}))
+    on_test(function(package)
+        assert(package:has_cfuncs("yaml_document_initialize",
+                                  {includes = "yaml.h"}))
     end)
+end)

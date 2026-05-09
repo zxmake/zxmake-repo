@@ -1,4 +1,4 @@
-package("emscripten")
+package("emscripten", function()
     set_kind("toolchain")
     set_homepage("https://emscripten.org/")
     set_description("Emscripten: An LLVM-to-WebAssembly Compiler.")
@@ -13,7 +13,7 @@ package("emscripten")
 
     add_deps("python")
 
-    on_load(function (package)
+    on_load(function(package)
         package:addenv("PATH", "upstream/emscripten")
         package:addenv("PATH", ".")
         package:addenv("EMSDK", ".")
@@ -25,7 +25,7 @@ package("emscripten")
         end
     end)
 
-    on_install("windows", "macosx", "linux", function (package)
+    on_install("windows", "macosx", "linux", function(package)
         import("lib.detect.find_directory")
 
         -- installation
@@ -40,7 +40,9 @@ package("emscripten")
 
         -- setup env
         local exe = package:is_plat("windows") and ".exe" or ""
-        local node_bindir = find_directory("bin", {path.join(installdir, "node", "**")})
+        local node_bindir = find_directory("bin", {
+            path.join(installdir, "node", "**")
+        })
         if node_bindir then
             node_bindir = path.relative(node_bindir, installdir)
             package:addenv("PATH", node_bindir)
@@ -50,7 +52,8 @@ package("emscripten")
             local python = find_directory("*", path.join(installdir, "python"))
             if python then
                 python = path.relative(python, installdir)
-                package:addenv("EMSDK_PYTHON", path.join(python, "python" .. exe))
+                package:addenv("EMSDK_PYTHON",
+                               path.join(python, "python" .. exe))
             end
             local java = find_directory("*", path.join(installdir, "java"))
             if java then
@@ -60,7 +63,8 @@ package("emscripten")
         end
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         local emcc = is_host("windows") and "emcc.bat" or "emcc"
         os.vrunv(emcc, {"--version"})
     end)
+end)

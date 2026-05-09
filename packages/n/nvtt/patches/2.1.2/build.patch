@@ -17,7 +17,7 @@ index e4d5c56..5d391cb 100644
 +++ b/cmake/OptimalOptions.cmake
 @@ -11,11 +11,11 @@ IF(MSVC)
  #	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2 /fp:fast")
- 
+
  	# Optimization flags.
 -	SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} /O2 /Ob2 /Oi /Ot /Oy /GL")
 -	SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} /O2 /Ob2 /Oi /Ot /Oy /GL")
@@ -29,7 +29,7 @@ index e4d5c56..5d391cb 100644
 +#	SET(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG")
 +#	SET(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG")
 +#	SET(CMAKE_MODULE_LINKER_FLAGS_RELEASE "${CMAKE_MODULE_LINKER_FLAGS_RELEASE} /LTCG")
- 
+
  	# Definitions.
  	ADD_DEFINITIONS(-D__SSE2__ -D__SSE__ -D__MMX__)
 diff --git a/extern/CMP_Core/source/cmp_math_func.h b/extern/CMP_Core/source/cmp_math_func.h
@@ -39,11 +39,11 @@ index c2f8908..b652497 100644
 @@ -32,6 +32,7 @@
  // Core API which have have GPU equivalents, defined here for HPC_CPU usage
  //============================================================================
- 
+
 +#include <cmath>
  #include <algorithm>
  using namespace std;
- 
+
 diff --git a/extern/CMakeLists.txt b/extern/CMakeLists.txt
 index ca90fa0..d8fbe1c 100644
 --- a/extern/CMakeLists.txt
@@ -51,18 +51,18 @@ index ca90fa0..d8fbe1c 100644
 @@ -5,7 +5,7 @@ ADD_SUBDIRECTORY(EtcLib)
  ADD_SUBDIRECTORY(rg_etc1_v104)
  #ADD_SUBDIRECTORY(etcpack)
- 
+
 -ADD_SUBDIRECTORY(libsquish-1.15)
 +#ADD_SUBDIRECTORY(libsquish-1.15)
- 
+
  ADD_SUBDIRECTORY(CMP_Core)
- 
+
 diff --git a/src/bc6h/CMakeLists.txt b/src/bc6h/CMakeLists.txt
 index fd75e74..bba50d5 100644
 --- a/src/bc6h/CMakeLists.txt
 +++ b/src/bc6h/CMakeLists.txt
 @@ -15,3 +15,8 @@ SET(BC6H_SRCS
- 
+
  ADD_LIBRARY(bc6h STATIC ${BC6H_SRCS})
  TARGET_LINK_LIBRARIES(bc6h nvcore nvmath)
 +
@@ -75,7 +75,7 @@ index 566fe1f..10b37cc 100644
 --- a/src/bc7/CMakeLists.txt
 +++ b/src/bc7/CMakeLists.txt
 @@ -23,3 +23,8 @@ SET(BC7_SRCS
- 
+
  ADD_LIBRARY(bc7 STATIC ${BC7_SRCS})
  TARGET_LINK_LIBRARIES(bc7 nvcore nvmath)
 +
@@ -89,7 +89,7 @@ index 38532eb..e68d8f8 100644
 +++ b/src/nvmath/nvmath.h
 @@ -118,12 +118,12 @@ inline float asinf_assert(const float f)
  #endif
- 
+
  #if NV_CC_MSVC
 -NV_FORCEINLINE float log2f(float x)
 +NV_FORCEINLINE float nv_log2f(float x)
@@ -109,22 +109,22 @@ index 8285f99..16500ca 100644
 @@ -47,9 +47,15 @@ ADD_DEFINITIONS(-DNVTT_EXPORTS)
  #ADD_DEFINITIONS(-DHAVE_RGETC)
  #ADD_DEFINITIONS(-DHAVE_ETCPACK)
- 
+
 +if(APPLE)
 +    add_compile_options(-mbmi2 -mfma)
 +endif()
 +
- IF(NVTT_SHARED)	
+ IF(NVTT_SHARED)
 +    ADD_DEFINITIONS(-DNVTT_SHARED=1)
      ADD_LIBRARY(nvtt SHARED ${NVTT_SRCS})
  ELSE(NVTT_SHARED)
 +    ADD_DEFINITIONS(-DNVTT_SHARED=0)
      ADD_LIBRARY(nvtt ${NVTT_SRCS})
  ENDIF(NVTT_SHARED)
- 
+
 @@ -64,4 +70,4 @@ INSTALL(FILES nvtt.h nvtt_wrapper.h DESTINATION include/nvtt)
- 
- 
+
+
  ADD_SUBDIRECTORY(tools)
 -ADD_SUBDIRECTORY(tests)
 +#ADD_SUBDIRECTORY(tests)
@@ -134,7 +134,7 @@ index 65a5dd3..1ee51e3 100644
 +++ b/src/nvtt/squish/CMakeLists.txt
 @@ -21,3 +21,8 @@ SET(SQUISH_SRCS
  	simd_ve.h)
- 
+
  ADD_LIBRARY(nvsquish STATIC ${SQUISH_SRCS})
 +
 +INSTALL(TARGETS nvsquish

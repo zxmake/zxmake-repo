@@ -1,4 +1,4 @@
-package("semi-static-conditions")
+package("semi-static-conditions", function()
     set_homepage("https://github.com/maxlucuta/semi-static-conditions")
     set_description("Branch Optimisation for High-frequency Trading")
     set_license("MIT")
@@ -6,7 +6,7 @@ package("semi-static-conditions")
     add_urls("https://github.com/maxlucuta/semi-static-conditions.git")
     add_versions("2023.09.05", "5fbb086c00e06bd530defe8845fc28d24a28d8fc")
 
-    on_install("windows", "linux", function (package)
+    on_install("windows", "linux", function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             set_languages("c++17")
@@ -22,8 +22,9 @@ package("semi-static-conditions")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <branch.hpp>
             int add(int a, int b) {
                 return a + b;
@@ -35,5 +36,7 @@ package("semi-static-conditions")
                 BranchChanger branch(add, sub);
                 branch.set_direction(true);
             }
-        ]]}, {configs = {languages = "c++17"}}))
+        ]]
+        }, {configs = {languages = "c++17"}}))
     end)
+end)

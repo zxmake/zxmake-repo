@@ -1,4 +1,4 @@
-package("libdill")
+package("libdill", function()
     set_homepage("https://github.com/sustrik/libdill")
     set_description("Structured concurrency in C")
     set_license("MIT")
@@ -9,13 +9,17 @@ package("libdill")
     add_deps("cmake")
     add_deps("openssl")
 
-    on_install("macosx", "linux", function (package)
+    on_install("macosx", "linux", function(package)
         local configs = {"-DBUILD_TESTING=OFF"}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
-        import("package.tools.cmake").install(package, configs, {packagedeps = "openssl"})
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
+                         (package:config("shared") and "ON" or "OFF"))
+        import("package.tools.cmake").install(package, configs,
+                                              {packagedeps = "openssl"})
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("dill_tcp_listen", {includes = "libdill.h"}))
     end)
+end)

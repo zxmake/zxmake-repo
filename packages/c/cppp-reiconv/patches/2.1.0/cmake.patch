@@ -4,7 +4,7 @@ index 6d3c761..0689164 100644
 +++ b/CMakeLists.txt
 @@ -48,7 +48,7 @@ if(MSVC)
  endif()
- 
+
  # Generate header file for build
 -if(WIN32)
 +if(WIN32 AND BUILD_SHARED_LIBS)
@@ -13,7 +13,7 @@ index 6d3c761..0689164 100644
      set(DLL_VARIABLE "__attribute__((__visibility__(\"default\")))")
 @@ -59,7 +59,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/include/cppp/reiconv.hpp.in" "${outp
  configure_file("${CMAKE_CURRENT_SOURCE_DIR}/windows/libcppp-reiconv.rc.in" "${CMAKE_BINARY_DIR}/windows/libcppp-reiconv.rc")
- 
+
  # Generate header file for install
 -if(WIN32)
 +if(WIN32 AND BUILD_SHARED_LIBS)
@@ -21,7 +21,7 @@ index 6d3c761..0689164 100644
  else()
      set(DLL_VARIABLE "")
 @@ -83,7 +83,7 @@ cppp_build_library(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/lib/iconv.cpp" T
- 
+
  # Include test suite.
  include("tests/tests.cmake")
 -

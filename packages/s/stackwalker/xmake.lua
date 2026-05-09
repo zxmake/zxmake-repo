@@ -1,14 +1,18 @@
-package("stackwalker")
+package("stackwalker", function()
 
     set_homepage("https://github.com/JochenKalmbach/StackWalker")
     set_description("A library to walk the callstack in windows applications.")
     set_license("BSD-2-Clause")
 
-    set_urls("https://github.com/JochenKalmbach/StackWalker/archive/$(version).zip",
-             "https://github.com/JochenKalmbach/StackWalker.git")
+    set_urls(
+        "https://github.com/JochenKalmbach/StackWalker/archive/$(version).zip",
+        "https://github.com/JochenKalmbach/StackWalker.git")
 
-    add_versions("1.20", "b139c83b7c4991930ebe48eae43b0feedca034e136f00be294f3641495b2c835")
-    add_patches("1.20", path.join(os.scriptdir(), "patches", "1.20", "debug_build.patch"), "dcd455d9c3560bcc7793e7c2f0ffafd363f26754ae87091fb982fffcff298466")
+    add_versions("1.20",
+                 "b139c83b7c4991930ebe48eae43b0feedca034e136f00be294f3641495b2c835")
+    add_patches("1.20", path.join(os.scriptdir(), "patches", "1.20",
+                                  "debug_build.patch"),
+                "dcd455d9c3560bcc7793e7c2f0ffafd363f26754ae87091fb982fffcff298466")
 
     add_deps("cmake")
 
@@ -16,14 +20,16 @@ package("stackwalker")
         add_syslinks("advapi32")
     end
 
-    on_install("windows", function (package)
+    on_install("windows", function(package)
         local configs = {"-DStackWalker_DISABLE_TESTS=ON"}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:debug() and "Debug" or "Release"))
         import("package.tools.cmake").install(package, configs)
-   end)
+    end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             void Func5() { StackWalker sw; sw.ShowCallstack(); }
             void Func4() { Func5(); }
             void Func3() { Func4(); }
@@ -33,5 +39,7 @@ package("stackwalker")
             void test() {
                 Func1();
             }
-        ]]}, {includes = {"StackWalker.h"}}))
+        ]]
+        }, {includes = {"StackWalker.h"}}))
     end)
+end)

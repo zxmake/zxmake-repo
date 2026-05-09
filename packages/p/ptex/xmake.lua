@@ -1,4 +1,4 @@
-package("ptex")
+package("ptex", function()
 
     set_homepage("http://ptex.us/")
     set_description("Per-Face Texture Mapping for Production Rendering")
@@ -6,24 +6,29 @@ package("ptex")
 
     add_urls("https://github.com/wdas/ptex/archive/refs/tags/$(version).tar.gz",
              "https://github.com/wdas/ptex.git")
-    add_versions("v2.3.2", "30aeb85b965ca542a8945b75285cd67d8e207d23dbb57fcfeaab587bb443402b")
-    add_versions("v2.4.1", "664253b84121251fee2961977fe7cf336b71cd846dc235cd0f4e54a0c566084e")
-    add_versions("v2.4.2", "c8235fb30c921cfb10848f4ea04d5b662ba46886c5e32ad5137c5086f3979ee1")
-    add_versions("v2.4.3", "435aa2ee1781ff24859bd282b7616bfaeb86ca10604b13d085ada8aa7602ad27")
+    add_versions("v2.3.2",
+                 "30aeb85b965ca542a8945b75285cd67d8e207d23dbb57fcfeaab587bb443402b")
+    add_versions("v2.4.1",
+                 "664253b84121251fee2961977fe7cf336b71cd846dc235cd0f4e54a0c566084e")
+    add_versions("v2.4.2",
+                 "c8235fb30c921cfb10848f4ea04d5b662ba46886c5e32ad5137c5086f3979ee1")
+    add_versions("v2.4.3",
+                 "435aa2ee1781ff24859bd282b7616bfaeb86ca10604b13d085ada8aa7602ad27")
 
     add_deps("zlib")
     if is_plat("linux") then
         add_syslinks("pthread")
     end
 
-    on_load("windows", "mingw@windows", function (package)
+    on_load("windows", "mingw@windows", function(package)
         if not package:config("shared") then
             package:add("defines", "PTEX_STATIC")
         end
     end)
 
-    on_install("windows", "linux", "macosx", function (package)
-        io.replace("src/ptex/PtexPlatform.h", "sys/types.h", "unistd.h", {plain = true})
+    on_install("windows", "linux", "macosx", function(package)
+        io.replace("src/ptex/PtexPlatform.h", "sys/types.h", "unistd.h",
+                   {plain = true})
         io.writefile("xmake.lua", format([[
             add_rules("mode.debug", "mode.release")
             set_configvar("PTEX_MAJOR_VERSION", "%s")
@@ -61,11 +66,14 @@ package("ptex")
         import("package.tools.xmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             void test() {
                 Ptex::String error;
                 PtexPtr<PtexCache> c(PtexCache::create(0,0));
             }
-        ]]}, {includes = "Ptexture.h"}))
+        ]]
+        }, {includes = "Ptexture.h"}))
     end)
+end)

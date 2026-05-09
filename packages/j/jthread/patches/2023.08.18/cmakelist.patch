@@ -5,7 +5,7 @@ index 517e13f..2a6427a 100644
 @@ -35,7 +35,7 @@ else ()
  	set(JTHREAD_COMPILE_STATIC ON CACHE BOOL "Flag indicating if a static library should be built, or a dynamic one")
  endif ()
- 
+
 -if (NOT MSVC OR JTHREAD_COMPILE_STATIC)
 +if (JTHREAD_COMPILE_STATIC)
  	set(JTHREAD_INSTALLTARGETS jthread-static)
@@ -14,7 +14,7 @@ index 517e13f..2a6427a 100644
 @@ -43,7 +43,7 @@ if (NOT MSVC OR JTHREAD_COMPILE_STATIC)
  	target_link_libraries(jthread-static ${CMAKE_THREAD_LIBS_INIT})
  endif()
- 
+
 -if ((NOT MSVC AND NOT JTHREAD_COMPILE_STATIC_ONLY) OR (MSVC AND NOT JTHREAD_COMPILE_STATIC))
 +if (NOT JTHREAD_COMPILE_STATIC)
  	add_library(jthread-shared SHARED ${SOURCES} ${HEADERS})

@@ -1,4 +1,4 @@
-package("mma")
+package("mma", function()
 
     set_homepage("https://github.com/jdumas/mma")
     set_description("A self-contained C++ implementation of MMA and GCMMA.")
@@ -8,10 +8,15 @@ package("mma")
     add_versions("2018.08.01", "aa51333f942220ac98e5957accb1b7e60590ec6f")
 
     if is_plat("windows") then
-        add_configs("shared", {description = "Build shared library.", default = false, type = "boolean", readonly = true})
+        add_configs("shared", {
+            description = "Build shared library.",
+            default = false,
+            type = "boolean",
+            readonly = true
+        })
     end
 
-    on_install(function (package)
+    on_install(function(package)
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             set_languages("cxx11")
@@ -27,6 +32,7 @@ package("mma")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cxxtypes("MMASolver", {includes = "mma/MMASolver.h"}))
     end)
+end)

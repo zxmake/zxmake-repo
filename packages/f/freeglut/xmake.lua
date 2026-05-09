@@ -1,15 +1,19 @@
-package("freeglut")
+package("freeglut", function()
     set_homepage("http://freeglut.sourceforge.net")
     set_description("Free implementation of the OpenGL Utility Toolkit (GLUT)")
     set_license("MIT")
 
-    add_urls("https://github.com/freeglut/freeglut/releases/download/v$(version)/freeglut-$(version).tar.gz",
-             "https://github.com/FreeGLUTProject/freeglut.git")
+    add_urls(
+        "https://github.com/freeglut/freeglut/releases/download/v$(version)/freeglut-$(version).tar.gz",
+        "https://github.com/FreeGLUTProject/freeglut.git")
 
-    add_versions("3.6.0", "9c3d4d6516fbfa0280edc93c77698fb7303e443c1aaaf37d269e3288a6c3ea52")
-    add_versions("3.4.0", "3c0bcb915d9b180a97edaebd011b7a1de54583a838644dcd42bb0ea0c6f3eaec")
+    add_versions("3.6.0",
+                 "9c3d4d6516fbfa0280edc93c77698fb7303e443c1aaaf37d269e3288a6c3ea52")
+    add_versions("3.4.0",
+                 "3c0bcb915d9b180a97edaebd011b7a1de54583a838644dcd42bb0ea0c6f3eaec")
 
-    add_patches("3.4.0", "patches/3.4.0/arm64.patch", "a96b538e218ca478c7678aad62b724226dcdf11371da58d1287b95dbe241d00e")
+    add_patches("3.4.0", "patches/3.4.0/arm64.patch",
+                "a96b538e218ca478c7678aad62b724226dcdf11371da58d1287b95dbe241d00e")
 
     add_deps("cmake")
 
@@ -20,16 +24,17 @@ package("freeglut")
     add_deps("glu", "opengl", {optional = true})
 
     if on_check then
-        on_check("windows", function (package)
+        on_check("windows", function(package)
             local msvc = package:toolchain("msvc")
             if msvc and package:is_arch("arm.*") then
                 local vs = msvc:config("vs")
-                assert(vs and tonumber(vs) >= 2022, "package(freeglut): requires Visual Studio 2022 and later for arm targets")
+                assert(vs and tonumber(vs) >= 2022,
+                       "package(freeglut): requires Visual Studio 2022 and later for arm targets")
             end
         end)
     end
 
-    on_load("windows", "mingw", function (package)
+    on_load("windows", "mingw", function(package)
         if not package:config("shared") then
             package:add("defines", "FREEGLUT_STATIC=1")
         end
@@ -37,15 +42,16 @@ package("freeglut")
         package:add("syslinks", "gdi32", "winmm", "user32", "advapi32")
     end)
 
-    on_fetch("linux", function (package, opt)
+    on_fetch("linux", function(package, opt)
         if package.find_package then
             return package:find_package("pkgconfig::glut", opt)
         end
     end)
 
-    on_install("linux", "windows", "mingw", function (package)
+    on_install("linux", "windows", "mingw", function(package)
         local configs = {"-DFREEGLUT_BUILD_DEMOS=OFF"}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:is_debug() and "Debug" or "Release"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:is_debug() and "Debug" or "Release"))
         if package:config("shared") then
             table.insert(configs, "-DFREEGLUT_BUILD_SHARED_LIBS=ON")
             table.insert(configs, "-DFREEGLUT_BUILD_STATIC_LIBS=OFF")
@@ -66,7 +72,8 @@ package("freeglut")
             if package:is_arch("arm64") then
                 local vs = package:toolchain("msvc"):config("vs")
                 if vs then
-                    assert(tonumber(vs) >= 2022, "package(freeglut): requires Visual Studio 2022 and later for arm targets")
+                    assert(tonumber(vs) >= 2022,
+                           "package(freeglut): requires Visual Studio 2022 and later for arm targets")
                     table.insert(configs, "-DCMAKE_SYSTEM_NAME=Windows")
                     table.insert(configs, "-DCMAKE_SYSTEM_PROCESSOR=ARM64")
                 end
@@ -77,9 +84,11 @@ package("freeglut")
         end
 
         import("package.tools.cmake").install(package, configs, opt)
-        os.trycp(path.join("include", "GL", "glut.h"), package:installdir("include", "GL"))
+        os.trycp(path.join("include", "GL", "glut.h"),
+                 package:installdir("include", "GL"))
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("glutInit", {includes = "GL/glut.h"}))
     end)
+end)

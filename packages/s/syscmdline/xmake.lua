@@ -1,4 +1,4 @@
-package("syscmdline")
+package("syscmdline", function()
     set_homepage("https://github.com/SineStriker/syscmdline")
     set_description("C++ Advanced Command Line Parser")
     set_license("MIT")
@@ -13,22 +13,27 @@ package("syscmdline")
         add_syslinks("shell32")
     end
 
-    on_install(function (package)
+    on_install(function(package)
         if not package:config("shared") then
             package:add("defines", "SYSCMDLINE_STATIC")
         end
 
         local configs = {}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:is_debug() and "Debug" or "Release"))
-        table.insert(configs, "-DSYSCMDLINE_BUILD_STATIC=" .. (package:config("shared") and "OFF" or "ON"))
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                         (package:is_debug() and "Debug" or "Release"))
+        table.insert(configs, "-DSYSCMDLINE_BUILD_STATIC=" ..
+                         (package:config("shared") and "OFF" or "ON"))
         import("package.tools.cmake").install(package, configs)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             namespace SCL = SysCmdLine;
             void test() {
                 SCL::Command cmd("mv", "move files to directory");
             }
-        ]]}, {configs = {languages = "c++17"}, includes = "syscmdline/parser.h"}))
+        ]]
+        }, {configs = {languages = "c++17"}, includes = "syscmdline/parser.h"}))
     end)
+end)

@@ -14,4 +14,3 @@ index 0a70bb1..7dd74f5 100644
 +        list(APPEND DYNAMIC_LIB ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
      endif()
  endif()
- 

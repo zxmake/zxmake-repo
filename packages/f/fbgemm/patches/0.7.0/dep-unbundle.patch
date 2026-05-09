@@ -27,7 +27,7 @@ index 0b51071..ecc2c9e 100644
 @@ -354,12 +354,7 @@ target_include_directories(fbgemm BEFORE
      PUBLIC $<BUILD_INTERFACE:${FBGEMM_SOURCE_DIR}>
      PUBLIC $<BUILD_INTERFACE:${FBGEMM_SOURCE_DIR}/include>)
- 
+
 -target_link_libraries(fbgemm
 -  $<BUILD_INTERFACE:asmjit>
 -  $<BUILD_INTERFACE:cpuinfo>)
@@ -35,11 +35,11 @@ index 0b51071..ecc2c9e 100644
 -  asmjit
 -  cpuinfo)
 +target_link_libraries(fbgemm asmjit cpuinfo)
- 
+
  if(OpenMP_FOUND)
    target_link_libraries(fbgemm OpenMP::OpenMP_CXX)
 @@ -383,12 +378,12 @@ install(
- 
+
  if(MSVC)
    if(FBGEMM_LIBRARY_TYPE STREQUAL "shared")
 -    install(
@@ -53,5 +53,5 @@ index 0b51071..ecc2c9e 100644
 -  install(TARGETS asmjit DESTINATION ${CMAKE_INSTALL_LIBDIR})
 +  # install(TARGETS asmjit DESTINATION ${CMAKE_INSTALL_LIBDIR})
  endif()
- 
+
  #Make project importable from the build directory

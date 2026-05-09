@@ -49,7 +49,7 @@ index 7219123d5..4fec4809b 100644
  #define JPH_MSVC_SUPPRESS_WARNING(w)
 +#define JPH_MSVC2019_SUPPRESS_WARNING(w)
  #endif
- 
+
  // Disable common warnings triggered by Jolt when compiling with -Wall
 @@ -197,7 +203,8 @@
  	JPH_MSVC_SUPPRESS_WARNING(4582) /* 'X': constructor is not implicitly called */				\
@@ -58,7 +58,7 @@ index 7219123d5..4fec4809b 100644
 -	JPH_MSVC_SUPPRESS_WARNING(5264) /* 'X': 'const' variable is not used */
 +	JPH_MSVC_SUPPRESS_WARNING(5264) /* 'X': 'const' variable is not used */						\
 +	JPH_MSVC2019_SUPPRESS_WARNING(5246) /* the initialization of a subobject should be wrapped in braces */
- 
+
  // OS-specific includes
  #if defined(JPH_PLATFORM_WINDOWS)
 diff --git a/Jolt/Math/Math.h b/Jolt/Math/Math.h

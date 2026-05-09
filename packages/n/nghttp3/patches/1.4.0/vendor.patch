@@ -8,7 +8,7 @@ index 2196dd0..ea839e5 100644
    nghttp3_unreachable.c
 -  sfparse/sfparse.c
  )
- 
+
  set(NGHTTP3_GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
 @@ -90,6 +89,7 @@ install(
  # Public shared library

@@ -10,10 +10,10 @@ diff --git a/OgreMain/src/OgrePlatformInformation.cpp b/OgreMain/src/OgrePlatfor
 -        #include <linux/sysctl.h>
 -    #endif
  #endif
- 
+
 -    #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
 -        #include <cpu-features.h>
--    #elif OGRE_CPU == OGRE_CPU_ARM 
+-    #elif OGRE_CPU == OGRE_CPU_ARM
 -        #if __MACH__
 -            #include <mach/machine.h>
 -            #ifndef CPU_SUBTYPE_ARM64_V8
@@ -37,7 +37,7 @@ diff --git a/OgreMain/src/OgrePlatformInformation.cpp b/OgreMain/src/OgrePlatfor
 -    #include "windows.h"
 +    #include <windows.h>
  #endif
- 
+
  // Yes, I know, this file looks very ugly, but there aren't other ways to do it better.
 diff --git a/OgreMain/CMakeLists.txt b/OgreMain/CMakeLists.txt
 --- a/OgreMain/CMakeLists.txt
@@ -45,7 +45,7 @@ diff --git a/OgreMain/CMakeLists.txt b/OgreMain/CMakeLists.txt
 @@ -419,11 +419,13 @@ else()
    set_target_properties(OgreMain PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
  endif()
- 
+
 -if(OGRE_GCC_VERSION VERSION_EQUAL 4.8 OR OGRE_GCC_VERSION VERSION_GREATER 4.8)
 -  if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
 -    list(APPEND LIBRARIES "-latomic_ops")
@@ -60,4 +60,3 @@ diff --git a/OgreMain/CMakeLists.txt b/OgreMain/CMakeLists.txt
 +    endif()
    endif()
  endif()
- 

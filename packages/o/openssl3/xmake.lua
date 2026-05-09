@@ -1,25 +1,38 @@
-package("openssl3")
+package("openssl3", function()
     set_homepage("https://www.openssl.org/")
-    set_description("A robust, commercial-grade, and full-featured toolkit for TLS and SSL.")
+    set_description(
+        "A robust, commercial-grade, and full-featured toolkit for TLS and SSL.")
     set_license("Apache-2.0")
 
-    add_urls("https://github.com/openssl/openssl/archive/refs/tags/openssl-$(version).zip")
+    add_urls(
+        "https://github.com/openssl/openssl/archive/refs/tags/openssl-$(version).zip")
 
-    add_versions("3.3.2", "4cda357946f9dd5541b565dba35348d614288e88aeb499045018970c789c9d61")
-    add_versions("3.3.1", "307284f39bfb7061229c57e263e707655aa80aa9950bf6def28ed63fec91a726")
-    add_versions("3.0.14", "9590b9ae18c4de183be74dfc9da5be1f1e8f85dd631a78bc74c0ebc3d7e27a93")
-    add_versions("3.0.7", "fcb37203c6bf7376cfd3aeb0be057937b7611e998b6c0d664abde928c8af3eb7")
-    add_versions("3.0.6", "9b45be41df0d6e9cf9e340a64525177662f22808ac69aee6bfb29c511284dae4")
-    add_versions("3.0.5", "4313c91fb0412e6a600493eb7c59bd555c4ff2ea7caa247a98c8456ad6f9fc74")
-    add_versions("3.0.4", "5b690a5c00e639f3817e2ee15c23c36874a1f91fa8c3a83bda3276d3d6345b76")
-    add_versions("3.0.3", "9bc56fd035f980cf74605264b04d84497df657c4f7ca68bfa77512e745f6c1a6")
-    add_versions("3.0.2", "ce3cbb41411731852e52bf96c06f097405c81ebf60ba81e0b9ca05d41dc92681")
-    add_versions("3.0.1", "53d8121af1c33c62a05a5370e9ba40fcc237717b79a7d99009b0c00c79bd7d78")
-    add_versions("3.0.0", "1bdb33f131af75330de94475563c62d6908ac1c18586f7f4aa209b96b0bfc2f9")
+    add_versions("3.3.2",
+                 "4cda357946f9dd5541b565dba35348d614288e88aeb499045018970c789c9d61")
+    add_versions("3.3.1",
+                 "307284f39bfb7061229c57e263e707655aa80aa9950bf6def28ed63fec91a726")
+    add_versions("3.0.14",
+                 "9590b9ae18c4de183be74dfc9da5be1f1e8f85dd631a78bc74c0ebc3d7e27a93")
+    add_versions("3.0.7",
+                 "fcb37203c6bf7376cfd3aeb0be057937b7611e998b6c0d664abde928c8af3eb7")
+    add_versions("3.0.6",
+                 "9b45be41df0d6e9cf9e340a64525177662f22808ac69aee6bfb29c511284dae4")
+    add_versions("3.0.5",
+                 "4313c91fb0412e6a600493eb7c59bd555c4ff2ea7caa247a98c8456ad6f9fc74")
+    add_versions("3.0.4",
+                 "5b690a5c00e639f3817e2ee15c23c36874a1f91fa8c3a83bda3276d3d6345b76")
+    add_versions("3.0.3",
+                 "9bc56fd035f980cf74605264b04d84497df657c4f7ca68bfa77512e745f6c1a6")
+    add_versions("3.0.2",
+                 "ce3cbb41411731852e52bf96c06f097405c81ebf60ba81e0b9ca05d41dc92681")
+    add_versions("3.0.1",
+                 "53d8121af1c33c62a05a5370e9ba40fcc237717b79a7d99009b0c00c79bd7d78")
+    add_versions("3.0.0",
+                 "1bdb33f131af75330de94475563c62d6908ac1c18586f7f4aa209b96b0bfc2f9")
 
     on_fetch("fetch")
 
-    on_load(function (package)
+    on_load(function(package)
         if not package:is_precompiled() then
             if package:is_plat("windows") then
                 package:add("deps", "nasm")
@@ -31,9 +44,13 @@ package("openssl3")
                 if jom then
                     package:add("deps", "jom", {private = true})
                 end
-            elseif package:is_plat("android") and is_subhost("windows") and os.arch() == "x64" then
+            elseif package:is_plat("android") and is_subhost("windows") and
+                os.arch() == "x64" then
                 -- when building for android on windows, use msys2 perl instead of strawberry-perl to avoid configure issue
-                package:add("deps", "msys2", {configs = {msystem = "MINGW64", base_devel = true}, private = true})
+                package:add("deps", "msys2", {
+                    configs = {msystem = "MINGW64", base_devel = true},
+                    private = true
+                })
             end
         end
 
@@ -56,7 +73,7 @@ package("openssl3")
         end
     end)
 
-    on_install("windows", function (package)
+    on_install("windows", function(package)
         import("package.tools.jom", {try = true})
         import("package.tools.nmake")
         local configs = {"Configure", "no-tests"}
@@ -71,7 +88,8 @@ package("openssl3")
             target = "VC-WIN64A"
         end
         table.insert(configs, target)
-        table.insert(configs, package:config("shared") and "shared" or "no-shared")
+        table.insert(configs,
+                     package:config("shared") and "shared" or "no-shared")
         table.insert(configs, "--prefix=" .. package:installdir())
         table.insert(configs, "--openssldir=" .. package:installdir())
         if jom then
@@ -89,14 +107,17 @@ package("openssl3")
         end
     end)
 
-    on_install("mingw", function (package)
+    on_install("mingw", function(package)
         local configs = {"Configure", "no-tests"}
-        table.insert(configs, package:is_arch("i386", "x86") and "mingw" or "mingw64")
-        table.insert(configs, package:config("shared") and "shared" or "no-shared")
+        table.insert(configs,
+                     package:is_arch("i386", "x86") and "mingw" or "mingw64")
+        table.insert(configs,
+                     package:config("shared") and "shared" or "no-shared")
         local installdir = package:installdir()
         -- Use MSYS2 paths instead of Windows paths
         if is_subhost("msys") then
-            installdir = installdir:gsub("(%a):[/\\](.+)", "/%1/%2"):gsub("\\", "/")
+            installdir = installdir:gsub("(%a):[/\\](.+)", "/%1/%2"):gsub("\\",
+                                                                          "/")
         end
         table.insert(configs, "--prefix=" .. installdir)
         table.insert(configs, "--openssldir=" .. installdir)
@@ -118,25 +139,32 @@ package("openssl3")
         import("package.tools.make").make(package, {"install_sw"})
     end)
 
-    on_install("linux", "macosx", "bsd", function (package)
+    on_install("linux", "macosx", "bsd", function(package)
         -- https://wiki.openssl.org/index.php/Compilation_and_Installation#PREFIX_and_OPENSSLDIR
         local buildenvs = import("package.tools.autoconf").buildenvs(package)
-        local configs = {"--openssldir=" .. package:installdir(),
-                         "--prefix=" .. package:installdir()}
-        table.insert(configs, package:config("shared") and "shared" or "no-shared")
+        local configs = {
+            "--openssldir=" .. package:installdir(),
+            "--prefix=" .. package:installdir()
+        }
+        table.insert(configs,
+                     package:config("shared") and "shared" or "no-shared")
         if package:debug() then
             table.insert(configs, "--debug")
         end
         os.vrunv("./config", configs, {envs = buildenvs})
-        local makeconfigs = {CFLAGS = buildenvs.CFLAGS, ASFLAGS = buildenvs.ASFLAGS}
+        local makeconfigs = {
+            CFLAGS = buildenvs.CFLAGS,
+            ASFLAGS = buildenvs.ASFLAGS
+        }
         import("package.tools.make").build(package, makeconfigs)
         import("package.tools.make").make(package, {"install_sw"})
         if package:config("shared") then
-            os.tryrm(path.join(package:installdir("lib"), "*.a"), path.join(package:installdir("lib64"), "*.a"))
+            os.tryrm(path.join(package:installdir("lib"), "*.a"),
+                     path.join(package:installdir("lib64"), "*.a"))
         end
     end)
 
-    on_install("cross", "android", function (package)
+    on_install("cross", "android", function(package)
 
         local target_arch = "generic32"
         if package:is_arch("x86_64") then
@@ -158,28 +186,32 @@ package("openssl3")
         end
 
         local target = target_plat .. "-" .. target_arch
-        local configs = {target,
-                         "-DOPENSSL_NO_HEARTBEATS",
-                         "no-shared",
-                         "no-threads",
-                         "--openssldir=" .. package:installdir():gsub("\\", "/"),
-                         "--prefix=" .. package:installdir():gsub("\\", "/")}
+        local configs = {
+            target, "-DOPENSSL_NO_HEARTBEATS", "no-shared", "no-threads",
+            "--openssldir=" .. package:installdir():gsub("\\", "/"),
+            "--prefix=" .. package:installdir():gsub("\\", "/")
+        }
         local buildenvs = import("package.tools.autoconf").buildenvs(package)
-        if package:is_cross() and package:is_plat("android") and is_subhost("windows") then
+        if package:is_cross() and package:is_plat("android") and
+            is_subhost("windows") then
             buildenvs.CFLAGS = buildenvs.CFLAGS:gsub("\\", "/")
             buildenvs.CXXFLAGS = buildenvs.CXXFLAGS:gsub("\\", "/")
             buildenvs.CPPFLAGS = buildenvs.CPPFLAGS:gsub("\\", "/")
             buildenvs.ASFLAGS = buildenvs.ASFLAGS:gsub("\\", "/")
-            os.vrunv("perl", table.join("./Configure", configs), {envs = buildenvs})
+            os.vrunv("perl", table.join("./Configure", configs),
+                     {envs = buildenvs})
         else
             os.vrunv("./Configure", configs, {envs = buildenvs})
         end
-        local makeconfigs = {CFLAGS = buildenvs.CFLAGS, ASFLAGS = buildenvs.ASFLAGS}
+        local makeconfigs = {
+            CFLAGS = buildenvs.CFLAGS,
+            ASFLAGS = buildenvs.ASFLAGS
+        }
         import("package.tools.make").build(package, makeconfigs)
         import("package.tools.make").make(package, {"install_sw"})
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("SSL_new", {includes = "openssl/ssl.h"}))
     end)
-
+end)

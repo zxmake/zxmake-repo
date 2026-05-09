@@ -5,10 +5,10 @@ index 79c07e61e..b454fcefc 100644
 @@ -73,14 +73,14 @@ class VectorIterator {
      same vector as the source iterator. **/
      VectorIterator& operator=(const VectorIterator& source) = default;
- 
+
 -    ELT& operator*() {
 +    /** Dereference the iterator to access the element it points to. Note
-+    that although the iterator may be const, it can still point to a 
++    that although the iterator may be const, it can still point to a
 +    mutable element. **/
 +    ELT& operator*() const {
          assert (index >= 0 && index < vectorp->size());
@@ -34,7 +34,7 @@ index 3b3b6f78d..d97b78c5a 100644
 +   fn_val = T(std::pow( base , l )); // extraneous cast required by VS 16.8.2
     return fn_val;
     }
- 
+
 diff --git a/SimTKcommon/Polynomial/src/rpoly.cpp b/SimTKcommon/Polynomial/src/rpoly.cpp
 index 10a399194..05afde29f 100644
 --- a/SimTKcommon/Polynomial/src/rpoly.cpp
@@ -46,5 +46,5 @@ index 10a399194..05afde29f 100644
 -    factor = pow(base*(T) 1.0,l);
 +    factor = T(std::pow( base, l )); // extraneous cast required by VS 16.8.2
      if (factor != 1.0) {
-         for (i=0;i<=n;i++) 
+         for (i=0;i<=n;i++)
              p[i] = factor*p[i];     /* Scale polynomial. */

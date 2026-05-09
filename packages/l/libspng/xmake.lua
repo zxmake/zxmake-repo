@@ -1,15 +1,22 @@
-package("libspng")
+package("libspng", function()
     set_homepage("https://libspng.org")
     set_description("Simple, modern libpng alternative")
     set_license("BSD-2-Clause")
 
-    set_urls("https://github.com/randy408/libspng/archive/refs/tags/$(version).tar.gz",
-             "https://github.com/randy408/libspng.git")
+    set_urls(
+        "https://github.com/randy408/libspng/archive/refs/tags/$(version).tar.gz",
+        "https://github.com/randy408/libspng.git")
 
-    add_versions("v0.7.4", "47ec02be6c0a6323044600a9221b049f63e1953faf816903e7383d4dc4234487")
-    add_versions("v0.7.1", "0726a4914ad7155028f3baa94027244d439cd2a2fbe8daf780c2150c4c951d8e")
+    add_versions("v0.7.4",
+                 "47ec02be6c0a6323044600a9221b049f63e1953faf816903e7383d4dc4234487")
+    add_versions("v0.7.1",
+                 "0726a4914ad7155028f3baa94027244d439cd2a2fbe8daf780c2150c4c951d8e")
 
-    add_configs("cmake", {description = "Use cmake build system", default = false, type = "boolean"})
+    add_configs("cmake", {
+        description = "Use cmake build system",
+        default = false,
+        type = "boolean"
+    })
 
     if is_plat("linux", "bsd") then
         add_syslinks("m")
@@ -17,7 +24,7 @@ package("libspng")
 
     add_deps("zlib")
 
-    on_load(function (package)
+    on_load(function(package)
         if package:config("cmake") then
             package:add("deps", "cmake")
         end
@@ -26,10 +33,11 @@ package("libspng")
         end
     end)
 
-    on_install(function (package)
+    on_install(function(package)
         if package:config("cmake") then
             local configs = {"-DBUILD_EXAMPLES=OFF"}
-            table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:is_debug() and "Debug" or "Release"))
+            table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
+                             (package:is_debug() and "Debug" or "Release"))
             if package:config("shared") then
                 table.join2(configs, {"-DSPNG_SHARED=ON", "-DSPNG_STATIC=OFF"})
             else
@@ -56,6 +64,7 @@ package("libspng")
         end
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("spng_decode_image", {includes = "spng.h"}))
     end)
+end)

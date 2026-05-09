@@ -10,7 +10,7 @@ index aa1ae43..d856869 100644
 +				    		uri_list += file.string();
  				    		uri_list += "\r\n";
  				    	}
- 
+
 diff --git a/source/gui/filebox.cpp b/source/gui/filebox.cpp
 index 63586ab..28071d5 100644
 --- a/source/gui/filebox.cpp
@@ -27,15 +27,15 @@ index 63586ab..28071d5 100644
 @@ -1042,7 +1042,7 @@ namespace nana
  					if(!filename_string.empty())
  						filename_string += ' ';
- 
+
 -					filename_string += "\"" + p.filename().u8string() + "\"";
 +					filename_string += "\"" + p.filename().string() + "\"";
  				}
  			}
- 
+
 @@ -1576,7 +1576,7 @@ namespace nana
- 
- 
+
+
  		if(!targets.empty())
 -			impl_->path = targets.front().parent_path().u8string();
 +			impl_->path = targets.front().parent_path().string();

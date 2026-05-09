@@ -1,6 +1,7 @@
-package("rapidhash")
+package("rapidhash", function()
     set_kind("library", {headeronly = true})
-    set_description("Very fast, high quality, platform independant hashing algorithm.")
+    set_description(
+        "Very fast, high quality, platform independant hashing algorithm.")
     set_homepage("https://github.com/Nicoshev/rapidhash")
 
     add_urls("https://github.com/Nicoshev/rapidhash.git")
@@ -11,5 +12,6 @@ package("rapidhash")
     end)
 
     on_test(function(package)
-        assert(package:has_cxxfuncs("rapid_mum", {includes = "rapidhash.h"}))      
+        assert(package:has_cxxfuncs("rapid_mum", {includes = "rapidhash.h"}))
     end)
+end)

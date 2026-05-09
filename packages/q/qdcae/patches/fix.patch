@@ -16,7 +16,7 @@ index 1d3b972..635187c 100644
 +#if !defined _WIN32 && !defined WIN64 && !defined MPPWIN
  #include <unistd.h>
 +#endif
- 
+
  #include "l2a_version.h"
  #include "lsda.h"
 @@ -192,7 +198,7 @@ main(int argc, char* argv[])
@@ -30,7 +30,7 @@ index 1d3b972..635187c 100644
    extern int optind, opterr, optopt;
 @@ -206,7 +212,7 @@ main(int argc, char* argv[])
    }
- 
+
    use_jobid = 0;
 -#ifdef MPPWIN
 +#if defined _WIN32 || defined WIN64 || defined MPPWIN

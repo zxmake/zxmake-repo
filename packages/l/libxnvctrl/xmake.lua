@@ -1,4 +1,4 @@
-package("libxnvctrl")
+package("libxnvctrl", function()
 
     set_homepage("https://www.nvidia.com/en-us/drivers/unix/")
     set_description("NVIDIA driver control panel")
@@ -7,7 +7,7 @@ package("libxnvctrl")
         add_extsources("apt::libxnvctrl-dev", "pacman::libxnctrl")
     end
 
-    on_fetch("linux", function (package, opt)
+    on_fetch("linux", function(package, opt)
         if opt.system then
             import("lib.detect.find_path")
             import("lib.detect.find_library")
@@ -19,7 +19,9 @@ package("libxnvctrl")
             local result = {links = {}, linkdirs = {}, includedirs = {}}
             local arch = package:is_arch("x86_64") and "x86_64" or "x86"
             local archsuffix = arch .. "-linux-gnu"
-            local linkinfo = find_library("XNVCtrl", paths, {suffixes = {"lib", path.join("lib", archsuffix)}})
+            local linkinfo = find_library("XNVCtrl", paths, {
+                suffixes = {"lib", path.join("lib", archsuffix)}
+            })
             if linkinfo then
                 table.insert(result.linkdirs, linkinfo.linkdir)
                 table.insert(result.links, "XNVCtrl")
@@ -27,7 +29,8 @@ package("libxnvctrl")
             result.linkdirs = table.unique(result.linkdirs)
 
             -- find headers
-            local path = find_path("NVCtrl/NVCtrl.h", paths, {suffixes = "include"})
+            local path = find_path("NVCtrl/NVCtrl.h", paths,
+                                   {suffixes = "include"})
             if path then
                 table.insert(result.includedirs, path)
             end
@@ -36,3 +39,4 @@ package("libxnvctrl")
             end
         end
     end)
+end)

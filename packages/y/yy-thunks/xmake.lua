@@ -1,13 +1,17 @@
-package("yy-thunks")
+package("yy-thunks", function()
     set_homepage("https://github.com/Chuyu-Team/YY-Thunks")
-    set_description("Fix DecodePointer, EncodePointer,RegDeleteKeyEx etc. APIs not found in Windows XP RTM.")
+    set_description(
+        "Fix DecodePointer, EncodePointer,RegDeleteKeyEx etc. APIs not found in Windows XP RTM.")
     set_license("MIT")
 
-    add_urls("https://github.com/Chuyu-Team/YY-Thunks/releases/download/v$(version)/YY-Thunks-$(version)-Binary.zip")
-    add_versions("1.0.9", "216b88757f28075d3d8c0363139e870d49ba84458fc10a0f094f264ebf0a302c")
-    add_versions("1.0.7", "3607a79ac37f141cbcbf00aaea8d82a4c2628d81d8dad9e2a4dce4c8c17a025b")
+    add_urls(
+        "https://github.com/Chuyu-Team/YY-Thunks/releases/download/v$(version)/YY-Thunks-$(version)-Binary.zip")
+    add_versions("1.0.9",
+                 "216b88757f28075d3d8c0363139e870d49ba84458fc10a0f094f264ebf0a302c")
+    add_versions("1.0.7",
+                 "3607a79ac37f141cbcbf00aaea8d82a4c2628d81d8dad9e2a4dce4c8c17a025b")
 
-    on_install("windows|x64", "windows|x86", function (package)
+    on_install("windows|x64", "windows|x86", function(package)
         import("core.tool.toolchain")
 
         -- check vs version
@@ -25,7 +29,9 @@ package("yy-thunks")
         end
     end)
 
-    on_test(function (package)
-        local obj = path.join(package:installdir("lib"), "YY_Thunks_for_WinXP.obj")
+    on_test(function(package)
+        local obj = path.join(package:installdir("lib"),
+                              "YY_Thunks_for_WinXP.obj")
         assert(os.isfile(obj))
     end)
+end)

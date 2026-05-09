@@ -1,32 +1,50 @@
-package("gtest")
+package("gtest", function()
     set_homepage("https://github.com/google/googletest")
     set_description("Google Testing and Mocking Framework.")
     set_license("BSD-3")
 
-    add_urls("https://github.com/google/googletest/archive/refs/tags/$(version).zip", {alias = "archive"})
+    add_urls(
+        "https://github.com/google/googletest/archive/refs/tags/$(version).zip",
+        {alias = "archive"})
     add_urls("https://github.com/google/googletest.git", {alias = "github"})
     add_versions("github:v1.8.1", "release-1.8.1")
-    add_versions("archive:v1.8.1", "927827c183d01734cc5cfef85e0ff3f5a92ffe6188e0d18e909c5efebf28a0c7")
+    add_versions("archive:v1.8.1",
+                 "927827c183d01734cc5cfef85e0ff3f5a92ffe6188e0d18e909c5efebf28a0c7")
     add_versions("github:v1.10.0", "release-1.10.0")
-    add_versions("archive:v1.10.0", "94c634d499558a76fa649edb13721dce6e98fb1e7018dfaeba3cd7a083945e91")
+    add_versions("archive:v1.10.0",
+                 "94c634d499558a76fa649edb13721dce6e98fb1e7018dfaeba3cd7a083945e91")
     add_versions("github:v1.11.0", "release-1.11.0")
-    add_versions("archive:v1.11.0", "353571c2440176ded91c2de6d6cd88ddd41401d14692ec1f99e35d013feda55a")
+    add_versions("archive:v1.11.0",
+                 "353571c2440176ded91c2de6d6cd88ddd41401d14692ec1f99e35d013feda55a")
     add_versions("github:v1.12.0", "release-1.12.0")
-    add_versions("archive:v1.12.0", "ce7366fe57eb49928311189cb0e40e0a8bf3d3682fca89af30d884c25e983786")
+    add_versions("archive:v1.12.0",
+                 "ce7366fe57eb49928311189cb0e40e0a8bf3d3682fca89af30d884c25e983786")
     add_versions("github:v1.12.1", "release-1.12.1")
-    add_versions("archive:v1.12.1", "24564e3b712d3eb30ac9a85d92f7d720f60cc0173730ac166f27dda7fed76cb2")
-    add_versions("v1.13.0", "ffa17fbc5953900994e2deec164bb8949879ea09b411e07f215bfbb1f87f4632")
-    add_versions("v1.14.0", "1f357c27ca988c3f7c6b4bf68a9395005ac6761f034046e9dde0896e3aba00e4")
-    add_versions("v1.15.2", "f179ec217f9b3b3f3c6e8b02d3e7eda997b49e4ce26d6b235c9053bec9c0bf9f")
+    add_versions("archive:v1.12.1",
+                 "24564e3b712d3eb30ac9a85d92f7d720f60cc0173730ac166f27dda7fed76cb2")
+    add_versions("v1.13.0",
+                 "ffa17fbc5953900994e2deec164bb8949879ea09b411e07f215bfbb1f87f4632")
+    add_versions("v1.14.0",
+                 "1f357c27ca988c3f7c6b4bf68a9395005ac6761f034046e9dde0896e3aba00e4")
+    add_versions("v1.15.2",
+                 "f179ec217f9b3b3f3c6e8b02d3e7eda997b49e4ce26d6b235c9053bec9c0bf9f")
 
-    add_configs("main",  {description = "Link to the gtest_main entry point.", default = false, type = "boolean"})
-    add_configs("gmock", {description = "Link to the googlemock library.", default = true, type = "boolean"})
+    add_configs("main", {
+        description = "Link to the gtest_main entry point.",
+        default = false,
+        type = "boolean"
+    })
+    add_configs("gmock", {
+        description = "Link to the googlemock library.",
+        default = true,
+        type = "boolean"
+    })
 
     if is_plat("linux") then
         add_syslinks("pthread")
     end
 
-    on_install(function (package)
+    on_install(function(package)
         io.writefile("xmake.lua", [[
             target("gtest")
                 set_kind("static")
@@ -54,8 +72,9 @@ package("gtest")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             int factorial(int number) { return number <= 1 ? number : factorial(number - 1) * number; }
             TEST(FactorialTest, Zero) {
               testing::InitGoogleTest(0, (char**)0);
@@ -64,10 +83,12 @@ package("gtest")
               EXPECT_EQ(6, factorial(3));
               EXPECT_EQ(3628800, factorial(10));
             }
-        ]]}, {configs = {languages = "c++14"}, includes = "gtest/gtest.h"}))
+        ]]
+        }, {configs = {languages = "c++14"}, includes = "gtest/gtest.h"}))
 
         if package:config("gmock") then
-            assert(package:check_cxxsnippets({test = [[
+            assert(package:check_cxxsnippets({
+                test = [[
                 using ::testing::AtLeast;
 
                 class A {
@@ -96,6 +117,11 @@ package("gtest")
 
                     EXPECT_TRUE(b_obj.b_foo());
                 }
-            ]]}, {configs = {languages = "c++14"}, includes = {"gtest/gtest.h", "gmock/gmock.h"}}))
+            ]]
+            }, {
+                configs = {languages = "c++14"},
+                includes = {"gtest/gtest.h", "gmock/gmock.h"}
+            }))
         end
     end)
+end)

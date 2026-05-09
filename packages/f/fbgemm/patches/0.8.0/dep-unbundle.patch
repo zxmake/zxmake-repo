@@ -5,7 +5,7 @@ index 35f0a967..bac7b4a2 100644
 @@ -246,7 +246,8 @@ message(WARNING "CMAKE_CXX_FLAGS_DEBUG is ${CMAKE_CXX_FLAGS_DEBUG}")
  message(WARNING "CMAKE_CXX_FLAGS_RELEASE is ${CMAKE_CXX_FLAGS_RELEASE}")
  message(WARNING "==========")
- 
+
 -if(NOT TARGET asmjit)
 +find_package(asmjit CONFIG REQUIRED)
 +if(0)
@@ -15,7 +15,7 @@ index 35f0a967..bac7b4a2 100644
 @@ -279,7 +280,8 @@ if(NOT TARGET asmjit)
    endif()
  endif()
- 
+
 -if(NOT TARGET cpuinfo)
 +find_package(cpuinfo CONFIG REQUIRED)
 +if(0)
@@ -25,7 +25,7 @@ index 35f0a967..bac7b4a2 100644
 @@ -363,12 +365,7 @@ target_include_directories(fbgemm BEFORE
      PUBLIC $<BUILD_INTERFACE:${FBGEMM_SOURCE_DIR}>
      PUBLIC $<BUILD_INTERFACE:${FBGEMM_SOURCE_DIR}/include>)
- 
+
 -target_link_libraries(fbgemm
 -  $<BUILD_INTERFACE:asmjit>
 -  $<BUILD_INTERFACE:cpuinfo>)
@@ -33,11 +33,11 @@ index 35f0a967..bac7b4a2 100644
 -  asmjit
 -  cpuinfo)
 +target_link_libraries(fbgemm asmjit cpuinfo)
- 
+
  if(OpenMP_FOUND)
    target_link_libraries(fbgemm OpenMP::OpenMP_CXX)
 @@ -392,12 +389,12 @@ install(
- 
+
  if(MSVC)
    if(FBGEMM_LIBRARY_TYPE STREQUAL "shared")
 -    install(
@@ -51,5 +51,5 @@ index 35f0a967..bac7b4a2 100644
 -  install(TARGETS asmjit DESTINATION ${CMAKE_INSTALL_LIBDIR})
 +  # install(TARGETS asmjit DESTINATION ${CMAKE_INSTALL_LIBDIR})
  endif()
- 
+
  #Make project importable from the build directory

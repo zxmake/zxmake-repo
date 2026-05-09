@@ -4,7 +4,7 @@ index 79dc0e8..51157be 100644
 +++ b/snappy.cc
 @@ -1014,7 +1014,7 @@ void MemMove(ptrdiff_t dst, const void* src, size_t size) {
  }
- 
+
  SNAPPY_ATTRIBUTE_ALWAYS_INLINE
 -size_t AdvanceToNextTag(const uint8_t** ip_p, size_t* tag) {
 +inline size_t AdvanceToNextTag(const uint8_t** ip_p, size_t* tag) {

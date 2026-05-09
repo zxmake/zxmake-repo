@@ -1,4 +1,4 @@
-package("tobiaslocker_base64")
+package("tobiaslocker_base64", function()
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/tobiaslocker/base64")
     set_description("A modern C++ base64 encoder / decoder ")
@@ -7,12 +7,14 @@ package("tobiaslocker_base64")
     add_urls("https://github.com/tobiaslocker/base64.git")
     add_versions("2024.02.26", "387b32f337b83d358ac1ffe574e596ba99c41d31")
 
-    on_install("windows|!arm64 or !windows", function (package)
-        os.cp("include/base64.hpp", package:installdir("include/tobiaslocker_base64"))
+    on_install("windows|!arm64 or !windows", function(package)
+        os.cp("include/base64.hpp",
+              package:installdir("include/tobiaslocker_base64"))
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <iostream>
             #include <tobiaslocker_base64/base64.hpp>
             void test() {
@@ -21,5 +23,7 @@ package("tobiaslocker_base64")
                 auto decoded_str = base64::from_base64("SGVsbG8sIFdvcmxkIQ==");
                 std::cout << decoded_str << std::endl;
             }
-        ]]}, {configs = {languages = "c++17"}}))
+        ]]
+        }, {configs = {languages = "c++17"}}))
     end)
+end)

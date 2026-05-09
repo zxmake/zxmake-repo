@@ -1,4 +1,4 @@
-package("libui")
+package("libui", function()
     set_homepage("https://libui-ng.github.io/libui-ng/")
     set_description("A portable GUI library for C")
 
@@ -10,17 +10,20 @@ package("libui")
     if is_plat("macosx") then
         add_frameworks("CoreGraphics", "CoreText", "Foundation", "AppKit")
     elseif is_plat("windows") then
-        add_syslinks("user32", "ole32", "gdi32", "d2d1", "dwrite", "comctl32", "windowscodecs")
+        add_syslinks("user32", "ole32", "gdi32", "d2d1", "dwrite", "comctl32",
+                     "windowscodecs")
     elseif is_plat("linux") then
         add_deps("gtk+3", "glib")
     end
 
-    on_install("linux", "macosx", "windows", function (package)
+    on_install("linux", "macosx", "windows", function(package)
         local configs = {"-Dexamples=false", "-Dtests=false"}
-        table.insert(configs, "--default-library=" .. (package:config("shared") and "shared" or "static"))
+        table.insert(configs, "--default-library=" ..
+                         (package:config("shared") and "shared" or "static"))
         import("package.tools.meson").install(package, configs)
     end)
 
-    on_test(function (package)
+    on_test(function(package)
         assert(package:has_cfuncs("uiInit", {includes = "ui.h"}))
     end)
+end)

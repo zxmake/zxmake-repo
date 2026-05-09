@@ -1,6 +1,7 @@
-package("re-spirv")
+package("re-spirv", function()
     set_homepage("https://github.com/rt64/re-spirv")
-    set_description("Lightweight and fast SPIR-V re-optimizer designed around spec constant usage.")
+    set_description(
+        "Lightweight and fast SPIR-V re-optimizer designed around spec constant usage.")
     set_license("MIT")
 
     add_urls("https://github.com/rt64/re-spirv.git", {submodules = false})
@@ -8,7 +9,7 @@ package("re-spirv")
 
     add_deps("spirv-headers")
 
-    on_install(function (package)
+    on_install(function(package)
         io.writefile("xmake.lua", [[
             add_requires("spirv-headers")
             add_rules("mode.debug", "mode.release")
@@ -29,10 +30,13 @@ package("re-spirv")
         import("package.tools.xmake").install(package)
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             void test() {
                 respv::Shader shader;
             }
-        ]]}, {configs = {languages = "c++17"}, includes = "re-spirv.h"}))
+        ]]
+        }, {configs = {languages = "c++17"}, includes = "re-spirv.h"}))
     end)
+end)

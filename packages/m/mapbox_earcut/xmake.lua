@@ -1,22 +1,29 @@
-package("mapbox_earcut")
+package("mapbox_earcut", function()
 
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/mapbox/earcut.hpp")
-    set_description("A C++ port of earcut.js, a fast, header-only polygon triangulation library.")
+    set_description(
+        "A C++ port of earcut.js, a fast, header-only polygon triangulation library.")
     set_license("ISC")
 
-    add_urls("https://github.com/mapbox/earcut.hpp/archive/refs/tags/v$(version).zip",
-             "https://github.com/mapbox/earcut.hpp.git")
-    add_versions("2.2.4", "998ae183e3c27f6f5cfed589164c3fb495ab9f805fc8d54e7151a42dab6c89bc")
-    add_versions("2.2.3", "010d2fe35938744960dcc0b25076eb541b07bb314a92afbcab14f7f887ceb98d")
-    add_patches("2.2.3", path.join(os.scriptdir(), "patches", "2.2.3", "mingw.patch"), "ac6ceb3d494d5a553936f6845c2df41d567614e33e389f47fe1520d6070a30e0")
+    add_urls(
+        "https://github.com/mapbox/earcut.hpp/archive/refs/tags/v$(version).zip",
+        "https://github.com/mapbox/earcut.hpp.git")
+    add_versions("2.2.4",
+                 "998ae183e3c27f6f5cfed589164c3fb495ab9f805fc8d54e7151a42dab6c89bc")
+    add_versions("2.2.3",
+                 "010d2fe35938744960dcc0b25076eb541b07bb314a92afbcab14f7f887ceb98d")
+    add_patches("2.2.3",
+                path.join(os.scriptdir(), "patches", "2.2.3", "mingw.patch"),
+                "ac6ceb3d494d5a553936f6845c2df41d567614e33e389f47fe1520d6070a30e0")
 
-    on_install(function (package)
+    on_install(function(package)
         os.cp("include/mapbox", package:installdir("include"))
     end)
 
-    on_test(function (package)
-        assert(package:check_cxxsnippets({test = [[
+    on_test(function(package)
+        assert(package:check_cxxsnippets({
+            test = [[
             #include <mapbox/earcut.hpp>
             #include <vector>
             #include <array>
@@ -28,5 +35,7 @@ package("mapbox_earcut")
                 std::vector<std::vector<PolyPoint2D> > polygons2d;
                 mapbox::earcut<N>(polygons2d);
             }
-        ]]}, {configs = {languages = "c++11"}, includes = "mapbox/earcut.hpp"}))
+        ]]
+        }, {configs = {languages = "c++11"}, includes = "mapbox/earcut.hpp"}))
     end)
+end)

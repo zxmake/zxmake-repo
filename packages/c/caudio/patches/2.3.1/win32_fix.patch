@@ -3,7 +3,7 @@ index 349082d..b745b12 100644
 --- a/CMake/Dependencies.cmake
 +++ b/CMake/Dependencies.cmake
 @@ -27,5 +27,6 @@ MACRO_DISPLAY_FEATURE_LOG()
- 
+
  # Add library and include paths from the dependencies
  include_directories(
 +  ${OPENAL_INCLUDE_DIR}/../
@@ -34,4 +34,3 @@ index f70d2f0..d8a4815 100644
 +	    s = std::string(widestr.begin(), widestr.end());
          return s;
      }
-     

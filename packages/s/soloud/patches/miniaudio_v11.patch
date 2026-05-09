@@ -14,9 +14,8 @@ index 7dba676..e34b910 100644
 @@ -73,7 +73,7 @@ namespace SoLoud
              return UNKNOWN_ERROR;
          }
- 
+
 -        aSoloud->postinit_internal(gDevice.sampleRate, gDevice.playback.internalBufferSizeInFrames, aFlags, gDevice.playback.channels);
 +        aSoloud->postinit_internal(gDevice.sampleRate, gDevice.playback.internalPeriodSizeInFrames, aFlags, gDevice.playback.channels);
- 
+
          aSoloud->mBackendCleanupFunc = soloud_miniaudio_deinit;
- 

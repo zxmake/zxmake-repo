@@ -5,9 +5,8 @@ index 3941c87..db8c293 100644
 @@ -19,6 +19,7 @@
  #include <unifex/scope_guard.hpp>
  #include <unifex/exception.hpp>
- 
+
 +#include <cstring>
  #include <atomic>
  #include <random>
  #include <system_error>
- 
