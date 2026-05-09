@@ -20,10 +20,6 @@ xrepo 是一个基于 [Xmake](https://github.com/xmake-io/xmake) 的跨平台 C/
 
 在 `packages/x/xxx/xmake.lua` 中写个关于新包的 xmake.lua 描述，然后提交一个 pull-request 到 dev 分支。
 
-例如：[packages/z/zlib/xmake.lua](https://github.com/xmake-io/xmake-repo/blob/dev/packages/z/zlib/xmake.lua):
-
-关于如何制作包的更详细描述，请参看文档：[制作和提交到官方仓库](https://xmake.io/#/zh-cn/package/remote_package?id=%e6%b7%bb%e5%8a%a0%e5%8c%85%e5%88%b0%e4%bb%93%e5%ba%93)
-
 ## 从 Github 创建一个包模板
 
 我们需要先安装 [gh](https://github.com/cli/cli) cli 工具，然后执行下面的命令登入 github。
@@ -36,7 +32,7 @@ gh auth login
 
 ```console
 $ xmake lua scripts/new.lua github:glennrp/libpng
-package("libpng")
+package("libpng", function()
     set_homepage("http://libpng.sf.net")
     set_description("LIBPNG: Portable Network Graphics support, official libpng repository")
 
@@ -56,6 +52,7 @@ package("libpng")
     on_test(function (package)
         assert(package:has_cfuncs("foo", {includes = "foo.h"}))
     end)
+end)
 packages/l/libpng/xmake.lua generated!
 ```
 

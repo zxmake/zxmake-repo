@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        ".lua-format": "plaintext"
+        ".lua-format": "plaintext",
+        "CONTRIBUTING.md": "plaintext",
+        "NOTICE.md": "plaintext"
     }
 }

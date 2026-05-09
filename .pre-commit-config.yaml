@@ -23,10 +23,16 @@ repos:
     rev: f8f5b91b0629fecc117f213d112aa91869dc536d
     hooks:
       - id: luaformatter-linux
-  # - repo: https://github.com/igorshubovych/markdownlint-cli.git
-  #   rev: v0.45.0
-  #   hooks:
-  #     - id: markdownlint
+  - repo: https://github.com/igorshubovych/markdownlint-cli.git
+    rev: v0.45.0
+    hooks:
+      - id: markdownlint
+        exclude: |
+          (?x)^(
+            LICENSE\.md|
+            NOTICE\.md|
+            CONTRIBUTING\.md
+          )$
   # - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
   #   rev: 3.2.1
   #   hooks:
