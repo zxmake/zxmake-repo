@@ -20,7 +20,7 @@ package("angelscript", function()
                  "6faa043717522ae0fb2677d907ca5b0e35a79d28e5f83294565e6c6229bfbdf7")
 
     add_patches(">=2.34.0", "patches/msvc-arm64.patch",
-                "1433f474870102e6fd8d0c9978b6d122a098cdecded29be70176b9dab534564f")
+                "e11c551269bb983f7226b2916bcecf79c0615fd63a05ccf52f4e11c272f6dc82")
 
     add_configs("exceptions", {
         description = "Enable exception handling in script context",

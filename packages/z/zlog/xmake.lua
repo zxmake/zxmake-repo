@@ -14,7 +14,7 @@ package("zlog", function()
                  "7fe412130abbb75a0779df89ae407db5d8f594435cc4ff6b068d924e13fd5c68")
 
     add_patches("1.2.17", "patches/1.2.17/cmake.patch",
-                "0558364a4a4a2d54375fffb1ae33877562058d90865712bb7519c9219b0f79e7")
+                "05dbf0a37f028a2bd8398bd2d205b2a22fa7a6c8feaa0a9867b64c1f41fa6125")
 
     add_syslinks("pthread")
 

@@ -13,11 +13,11 @@ package("libflac", function()
     add_versions("1.3.3",
                  "668cdeab898a7dd43cf84739f7e1f3ed6b35ece2ef9968a5c7079fe9adfe1689")
     add_patches("1.4.3", "patches/1.4.2/cmake.patch",
-                "0a99382d5d7bd33078572b6cc3af08ee7e5e3618c80754a5fdc400bd69f4e470")
+                "29c46028e03c78f4a04aa878bfc3e0f4dda8dda41aba56bc909c307daec7ac32")
     add_patches("1.4.2", "patches/1.4.2/cmake.patch",
-                "0a99382d5d7bd33078572b6cc3af08ee7e5e3618c80754a5fdc400bd69f4e470")
+                "29c46028e03c78f4a04aa878bfc3e0f4dda8dda41aba56bc909c307daec7ac32")
     add_patches("1.3.3", "patches/1.3.3/cmake.patch",
-                "49baa40ab70d63e74cfc3f0cc2f13824545a618ceaeffdd51d3333d90b37fd32")
+                "b1ee9b071e330b90e50f7a6801963c7f1d40c99ce7d631dc13a928d35590095c")
 
     if is_plat("mingw") and is_subhost("msys") then
         add_extsources("pacman::flac")

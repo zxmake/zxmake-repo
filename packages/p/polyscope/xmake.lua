@@ -18,13 +18,13 @@ package("polyscope", function()
                  "c0d3594b1c818c6e7efe2c2589d71f5e254db383d36a92555aa909a2114f12d4")
 
     add_patches(">=2.2.1", "patches/v2.2.1/deps.patch",
-                "7183fac6dcb6ebc9441c02e4c5f51721ab2a64fe524488611e6085e5b72bb6ae")
+                "599482137ab5a562e5a43f90fa72593036d5909c475c797da754ad9ba1d78be6")
     add_patches("2.1.0", "patches/v2.1.0/deps.patch",
-                "01bc0b31193e65b8cc079d9f232f73fb995b3cfd276840add58a01dfcf477cc8")
+                "60b76afef7511b283bd9927ae3391bd1dcd2523f2887c286408d8fd4a42db9ad")
     add_patches("1.3.0", "patches/v1.3.0/deps.patch",
-                "2d183713be791deddcfb48e4546793f584071eb1aa7a045e03c7ceed841470c8")
+                "e4980e12dc7939d62bafc3cd2830a0de727fdf876cc9c441af16624b8019d2a1")
     add_patches("1.3.0", "patches/v1.3.0/imgui.patch",
-                "e7865d6de85103098cdc25ab8a0e94dd26fb5f718609f20093b91891cc8f21e1")
+                "72bf04e2529576d34a2f78d43cbecc8795e952e52ca6e72b7ec7f4bab2516b6c")
 
     if is_plat("windows") then
         add_configs("shared", {

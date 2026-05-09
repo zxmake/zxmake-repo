@@ -16,7 +16,7 @@ package("dispenso", function()
                  "581f95c16cd479692bc89448d0648f6ce24162454308c544c4d35bf5e9efe5c8")
 
     add_patches("1.2.0", "patches/1.2.0/namespace.patch",
-                "a0c00cad221f05f9624a28c2e22f6e419b21b9832281cb875283bf89847b50f1")
+                "34eafcc027f9b981ee0dba29743816f05fd92f6b80f319a82c9c21842a45ed8a")
 
     if is_plat("linux", "bsd") then
         add_syslinks("pthread")

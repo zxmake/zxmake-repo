@@ -15,9 +15,9 @@ package("ls-qpack", function()
                  "075a05efee27961eac5ac92a12a6e28a61bcd6c122a0276938ef993338577337")
 
     add_patches("2.5.5", "patches/2.5.5/cmake.patch",
-                "23fd785c3db2e1b43ead464b0ee8d12e9f290fbfdf818c3238cba316df295f08")
+                "d8bbe54f9b6d6181cfe51d906cb0a8fc8c6604b4a16038f9e0cfb7fd21f05798")
     add_patches("2.5.3", "patches/v2.5.3/fix-cmake-install.patch",
-                "7d819b620b5e2bd34ef58a91bf20d882883c7525def9f9f80313b64cba5e5239")
+                "8fc4d2988b79f8c8de6d506e8c2fb655f5398449ea3e68c44f66e3d4a54fcf7c")
 
     add_deps("cmake")
     add_deps("xxhash")

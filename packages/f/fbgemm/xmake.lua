@@ -14,9 +14,9 @@ package("fbgemm", function()
                  "c51ac26bc0aa8fef7e80631c4abdd3a7c33d1a097359cef9b008bf9e1203c071")
 
     add_patches("0.8.0", "patches/0.8.0/dep-unbundle.patch",
-                "505ccda3b12ec519cb0732352b223862b3470c207e03e84889b977cbdc1d9aae")
+                "fe48123c3101b41c030786c98ce08d7a4b5d0c6411ae37072522b365a193fb81")
     add_patches("0.7.0", "patches/0.7.0/dep-unbundle.patch",
-                "f3117ff728989146d5ab0c370fe410c73459091f65cae5f6b304e5637889fb8f")
+                "4ee08c50b8797c3e0de81201f12883e158a36555d01ce93c5ed659fac5a4e6fc")
 
     if is_plat("windows") then
         add_patches("0.8.0", "patches/0.8.0/msvc-omp.patch",

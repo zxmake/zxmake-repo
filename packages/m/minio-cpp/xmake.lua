@@ -12,9 +12,9 @@ package("minio-cpp", function()
                  "da0f2f54bf169ad9e5e9368cc9143df4db056fc5c05bb55d8c1d9065e7211f7c")
 
     add_patches("0.3.0", "patches/0.3.0/cmake-pkgconfig-find-deps.patch",
-                "53a0a5a300c896ad92dbaf3b96fa25556a2f555e84ce07deb7b7b1562ddac9e5")
+                "7d0ac9fa769ce17620ee253daec81a8dd7eac4e58e14cb8c0f6096b329bfea0d")
     add_patches("0.3.0", "patches/0.3.0/macos-unistd.patch",
-                "cd50e5d3cb5ceda7d606dc15f90ab4764b34a61a96a3be83f02688329843ef1f")
+                "a0c3f0ec30f65f4955f2fdd5124ea6519ee04e79594b04fd1cce79b2db74d630")
 
     add_deps("cmake")
     if is_host("windows") then

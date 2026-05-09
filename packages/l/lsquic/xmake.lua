@@ -17,7 +17,7 @@ package("lsquic", function()
                  "f18ff2fa0addc1c51833304b3d3ff0979ecf5f53f54f96bcd3442a40cfcd440b")
 
     add_patches(">=4.0.8", "patches/4.0.8/cmake.patch",
-                "c9b8412fbd7df511dee4d57ea5dfa50bc527e015fc808270235b91abfd9baa89")
+                "07f6d9cda937252843fcfbc056f34b0f6e2db16fc0fd9dfebb9fd6102d17585d")
 
     add_configs("fiu", {
         description = "Use Fault Injection in Userspace (FIU)",

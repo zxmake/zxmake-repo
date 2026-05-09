@@ -23,7 +23,7 @@ package("libzip", function()
                  "fd6a7f745de3d69cf5603edc9cb33d2890f0198e415255d0987a0cf10d824c6f")
 
     add_patches("1.11.1", "patches/1.11.1/mingw-shared.patch",
-                "bdd27b2c68ff045160126a6005237105307af06cfc7f89df69e6728ce23fa36a")
+                "bd5f70b229c7bbeebf773928cdd0371fa4cf98c6c588e8376356c9472a9191b3")
     add_patches("<=1.10.1", "patches/1.10.1/mingw.patch",
                 "17513dbef5feca0630ad16a2eacb507fd2ee3d3a47a7c9a660eba24b35ea3fa8")
 

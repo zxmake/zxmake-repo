@@ -11,7 +11,7 @@ package("cppp-reiconv", function()
                  "3e539785a437843793c5ce2f8a72cb08f2b543cba11635b06db25cfc6d9cc3a4")
 
     add_patches("2.1.0", "patches/2.1.0/cmake.patch",
-                "21bd2fcb5874f8774af1360aaac51073b67bf4c754096f0fe162d66632c1b7f9")
+                "5283a4947ec60ba94891b76711d070c478d1351a9f0c1d965a014ec1a165988a")
 
     add_deps("cmake", "python")
 

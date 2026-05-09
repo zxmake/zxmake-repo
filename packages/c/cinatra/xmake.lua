@@ -17,7 +17,7 @@ package("cinatra", function()
                  "4e14d5206408eccb43b3e810d3a1fe228fbc7496ded8a16b041ed12cbcce4479")
 
     add_patches(">=0.8.9", "patches/0.8.9/windows-move.patch",
-                "c913ed0e9044ffc0ced40516245ec0d55262f8eabd30244d9911c3f0427a60f5")
+                "5b378de9e07a56fdcfb5ac797ff080c941a069baf95bf6404f2304d95477de76")
 
     add_configs("ssl",
                 {description = "Enable SSL", default = false, type = "boolean"})

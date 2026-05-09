@@ -20,7 +20,7 @@ package("onnx", function()
                  "052ad3d5dad358a33606e0fc89483f8150bb0655c99b12a43aa58b5b7f0cc507")
 
     add_patches(">=1.16.0", "patches/1.16.0/cmake-abseil.patch",
-                "d8cad2b231ce01aa3263692f88293be3eaa2b380e021eb5288f4c7ea930c19cb")
+                "c337e69d63e92b60979bf2b474e10031306b500076c9e241c602de223e89ae8c")
 
     add_configs("exceptions", {
         description = "Enable exception handling",

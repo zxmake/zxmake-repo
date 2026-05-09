@@ -16,7 +16,7 @@ package("fastgltf", function()
                  "44bcb025dd5cd480236a3bc7a3f8c9a708a801ed773b7859677440d22e0e1e7c")
 
     add_patches("0.7.1", "patches/0.7.1/cmake-simdjson.patch",
-                "943828708f0e011122249196dc70d9a1f026e3212e1c1c35f6988907a6ea4e49")
+                "d1cf27b688c01cd92fb471c74c3f0ec7e8bbf5bedc65b6bef429d453fef086a5")
 
     add_configs("small_vector", {
         description = "Uses a custom SmallVector type optimised for small arrays",

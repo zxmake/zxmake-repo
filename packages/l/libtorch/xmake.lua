@@ -20,16 +20,16 @@ package("libtorch", function()
     add_versions("v2.4.0", "d990dada86a8ad94882b5c23e859b88c0c255bda")
 
     add_patches("1.9.x", "patches/1.9.0/gcc11.patch",
-                "4191bb3296f18f040c230d7c5364fb160871962d6278e4ae0f8bc481f27d8e4b")
+                "97b5e01ab2f4d7af7d4a497f55e4664270cd223712729eddb288124b43654606")
     add_patches("1.11.0", "patches/1.11.0/gcc11.patch",
-                "1404b0bc6ce7433ecdc59d3412e3d9ed507bb5fd2cd59134a254d7d4a8d73012")
+                "f59f0e70226f458a05064cb61103c590bdd29bb111f87e782ad6b816370621f6")
     -- Fix compile on macOS. Refer to https://github.com/pytorch/pytorch/pull/80916
     add_patches("1.12.1", "patches/1.12.1/clang.patch",
                 "cdc3e00b2fea847678b1bcc6b25a4dbd924578d8fb25d40543521a09aab2f7d4")
     add_patches("1.12.1", "patches/1.12.1/vs2022.patch",
                 "5a31b9772793c943ca752c92d6415293f7b3863813ca8c5eb9d92a6156afd21d")
     add_patches("2.2.2", "patches/2.2.2/pocketfft.patch",
-                "8b756d867fb60839dcaeb1ee0bdf4189ee95e7f5c6f3810f8cbc8f6a5fae60e9")
+                "a3ed98baf0d87ed4c26a006d01c906c14b9ae110ba08ee41223e419d418b31b7")
 
     add_configs("shared", {
         description = "Build shared library.",

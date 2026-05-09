@@ -10,7 +10,7 @@ package("jthread", function()
     add_deps("cmake")
 
     add_patches("2023.08.18", "patches/2023.08.18/cmakelist.patch",
-                "62304c64bf7a84ce7d3f95042d2307b4306d934e00cc033837610d9cef8401d5")
+                "10503405b4bfa2d3e4025d60e950c2f0f207d765af1ac45d9c5572500702e91e")
 
     add_includedirs("include", "include/jthread")
 

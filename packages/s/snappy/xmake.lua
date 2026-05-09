@@ -13,9 +13,9 @@ package("snappy", function()
                  "49d831bffcc5f3d01482340fe5af59852ca2fe76c3e05df0e67203ebbe0f1d90")
 
     add_patches("1.1.9", "patches/1.1.9/inline.patch",
-                "ed6b247d19486ab3f08f268269133193d7cdadd779523c5e69b5e653f82d535b")
+                "5bcf1a1e880301506aed7d1f3aa42f7a2940d155b04bef3979d95687fb84af31")
     add_patches("1.1.10", "patches/1.1.10/cmake.patch",
-                "d4883111dcfab81ea35ac1e4e157e55105cec02a0ba804458405be25cbf7b6bb")
+                "51da304cf3cbf9047cef385bb293aa1b830e92f8327556f6e048b868cea0f047")
 
     add_deps("cmake")
 

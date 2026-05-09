@@ -8,7 +8,7 @@ package("munkres-algorithm", function()
     add_versions("2021.04.05", "30c5fbdde1e5a9fb44fcac55b7c0e8676baaccfd")
 
     add_patches("2021.04.05", "patches/2021.04.05/cstdint.patch",
-                "ceca3960e7fbed9578517c1e5830e5e056d4c0bdcc250871d3277364729c78fe")
+                "28a72d8e46f697ec76a2141654b431753478d6fa1d0cd04a1f95d34afb473402")
 
     on_install(function(package)
         os.cp("munkres.hpp", package:installdir("include"))

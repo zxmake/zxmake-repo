@@ -12,9 +12,9 @@ package("libfido2", function()
                  "32e3e431cfe29b45f497300fdb7076971cb77fc584fcfa80084d823a6ed94fbb")
 
     add_patches("1.15.0", "patches/1.15.0/cmake-pkgconfig-find-deps.patch",
-                "1d8c559529f8589e44f794b33d9216234d44ef857742db9ef94693dbd41c9486")
+                "90f79566ce3ddeae42992c8cf05997a86be7b97b32f3c0a6d3fcb5813ac8caa0")
     add_patches("1.15.0", "patches/1.15.0/add-syslinks.patch",
-                "1da25738d57afbb8c6b2a95796a9711d234a44903bc32e765377b2b455c340ee")
+                "1155279e550ab3c843a61e6e45cf8c9f2d698a1f205a5cdaddbf97166fe43e96")
 
     add_configs("hidapi",
                 {description = "Use hidapi", default = false, type = "boolean"})

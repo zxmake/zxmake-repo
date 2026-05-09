@@ -9,7 +9,7 @@ package("libogg", function()
     add_versions("v1.3.4",
                  "62cc64b9fd3cf57bde3a9033e94534ba34313d2bb9698029f623121a4e47bb9b")
     add_patches("v1.3.4", "patches/1.3.4/macos_fix.patch",
-                "e12c41ad71206777f399c1048914e5e5a2fe44e18d0d50ebe9bedbfbe0624c35")
+                "36ffa6a2832c9812457c24f10ff2748c90df71e9d5c80768693b322ccdce65ba")
 
     add_deps("cmake")
     if is_plat("cross") and is_subhost("windows") then

@@ -17,7 +17,7 @@ package("ucx", function()
                  "b7189b69fe0e16e3c03784ef674e45687a9c520750bd74a45125c460ede37647")
 
     add_patches("1.16.0", "patches/1.16.0/unused_variable.patch",
-                "dd40219cf1989cd42ea19f334ea5c3e4e57736bcbad62fa6741f00a1bb89f0fc")
+                "df5058e181fcd402d532abde19bac94ce9e1110a0edbc98bf08546df5cbe64ed")
 
     add_configs("cuda", {
         description = "Enable CUDA support.",

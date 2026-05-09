@@ -19,7 +19,7 @@ package("lief", function()
                  "92916dcb3178353d863aef4f409186889983c56e025b774741d5316a72ec3a7d")
 
     add_patches("<=0.15.1", "patches/0.15.1/algorithm.patch",
-                "3e110539c3db037b2b24cd32f97ad8cc6241b1f69d4a65dab9fd6c84e482bbd9")
+                "5b697ce111f7f4cea5f821382d485db9afe994bd018a3b6ec0db1fc7ac1d3158")
 
     add_configs("elf", {
         description = "Enable ELF module.",

@@ -8,7 +8,7 @@ package("amgx", function()
     add_versions("v2.4.0", "2b4762f02af2ed136134c7f0570646219753ab3e")
 
     add_patches("2.4.0", "patches/2.4.0/msvc.patch",
-                "46dcb9a5e1b4157fce91e06050c1d70f5e4fe34d7bf085216629c4f8708f90a5")
+                "78579b4fef0ae9a7c7ed42e40d2dc257e6db15ac829ca24650c361684541f720")
 
     if is_plat("windows") then
         set_policy("platform.longpaths", true)

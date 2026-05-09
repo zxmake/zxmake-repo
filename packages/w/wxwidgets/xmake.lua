@@ -101,7 +101,7 @@ package("wxwidgets", function()
         if is_plat("linux") then
             add_deps("opengl", "at-spi2-core")
             add_patches("<=3.2.5", "patches/3.2.5/add_libdir.patch",
-                        "9a9fe4d745b4b6b09998ec7a93642d69761a8779d203fbb42a3df8c3d62adeb0")
+                        "2504a759c864c49d2083c047e0df51003e2f8756fc34a6d80eb9f77722ed129a")
         end
     end
 

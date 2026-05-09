@@ -13,9 +13,9 @@ package("enet", function()
                  "1e0b4bc0b7127a2d779dd7928f0b31830f5b3dcb7ec9588c5de70033e8d2434a")
 
     add_patches("v1.3.18", "patches/v1.3.18/cmake.patch",
-                "8feb51d3220d04c53d93aea053db522a0429bb3a0236039a2b62d8f01a3f638b")
+                "e9e1c2b44eb9d3bf5f1a764265d08020664cc9ec10275dc8d5c6292bc4fbb252")
     add_patches("v1.3.17", "patches/v1.3.17/cmake.patch",
-                "e77d2d129952443d67c1ec432de81843d72b854d25bbd6fb244b0f85804d21d1")
+                "981daf3eb48cd00363d16fb558b944474a5b30dea7ba7cf02ddf0382d9aec350")
 
     if is_plat("mingw") and is_subhost("msys") then
         add_extsources("pacman::enet")

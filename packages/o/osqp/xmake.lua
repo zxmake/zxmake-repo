@@ -11,7 +11,7 @@ package("osqp", function()
                  "285b2a60f68d113a1090767ec8a9c81a65b3af2d258f8c78a31cc3f98ba58456")
 
     add_patches("0.6.3", "patches/0.6.3/cmake.patch",
-                "ffe3809019eebae7559e8c4016431e9d3e9bc35776d9affe65b83904dd753999")
+                "2d1d960731d4ce49195539445ace46fd7353ee79c241883a822234f6e431b865")
 
     add_deps("cmake")
     if is_subhost("windows") then

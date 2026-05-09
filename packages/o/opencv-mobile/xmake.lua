@@ -24,7 +24,7 @@ package("opencv-mobile", function()
                  "85c19b443454d3ae839d8f4f7a6a71c79f9ac38592a8a96e2f806fc0c68b64f4")
 
     add_patches("*", "patches/msvc.patch",
-                "6fa760ea58c8b90c87129f16c84b128a4447ea11cee7d6568ea4f5e7ae250971")
+                "6cfc9b752af0d45c01ede27c5a552d1a865c93f9256210aaf808cbda06381d47")
 
     add_deps("cmake", "python 3.x", {kind = "binary"})
     add_deps("openmp")

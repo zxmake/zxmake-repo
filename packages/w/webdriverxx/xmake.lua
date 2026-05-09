@@ -9,9 +9,9 @@ package("webdriverxx", function()
     add_versions("2023.04.22", "b8c9ac36360021daca7b0fd006a092b605b19e29")
 
     add_patches("2023.04.22", "patches/2023.04.22/picojson.patch",
-                "11e23fe37c7e3b8ec174642542567c9d6bae3657892f5d7ac8203cbb89c9112c")
+                "d539deee0ebfbd3f46e9f9550ec23f8c67da503465d35f23c6c3c2e7ec522f25")
     add_patches("2023.04.22", "patches/2023.04.22/fix_cxx23.patch",
-                "da63a9b134ba78cb17b099486b83d2bc846c9786590265eb4e31f88a9911aeab")
+                "a07d9498eb678634ecdef0732cab6bec5bc8e3f60b4bcfce0bc295b8bdd16229")
 
     add_deps("libcurl", "picojson")
 

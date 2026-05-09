@@ -22,9 +22,9 @@ package("reflect-cpp", function()
                  "d2c8876d993ddc8c57c5804e767786bdb46a2bdf1a6cd81f4b14f57b1552dfd7")
 
     add_patches("0.11.1", "patches/0.11.1/cmake.patch",
-                "a43ae2c6de455054ab860adfb309da7bd376c31c493c8bab0ebe07aae0805205")
+                "23df4d2ed3f5c5577534c3d0e621aed671dfe82d18fec0217cd16e08d139b40e")
     add_patches("0.10.0", "patches/0.10.0/cmake.patch",
-                "b8929c0a13bd4045cbdeea0127e08a784e2dc8c43209ca9f056fff4a3ab5c4d3")
+                "3b954d415e880ce992238f90016b5cf8c88eb3c9e465e4a22d3babfd1fb1ec16")
 
     add_configs("bson", {
         description = "Enable Bson Support.",

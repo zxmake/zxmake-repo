@@ -14,7 +14,7 @@ package("pcapplusplus", function()
                  "f2b92d817df6138363be0d144a61716f8ecc43216f0008135da2e0e15727d35a")
 
     add_patches("v24.09", "patches/v24.09/vla.patch",
-                "8c380468c78118b6d85f6b3856cd49c4d890fd326dde3400b8c47c01c885cef4")
+                "ed262ca683337dc18b8d59a1651df1875d9991ae77e4708acafa10b8a7ff0866")
 
     add_configs("shared", {
         description = "Build shared library.",

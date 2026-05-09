@@ -22,7 +22,7 @@ package("libyuv", function()
                  "a8dddc6f45d6987cd3c08e00824792f3c72651fde29f475f572ee2292c03761f")
 
     add_patches("1891", "patches/1891/cmake.patch",
-                "87086566b2180f65ff3d5ef9db7c59a6e51e2592aeeb787e45305beb4cf9d30d")
+                "84fea85f10cc36e85a0abaad3e93d7d21c4617edd07b416257955255023bc301")
 
     add_configs("jpeg", {
         description = "Build with JPEG.",

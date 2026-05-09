@@ -26,11 +26,11 @@ package("vtk", function()
                  "8354ec084ea0d2dc3d23dbe4243823c4bfc270382d0ce8d658939fd50061cab8")
 
     add_patches("9.0.3", "patches/9.0.3/limits.patch",
-                "3bebcd1cac52462b0cf84c8232c3426202c75c944784252b215b4416cbe111db")
+                "af4e663ec1e8af4120aede943f801136cb8895bc610b8c386dfc4edf04e9cbd1")
     add_patches("9.2.6", "patches/9.2.6/gcc13.patch",
-                "71bcb65197442e053ae2a69079bd2b3b8708a0bedf9f4f9a955e72b15720857c")
+                "e6092050da4515ef786311486cffc52c72e2793046cf1f31f20988fd8b011843")
     add_patches("9.3.1", "patches/9.3.1/msvc.patch",
-                "619ed4145f3b7c727aee168aac04271e6414d314bf49db470de688acc9f49cb8")
+                "4db3ea2f56c00e241c9fdc1798c16d8d25c225bba96fe20ffdd9a21d0f80e67b")
 
     add_configs("cuda", {
         description = "Enable CUDA support.",

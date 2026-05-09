@@ -16,7 +16,7 @@ package("fltk", function()
                  "f30661851a61f1931eaaceb9ef4005584c85cb07fd7ffc38a645172b8e4eb3df")
 
     add_patches("1.3.9", "patches/1.3.9/cmake-fluid.patch",
-                "06ee1e82a74651a0b4ba4b386e5e5436d8b95584330d02a8a2c53351210a9127")
+                "9a2c5f090a80fe54569d43fae5ed72a45419d0393732449a2cf4651d88b2be50")
 
     if is_plat("linux") then
         add_configs("pango", {

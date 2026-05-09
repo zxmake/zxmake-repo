@@ -57,11 +57,11 @@ package("tbb", function()
                      "c7bb7aa69c254d91b8f0041a71c5bcc3936acb64408a1719aec0b2b7639dd84f")
 
         add_patches("2020.3", "patches/2020.3/gcc13.patch",
-                    "419557beb877a72fa394c886fbb674c1b0c300fee7f2ec4e2de39ceeeb6b95fd")
+                    "5e9e5a1b09ce9d1ca95dd497a8ebeef95b4e83d3f32e55cb67542be3af9129bb")
         add_patches("2021.2.0", "patches/2021.2.0/gcc11.patch",
-                    "181511cf4878460cb48ac0531d3ce8d1c57626d698e9001a0951c728fab176fb")
+                    "8825e2569892fdfbbea79c4d75999fb0f1f63afa1ab7a4213dea07ac682b2b8d")
         add_patches("2021.5.0", "patches/2021.5.0/i386.patch",
-                    "1a1c11724839cf98b1b8f4d415c0283ec7719c330b11503c578739eb02889ec0")
+                    "c300651312ee7ddbe79144f32e7e6b79b660fa6114a4564c3ab3c5dd0e7cc6fd")
 
         if is_plat("macosx") then
             add_configs("compiler", {

@@ -27,11 +27,11 @@ package("backward-cpp", function()
 
     if is_plat("mingw") then
         add_patches("v1.6", "patches/v1.6/link_to_imagehlp.patch",
-                    "0a135b6d68970ff6609a3eb4deb2b10c317eee15ba980eb178b93402a97c957c")
+                    "d221bd533f912caff8fc42960a5fcabb9c6663a5c266bb01033a48dcc2f52e7c")
 
         if is_arch("i386") then
             add_patches("v1.6", "patches/v1.6/fix_32bit_ssize_t_typedef.patch",
-                        "fb372fe5934984aecb00b3153f737f63a542ff9359d159a9bcb79c5d54963b42")
+                        "51c264837838dba69acd0ed8f17d59020628a82cd7cd8e1dfe7d1bcf2f281f71")
         end
     end
 

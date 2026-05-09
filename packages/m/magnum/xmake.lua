@@ -11,7 +11,7 @@ package("magnum", function()
                  "78c52bc403cec27b98d8d87186622ca57f8d70ffd64342fe4094c720b7d3b0e3")
 
     add_patches("2020.06", "patches/2020.06/msvc.patch",
-                "0739a29807c6aeb4681eaadb4c624c39f5d1ba746de3df7ab83801f41d1ad5bd")
+                "4e37fcf3391637d116a9213bafef093e79ccf13aeadf7b9b886bf57bda5db65a")
 
     add_configs("audio", {
         description = "Build Audio library.",

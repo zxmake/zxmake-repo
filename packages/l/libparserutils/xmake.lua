@@ -11,7 +11,7 @@ package("libparserutils", function()
                  "816f0cb3281c6f6a6cc974ba00c3975fe91ab1425125aa9af64903065d2a36ec")
 
     add_patches("0.2.5", "patches/0.2.5/uninitialised-variable.patch",
-                "1f9f6b7e0444f1bcb4e13684cc5e3660d33ab30db5e7d995e7644bc8b3fda3ff")
+                "9c5e2202073cade494f3c4e72870fbd226ab29fa4438a670f0f5bc67800b150a")
 
     on_load(function(package)
         if is_subhost("windows") and not package:is_precompiled() then

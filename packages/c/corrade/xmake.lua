@@ -12,7 +12,7 @@ package("corrade", function()
                  "d89a06128c334920d91fecf23cc1df48fd6be26543dc0ed81b2f819a92d70e72")
 
     add_patches("2020.06", "patches/2020.06/msvc.patch",
-                "af90c9bad846a2cbe834fe270860446f6329636f9b9b7ad23454cf479c1dc05f")
+                "29b15c6c95999ab067669209ff4ab9a50034512929508c5b8ed6532ff4d485dd")
 
     if is_plat("windows") then
         add_syslinks("shell32")

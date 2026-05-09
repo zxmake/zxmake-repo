@@ -18,7 +18,7 @@ package("mcfgthread", function()
                  "d2318ef761927860b7a8963308145065047d8ad2102313b26e6eb2d88d9ef1e3")
 
     add_patches("1.8.4", "patches/1.8.4/meson.patch",
-                "89b98f9152719c44c2a7d8800b63ac621954fd0fe10884b9e90fc3298b76c6c9")
+                "be33787f990967b9059fbe630129f077b325930ff24aec3b14bce6be22d63bd1")
 
     add_configs("debug_checks", {
         description = "enable run-time assertions",

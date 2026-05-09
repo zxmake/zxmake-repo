@@ -11,7 +11,7 @@ package("termcap", function()
                  "91a0e22e5387ca4467b5bcb18edf1c51b930262fd466d5fda396dd9d26719100")
 
     add_patches("1.3.1", "patches/1.3.1/unistd_h.patch",
-                "9a61b94c22d913ac4f5adf3e5735c07cb5e57eaa057f737bacb754215897cce0")
+                "0b61b49d5944728c5d9bc0b1955aabf2fb17a11aed6d7c77a005098cf3436fde")
 
     on_install(function(package)
         io.writefile("xmake.lua", [[

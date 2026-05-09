@@ -55,9 +55,9 @@ package("c-ares", function()
     add_patches("1.29.0", "patches/1.29.0/macosx-header.patch",
                 "389c12e54d82f0e8d5dc38dc15bbade12592509627680498774159a0cb32faf2")
     add_patches("1.18.1", "patches/1.18.1/guard-imported-lib.patch",
-                "3cb03453af9e1477cfe926b1c03b2e3fbb8200a72888b590439e69e2d4253609")
+                "495f8ab71853aafa86385785a3885b5de90a150a30d618c6b2419b66063bd535")
     add_patches("1.18.1", "patches/1.18.1/skip-docs.patch",
-                "bbe389b4aab052c2e6845e87d1f56a8366bf18c944f5e5e6f05a2cf105dbe680")
+                "f582f1ac9c7795553cd5a6fb5d7ad8a41347825068bacd06c5d0ac39e743b4e0")
 
     add_configs("tools", {
         description = "Build tools",

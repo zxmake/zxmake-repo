@@ -59,8 +59,8 @@ packages/l/libpng/xmake.lua generated!
 ## 在本地测试一个包
 
 ```console
-xmake l scripts/test.lua --shallow -vD zlib
-xmake l scripts/test.lua --shallow -vD -p iphoneos zlib
-xmake l scripts/test.lua --shallow -vD -k shared -m debug zlib
-xmake l scripts/test.lua --shallow -vD --vs_runtime=MD zlib
+xmake lua -vD scripts/test.lua --shallow -vD zlib
+xmake lua -vD scripts/test.lua --shallow -vD -p iphoneos zlib
+xmake lua -vD scripts/test.lua --shallow -vD -k shared -m debug zlib
+xmake lua -vD scripts/test.lua --shallow -vD --vs_runtime=MD zlib
 ```

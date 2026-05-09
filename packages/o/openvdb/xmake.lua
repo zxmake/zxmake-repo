@@ -27,7 +27,7 @@ package("openvdb", function()
                  "6314ff1db057ea90050763e7b7d7ed86d8224fcd42a82cdbb9c515e001b96c74")
 
     add_patches(">=10.1.0", "patches/10.1.0/blosc-dep.patch",
-                "a1a5adf4ae2c75c3a3a390b25654dd7785b88d15e459a1620fc0b42b20f81ba0")
+                "fb84d466e25d79bc909f0357bbd979ab77118aad19c4ac9a55cf8d08854856a2")
 
     add_deps("cmake")
     add_deps("boost >1.73",

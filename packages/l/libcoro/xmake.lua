@@ -19,11 +19,11 @@ package("libcoro", function()
                  "2cb6f45fc73dad6008cc930d92939785684835e03b12df422b98fcab9e393add")
 
     add_patches("v0.14.1", "patches/v0.14.1.patch",
-                "bd5892560831ec322409ed9af82466ae523d967c1c80ca77c66bc9b64a4b54c7")
+                "15abfece33be97717968aa9a1d16277f9206cfa34114c18856a97a7f670bf4f0")
     add_patches("v0.14.0", "patches/v0.14.0.patch",
-                "bd5892560831ec322409ed9af82466ae523d967c1c80ca77c66bc9b64a4b54c7")
+                "15abfece33be97717968aa9a1d16277f9206cfa34114c18856a97a7f670bf4f0")
     add_patches("v0.13.0", "patches/v0.13.0.patch",
-                "bd5892560831ec322409ed9af82466ae523d967c1c80ca77c66bc9b64a4b54c7")
+                "15abfece33be97717968aa9a1d16277f9206cfa34114c18856a97a7f670bf4f0")
 
     if not is_plat("windows", "wasm") then
         add_configs("networking", {

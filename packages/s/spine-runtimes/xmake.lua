@@ -8,7 +8,7 @@ package("spine-runtimes", function()
     add_versions("3.8", "d33c10f85634d01efbe4a3ab31dabaeaca41230c")
 
     add_patches("3.8", "patches/3.8/cmake.patch",
-                "bbfa70e3e36f8b3beefbc84d8047eb6735e1e75f4dce643d8916e231b13b992c")
+                "8d8587bc45959932bd2eb1ea9429197086904cfcf4ed20efa974966e84f409bc")
 
     add_configs("shared", {
         description = "Build shared library.",

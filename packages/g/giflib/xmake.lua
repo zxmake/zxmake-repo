@@ -13,7 +13,7 @@ package("giflib", function()
                  "31da5562f44c5f15d63340a09a4fd62b48c45620cd302f77a6d9acf0077879bd")
 
     add_patches("5.2.1", "patches/5.2.1/unistd.h.patch",
-                "0f1f7b9a295c9965529608f7e9d810b7f7a2642b3b18910402d5d7ce8b86fc13")
+                "9198f2aa35a15687ad15311a7e91bc08c354a89f2c97ba49c0ae44d746f2925c")
 
     add_configs("utils", {
         description = "Build utility binaries.",

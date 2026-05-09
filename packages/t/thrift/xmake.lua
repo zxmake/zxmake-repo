@@ -24,9 +24,9 @@ package("thrift", function()
                  "df2931de646a366c2e5962af679018bca2395d586e00ba82d09c0379f14f8e7b")
 
     add_patches(">=0.21.0", "patches/0.21.0/cmake.patch",
-                "506f7f70d76e092a62e87ada5290410a203241a08ba362eb82afa6200fae0881")
+                "5c060127bf1673ed26a935e499fa91f409f1c44284479c4de82dff9b4360983a")
     add_patches(">=0.16.0 <=0.20.0", "patches/0.16.0/cmake.patch",
-                "8dd82f54d52a37487e64aa3529f4dbcedcda671ab46fcb7a8c0f2c521ee0be9b")
+                "0b3845c454c9f0f378efb893e261b811aa4f0598a6e4d7ce3cb18dc565443413")
 
     add_configs("compiler", {
         description = "Build compiler",

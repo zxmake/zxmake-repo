@@ -11,7 +11,7 @@ package("libhubbub", function()
                  "570f2aef99071e0c24d16444b74884d611f46b264bbfb6e314039c9786e87160")
 
     add_patches("0.3.8", "patches/0.3.8/treebuilder.patch",
-                "c966decf79bcd0bbca4fe6c4ccdba776b9b9b3551a5956a894f14a55ec21eb72")
+                "143efc05f6665c8d07fced47fdd7bc3e035ecf015710cc800ff9a5ac13f8a482")
 
     add_deps("libparserutils")
     if is_plat("windows") then

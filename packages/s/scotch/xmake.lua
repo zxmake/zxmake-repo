@@ -14,7 +14,7 @@ package("scotch", function()
 
     if is_plat("windows", "mingw", "msys", "bsd") then
         add_patches("7.0.5", "patches/7.0.5/cmake.patch",
-                    "5104181d78dcf31779ab70cae61bb80fa2f6f836ce5d73628ef9b2d074fb8d8c")
+                    "0ddef537189e1b5483ac2a77e896d9f0a61045ffb60d571924a45f0cee667fa2")
     end
 
     add_configs("zlib", {

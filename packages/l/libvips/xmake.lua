@@ -19,7 +19,7 @@ package("libvips", function()
                  "5701445a076465a3402a135d13c0660d909beb8efc4f00fbbe82392e243497f2")
 
     add_patches("8.15.3", "patches/8.15.3/msvc-ssize_t.patch",
-                "1995af657dfd2f4e4f8edec685f67bd473537ff33c42d8329a0df0e0477408b9")
+                "172334cea2324b01ecd223a10e7dd0fc0bf133cf543312aa3560055c74e6e727")
 
     add_configs("c++", {
         description = "Build C++ API",

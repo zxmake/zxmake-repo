@@ -17,9 +17,9 @@ package("nghttp3", function()
                  "a83c6a4f589ae777a5f967652969d99b3399a85971340b8de9bed79119a11f88")
 
     add_patches(">=1.4.0", "patches/1.4.0/vendor.patch",
-                "a6d611938c797d721a0345c5c772a1405ae0d6587ae46e16c1b73c89090a5c08")
+                "af2dc5f285041e13adbbf35c929019da72c7c07f6823b2cbd3428efac667dbc7")
     add_patches("1.3.0", "patches/1.3.0/vendor.patch",
-                "51ab785328270b8df854283a8c20403c09813b0586eb84702a9c20241ff14980")
+                "27b11eedb681280250b6f60be043c691f32bc7107d75e8665772e05994e9280b")
 
     add_deps("cmake", "sfparse")
 
