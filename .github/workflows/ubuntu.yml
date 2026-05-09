@@ -22,7 +22,6 @@ jobs:
 
       - name: Install XMake
         run: |
-          mkdir /software && cd /software
           git clone --recursive https://github.com/TOMO-CAT/xmake.git
           cd xmake
           git checkout master

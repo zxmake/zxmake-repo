@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "emmylua_new",
+            "request": "launch",
+            "name": "EmmyLua Debug With Specific Port",
+            "host": "localhost",
+            "port": "${input:port}",
+            "ext": [
+                ".lua",
+                ".lua.txt",
+                ".lua.bytes"
+            ],
+            "ideConnectDebugger": true
+        }
+    ],
+    "inputs": [
+        {
+            "id": "port",
+            "type": "promptString",
+            "description": "Please input the port of the Emmylua Debugger",
+            "default": "9966"
+        }
+    ]
+}

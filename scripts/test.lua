@@ -303,8 +303,8 @@ function main(...)
         packages = get_modified_packages()
     end
     if #packages == 0 then
-        -- 还是没找到 package 会降级到 tbox
-        table.insert(packages, "tbox dev")
+        -- 还是没找到 package 会降级到 protobuf
+        table.insert(packages, "protobuf-cpp 3.19.4")
     end
 
     -- prepare test project
@@ -317,24 +317,27 @@ function main(...)
         os.tryrm(workdir)
         os.mkdir(workdir)
         os.cd(workdir)
-        os.execv(os.programfile(), {"create", "test"})
+        os.vexecv(os.programfile(), {"create", "test"})
     else
         os.cd(workdir)
     end
     os.cd("test")
     print(os.curdir())
+
     -- do action for remote?
     if os.isdir("xmake-repo") then
-        os.execv(os.programfile(), {"service", "--disconnect"})
+        os.vexecv(os.programfile(), {"service", "--disconnect"})
     end
     if argv.remote then
         os.tryrm("xmake-repo")
         os.cp(path.join(repodir, "packages"), "xmake-repo/packages")
-        os.execv(os.programfile(), {"service", "--connect"})
+        os.vexecv(os.programfile(), {"service", "--connect"})
         repodir = "xmake-repo"
     end
-    os.execv(os.programfile(), {"repo", "--add", "local-repo", repodir})
-    os.execv(os.programfile(), {"repo", "-l"})
+
+    -- 添加 local repo
+    os.vexecv(os.programfile(), {"repo", "--add", "local-repo", repodir})
+    os.vexecv(os.programfile(), {"repo", "-l"})
 
     local packages_original = table.clone(packages)
 

@@ -49,9 +49,6 @@ package("protobuf-cpp", function()
     add_patches("3.17.3", path.join(os.scriptdir(), "patches", "3.17.3",
                                     "field_access_listener.patch"),
                 "ac9bdf49611b01e563fe74b2aaf1398214129454c3e18f1198245549eb281e85")
-    add_patches("3.19.4", path.join(os.scriptdir(), "patches", "3.19.4",
-                                    "vs_runtime.patch"),
-                "8e73e585d29f3b9dca3c279df0b11b3ee7651728c07f51381a69e5899b93c367")
 
     add_configs("zlib", {
         description = "Enable zlib",
