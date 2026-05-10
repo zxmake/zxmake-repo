@@ -19,26 +19,28 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Prepare Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev p7zip
+          # sudo apt-get install git build-essential wget lsb-release software-properties-common gnupg
+
       - name: Install XMake
         run: |
           mkdir /software && cd /software
           git clone --recursive https://github.com/TOMO-CAT/xmake.git
           cd xmake
           git checkout master
-          bash scripts/install.sh
+          bash scripts/install.sh --runtime=lua
           xmake --version
-
-      - name: Prepare Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev p7zip
 
       - name: Clang Toolchain Installation
         run: |
           # https://apt.llvm.org/
-          wget https://apt.llvm.org/llvm.sh
-          chmod +x llvm.sh
-          sudo ./llvm.sh 18 all
+          # wget https://apt.llvm.org/llvm.sh
+          # chmod +x llvm.sh
+          # sudo ./llvm.sh 18 all
+          sudo apt-get install -y clang-18 lld-18 libc++-18-dev libc++abi-18-dev
 
       - name: Tests
         run: |
