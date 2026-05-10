@@ -13,7 +13,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-24.04]
-        arch: [armeabi-v7a, arm64-v8a]
+        # arch: [armeabi-v7a, arm64-v8a]
+        arch: [arm64-v8a]
         # ndk: ["r22", "r27"]
         ndk: ["r27"]
         # ndk_sdkver: ["21", "30"]

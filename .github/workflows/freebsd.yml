@@ -1,11 +1,7 @@
 name: FreeBSD
 
 on:
-  pull_request:
-    branches:
-      - master
-  push:
-    branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -33,11 +29,9 @@ jobs:
           prepare: pkg install -y git curl unzip gmake llvm gsed bash perl5 openssl
           run: |
             git config --global --add safe.directory `pwd`
-            git clone --recurse-submodules https://github.com/xmake-io/xmake.git /tmp/xmake -b dev
+            git clone --recurse-submodules https://github.com/TOMO-CAT/xmake.git /tmp/xmake -b master
             cd /tmp/xmake
-            ./configure
-            gmake -j4
-            gmake install
+            bash scripts/install.sh
             export XMAKE_ROOT=y
             cd -
             xmake l ./scripts/test.lua -D -k ${{ matrix.kind }} -vD
