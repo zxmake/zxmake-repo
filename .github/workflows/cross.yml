@@ -11,7 +11,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-24.04]
         cross: [arm-none-linux-gnueabihf, aarch64-none-linux-gnu]
 
     runs-on: ${{ matrix.os }}
@@ -28,7 +28,7 @@ jobs:
           git clone --recursive https://github.com/TOMO-CAT/xmake.git
           cd xmake
           git checkout master
-          bash scripts/install.sh
+          bash scripts/install.sh --runtime=lua
           xmake --version
 
       - name: Installation
