@@ -1,11 +1,11 @@
 name: Archlinux
 
 on:
-  # pull_request:
-  #   branches:
-  #     - master
-  # push:
-  #   branches: [ master ]
+  pull_request:
+    branches:
+      - master
+  push:
+    branches: [ master ]
 
 jobs:
   build:
