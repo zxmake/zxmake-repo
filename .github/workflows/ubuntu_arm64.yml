@@ -1,11 +1,11 @@
 name: Linux (arm64)
 
 on:
-    # pull_request:
-    #   branches:
-    #     - master
-    # push:
-    #   branches: [ master ]
+  pull_request:
+    branches:
+      - master
+  push:
+    branches: [ master ]
 
 jobs:
   build:
@@ -13,7 +13,8 @@ jobs:
       matrix:
         os: [ubuntu-24.04-arm]
         kind: [static, shared]
-        mode: [debug, release]
+        # mode: [debug, release]
+        mode: [release]
 
     runs-on: ${{ matrix.os }}
 
