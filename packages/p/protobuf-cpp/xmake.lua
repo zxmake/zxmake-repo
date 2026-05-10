@@ -55,6 +55,11 @@ package("protobuf-cpp", function()
         default = false,
         type = "boolean"
     })
+    add_configs("protoc", {
+        description = "Build protoc compiler",
+        default = true,
+        type = "boolean"
+    })
 
     add_deps("cmake")
 
@@ -65,7 +70,9 @@ package("protobuf-cpp", function()
     end
 
     on_load(function(package)
-        package:addenv("PATH", "bin")
+        if package:config("protoc") then
+            package:addenv("PATH", "bin")
+        end
         if package:config("zlib") then
             package:add("deps", "zlib")
         end
@@ -84,7 +91,9 @@ package("protobuf-cpp", function()
         -- CMAKE_POSITION_INDEPENDENT_CODE 生成 fPIC 代码
         -- @see https://github.com/protocolbuffers/protobuf/issues/1919
         local configs = {
-            "-Dprotobuf_BUILD_TESTS=OFF", "-Dprotobuf_BUILD_PROTOC_BINARIES=ON",
+            "-Dprotobuf_BUILD_TESTS=OFF",
+            "-Dprotobuf_BUILD_PROTOC_BINARIES=" ..
+                (package:config("protoc") and "ON" or "OFF"),
             "-DCMAKE_POLICY_VERSION_MINIMUM=3.5",
             "-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
         }
@@ -106,11 +115,10 @@ package("protobuf-cpp", function()
             buildir = "build",
             packagedeps = packagedeps
         })
-        os.trycp("build/Release/protoc.exe", package:installdir("bin"))
     end)
 
     on_test(function(package)
-        if package:is_cross() then
+        if package:is_cross() or not package:config("protoc") then
             return
         end
         io.writefile("test.proto", [[
