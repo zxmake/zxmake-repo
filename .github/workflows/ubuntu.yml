@@ -35,4 +35,4 @@ jobs:
 
       - name: Tests
         run: |
-          xmake lua ./scripts/test.lua --diagnosis --kind=${{ matrix.kind }} --mode=${{ matrix.mode }}
+          xmake lua -v ./scripts/test.lua --diagnosis --kind=${{ matrix.kind }} --mode=${{ matrix.mode }}

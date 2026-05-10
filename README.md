@@ -58,7 +58,8 @@ packages/l/libpng/xmake.lua generated!
 
 ## 在本地测试一个包
 
-```console
+```bash
+xmake lua -v scripts/test.lua -vD --mode=release --kind=static protobuf-cpp
 xmake lua -vD scripts/test.lua --shallow -vD zlib
 xmake lua -vD scripts/test.lua --shallow -vD -p iphoneos zlib
 xmake lua -vD scripts/test.lua --shallow -vD -k shared -m debug zlib

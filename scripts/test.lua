@@ -324,19 +324,12 @@ function main(...)
     os.cd("test")
     print(os.curdir())
 
-    -- do action for remote?
-    if os.isdir("xmake-repo") then
-        os.vexecv(os.programfile(), {"service", "--disconnect"})
-    end
-    if argv.remote then
-        os.tryrm("xmake-repo")
-        os.cp(path.join(repodir, "packages"), "xmake-repo/packages")
-        os.vexecv(os.programfile(), {"service", "--connect"})
-        repodir = "xmake-repo"
-    end
-
     -- 添加 local repo
-    os.vexecv(os.programfile(), {"repo", "--add", "local-repo", repodir})
+    -- 拷贝到 test 目录下避免 xmake 对原始仓库执行 git reset
+    local local_repo_dir = path.join(os.curdir(), "local-repo")
+    os.tryrm(local_repo_dir)
+    os.cp(path.join(repodir, "packages"), path.join(local_repo_dir, "packages"))
+    os.vexecv(os.programfile(), {"repo", "--add", "local-repo", local_repo_dir})
     os.vexecv(os.programfile(), {"repo", "-l"})
 
     local packages_original = table.clone(packages)
